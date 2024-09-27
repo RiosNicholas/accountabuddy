@@ -20,6 +20,7 @@ import {
 const formSchema = z.object({
   username: z.string().min(2).max(50),
   password: z.string().min(2).max(50),
+  // TODO: add message for invalid username or password
 })
 
 export default function Home() {
@@ -33,17 +34,16 @@ export default function Home() {
  
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values)
   }
 
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <h1>Accountabuddy</h1>
+    <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <h1 className="text-2xl font-black">Accountabuddy</h1>
       <main className="overflow-y-auto max-h-[calc(100vh-40px-64px)]"> 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 p-2">
             <FormField
               control={form.control}
               name="username"
@@ -71,11 +71,15 @@ export default function Home() {
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button className="w-full" type="submit">Sign In</Button>
           </form>
+          <span className="flex justify-center text-sm text-center">
+            <p className="mr-1">Don't have an account?</p> 
+            <a className="underline text-accent hover:cursor-pointer">Sign up here</a> 
+          </span>
         </Form>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
+      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center text-sm">
         <a
           className="flex items-center gap-2 hover:underline hover:underline-offset-4"
           href="https://sasn.rutgers.edu/mathematics-and-computer-science/ba-computer-science"
