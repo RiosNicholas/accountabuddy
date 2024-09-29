@@ -23,7 +23,7 @@ const formSchema = z.object({
   // TODO: add message for invalid username or password
 })
 
-export default function Home() {
+export default function Login() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -114,3 +114,4 @@ export default function Home() {
     </div>
   );
 }
+
