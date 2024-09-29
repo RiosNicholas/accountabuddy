@@ -15,7 +15,7 @@ export function ModeToggle() {
   const { setTheme } = useTheme()
 
   return (
-    <div className="flex justify-end m-2">
+    <div className="flex justify-end m-3">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon">
