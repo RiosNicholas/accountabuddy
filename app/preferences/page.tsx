@@ -22,11 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Progress } from "@/components/ui/progress"
 
 const FormSchema = z.object({
-  locationPreferences: z
+  methodPreferences: z
     .string({
-      required_error: "Please select your location preference.",
+      required_error: "Please select your preferred way to meet.",
     }),
   frequencyPreferences: z
 		.string({
@@ -43,13 +44,17 @@ export default function Preferences() {
   }
 
   return (
+		// TODO: Add a progress tracker for all of the settings. maybe replace the save preferences with forward and backwards arrow until the end.
     <main className="flex flex-col items-center">
+			<div className="w-2/3 lg:w-1/2 mb-6">
+				<Progress value={33} />
+			</div>
 			<h1 className="font-extrabold text-left">Preferences</h1>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 lg:w-1/2 space-y-3">
 					<FormField
 						control={form.control}
-						name="locationPreferences"
+						name="methodPreferences"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Method Preferences</FormLabel>
@@ -101,9 +106,12 @@ export default function Preferences() {
 						You can manage preferences in your{" "}
 						<Link href="/profile/settings" className="underline">profile settings</Link>.
 					</FormDescription>
-					<Button type="submit">Save Preferences</Button>
 				</form>
 			</Form> 
+			<div className='flex justify-end m-4 w-2/3 lg:w-1/2'>
+				{/* TODO: add page routing to buttons */}
+				<Button type="submit">Next</Button>
+			</div>
     </main>
   )
 }
