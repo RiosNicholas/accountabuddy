@@ -109,8 +109,9 @@ export default function Preferences() {
 				</form>
 			</Form> 
 			<div className='flex justify-end m-4 w-2/3 lg:w-1/2'>
-				{/* TODO: add page routing to buttons */}
-				<Button type="submit">Next</Button>
+				<Link href="preferences/goals">
+					<Button type="submit">Next</Button>
+				</Link>
 			</div>
     </main>
   )

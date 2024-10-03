@@ -71,7 +71,7 @@ export default function Login() {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">Sign In</Button>
+            <Button className="w-full" type="submit">Sign in</Button>
           </form>
           <span className="flex justify-center text-sm text-center">
             <p className="mr-1">Don't have an account?</p> 

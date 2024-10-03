@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
+import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -36,7 +37,6 @@ export default function Home() {
     // Do something with the form values.
     console.log(values)
   }
-
 
   return (
     <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
@@ -71,11 +71,17 @@ export default function Home() {
                 </FormItem>
               )}
             />
-            <Button className="w-full" type="submit">Sign In</Button>
+            <Link href="auth/login/" passHref>
+              <Button className="w-full mt-2" type="submit">
+                Sign in
+              </Button>
+            </Link>
           </form>
           <span className="flex justify-center text-sm text-center">
-            <p className="mr-1">Don't have an account?</p> 
-            <a className="underline text-accent hover:cursor-pointer">Sign up here</a> 
+            <p className="mr-1">Don't have an account?</p>
+            <Link href="auth/signup" passHref>
+              <a className="underline text-accent hover:cursor-pointer">Sign up here</a>
+            </Link>
           </span>
         </Form>
       </main>
