@@ -3,9 +3,8 @@
 import { useState } from 'react';
 
 import { Progress } from '@/components/ui/progress';
-import { Button } from '@/components/ui/button';
 
-export default function Accountability() {
+export default function AccountabilityPreferences() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const handleOptionClick = (option: string) => {
@@ -31,7 +30,7 @@ export default function Accountability() {
   ];
 
   return (
-    <main className='flex flex-col items-center'>
+    <>
       <div className="w-2/3 lg:w-1/2 mb-6">
         <Progress value={99} />
       </div>
@@ -48,10 +47,6 @@ export default function Accountability() {
             </li>
           ))}
       </ul>
-      <div className='flex justify-between m-4 w-2/3 lg:w-1/2'>
-        <Button type="submit">Back</Button>
-        <Button type="submit">Save Preferences</Button>
-      </div>
-    </main>
+    </>
   );
 }

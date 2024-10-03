@@ -1,27 +1,27 @@
 "use client";
 
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
+// import { useForm } from "react-hook-form"
+// import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+// import {
+//   Form,
+//   FormControl,
+//   FormDescription,
+//   FormField,
+//   FormItem,
+//   FormLabel,
+//   FormMessage,
+// } from "@/components/ui/form"
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select"
 
 export default function ProfileSignup() {
   return (

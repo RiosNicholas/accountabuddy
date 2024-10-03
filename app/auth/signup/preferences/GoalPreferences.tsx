@@ -1,11 +1,9 @@
 "use client"
 
-import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import Link from 'next/link';
 import { useState } from 'react';
 
-export default function Goals() {
+export default function GoalPreferences() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
   const handleOptionClick = (option: string) => {
@@ -20,7 +18,7 @@ export default function Goals() {
   const goalBuckets = ['Education', 'Health & Fitness', 'Finance', 'Career', 'Self Development', 'Social'];
 
   return (
-    <main className='flex flex-col items-center'>
+    <>
       <div className="w-2/3 lg:w-1/2 mb-6">
        <Progress value={66} />
       </div>
@@ -37,11 +35,6 @@ export default function Goals() {
           </li>
         ))}
       </ul>
-      <div className='flex justify-between m-4 w-2/3 lg:w-1/2'>
-        <Button type="submit">Back</Button>
-        {/* TODO: Update endpoints. maybe use numbers? look into how to do this */}
-        <Button type="submit">Next</Button>
-      </div>
-    </main>
+    </>
   );
 };
