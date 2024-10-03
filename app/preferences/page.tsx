@@ -67,7 +67,7 @@ export default function Preferences() {
 									<SelectContent>
 										<SelectItem value="in-person">In-Person</SelectItem>
 										<SelectItem value="virtual">Virtual</SelectItem>
-										<SelectItem value="no-preference">No Preferences</SelectItem>
+										<SelectItem value="no-preference">No Preference</SelectItem>
 									</SelectContent>
 									{/* TODO: Conditionally render another form field if virtual is selected ]
 										- do they prefer to meet async/sync over text? 
@@ -115,3 +115,4 @@ export default function Preferences() {
     </main>
   )
 }
+
