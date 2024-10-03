@@ -34,7 +34,7 @@ export default function AccountabilityPreferences() {
       <div className="w-2/3 lg:w-1/2 mb-6">
         <Progress value={99} />
       </div>
-      <h1 className="font-extrabold text-left mb-3">What do you seek accountability in?</h1>
+      <h1 className="font-bold text-left mb-3">How can we help you reach your goals?</h1>
         <ul className='space-y-3 w-2/3 lg:w-1/2'>
           {accountabilityBuckets.map((bucket) => (
             // TODO: add an icon to the left of the each bucket name
