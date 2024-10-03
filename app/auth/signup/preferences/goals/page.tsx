@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function Goals() {
@@ -38,6 +39,7 @@ export default function Goals() {
       </ul>
       <div className='flex justify-between m-4 w-2/3 lg:w-1/2'>
         <Button type="submit">Back</Button>
+        {/* TODO: Update endpoints. maybe use numbers? look into how to do this */}
         <Button type="submit">Next</Button>
       </div>
     </main>
