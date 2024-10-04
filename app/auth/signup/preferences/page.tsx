@@ -25,15 +25,14 @@ export default function SignupProfilePreferencesPage() {
 
   return (
     <div className='w-full'>
-
       <main className="flex flex-col items-center">
-        <div className="w-2/3 lg:w-1/2 mb-6">
+        <div className="w-2/3 lg:w-1/2 my-6">
           <Progress value={currentStep * 33} />
         </div>
         {currentStep === 1 && <MethodPreferences />}
         {currentStep === 2 && <GoalPreferences />}
         {currentStep === 3 && <AccountabilityPreferences />}
-      <div className={`flex ${currentStep === 1 ? 'justify-end' : 'justify-between'} m-4 w-2/3 lg:w-1/2`}>
+        <div className={`flex ${currentStep === 1 ? 'justify-end' : 'justify-between'} m-4 w-2/3 lg:w-1/2`}>
         {/* TODO: add button disabling and api configuration
           - if form contents are null at a given step, disable the next button, etc.
           - track metadata for form completion and api calls
