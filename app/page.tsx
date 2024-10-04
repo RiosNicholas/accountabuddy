@@ -27,18 +27,20 @@ export default function HomePage() {
   }
 
   return (
-    // FIXME: padding and margins are off. there's a ton of whitespace
-    <div className="relative grid grid-rows-2 md:grid-cols-2 w-full sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <div className="absolute inset-0 md:relative md:row-start-1 md:col-span-1 flex items-center justify-center z-0 md:h-full">
-        <img
-          src="/pexels-minan1398-853168.jpg"
+    <div className="relative w-full min-h-screen grid grid-cols-1 md:grid-cols-3">
+      <div className="absolute inset-0 md:relative md:col-span-2">
+        <Image 
+          src="/pexels-minan1398-853168.jpg" 
           alt="Silhouette of people raising their hands together."
-          className="w-full h-full object-cover md:object-cover md:w-full md:h-full opacity-10 md:opacity-100"
+          layout="fill" 
+          objectFit="cover" 
+          className="opacity-100"
         />
       </div>
-      <main className="relative row-start-1 col-span-2 md:col-span-1 flex flex-col justify-center items-center md:row-start-1 md:col-start-2 z-10 py-6">
+
+      <main className="relative z-10 col-span-1 flex flex-col justify-center items-center md:col-start-3 bg-white bg-opacity-95 md:bg-transparent p-4 md:p-0 min-h-screen">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 p-2 w-5/6 md:w-4/5 lg:w-3/5">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-4 w-5/6 md:w-4/5 lg:w-3/5">
             <FormField
               control={form.control}
               name="username"
@@ -60,7 +62,6 @@ export default function HomePage() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <Input className='bg-background' placeholder="Password" {...field} />
-                    {/* TODO: Conceal password as it is typed in the input bar */}
                   </FormControl>
                   <FormMessage />
                 </FormItem>
