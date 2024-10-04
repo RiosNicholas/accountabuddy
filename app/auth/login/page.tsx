@@ -64,7 +64,7 @@ export default function Home() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Password" {...field} />
+                    <Input type="password" placeholder="Password" {...field} />
                     {/* TODO: Conceal password as it is typed in the input bar */}
                   </FormControl>
                   <FormMessage />
