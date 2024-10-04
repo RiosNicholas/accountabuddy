@@ -38,7 +38,7 @@ export default function HomePage() {
         />
       </div>
 
-      <main className="relative z-10 col-span-1 flex flex-col justify-center items-center md:col-start-3 bg-white bg-opacity-95 md:bg-transparent p-4 md:p-0 min-h-screen">
+      <main className="relative z-10 col-span-1 flex flex-col justify-center items-center md:col-start-3 bg-white bg-opacity-85 md:bg-transparent p-4 md:p-0 min-h-screen">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-4 w-5/6 md:w-4/5 lg:w-3/5">
             <FormField
