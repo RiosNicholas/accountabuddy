@@ -45,9 +45,6 @@ export default function MethodPreferences() {
   return (
 		// TODO: Add a progress tracker for all of the settings. maybe replace the save preferences with forward and backwards arrow until the end.
     <>
-			<div className="w-2/3 lg:w-1/2 mb-6">
-				<Progress value={33} />
-			</div>
 			<h1 className="font-bold text-left">How would you like to meet?</h1>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 lg:w-1/2 space-y-3">

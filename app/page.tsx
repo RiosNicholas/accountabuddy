@@ -79,9 +79,9 @@ export default function Home() {
           </form>
           <span className="flex justify-center text-sm text-center">
             <p className="mr-1">Don't have an account?</p>
-            {/* <Link href="auth/signup" passHref> */}
-              <a className="underline text-accent hover:cursor-pointer">Sign up here</a>
-            {/* </Link> */}
+            <Link href="auth/signup" className="underline text-accent hover:cursor-pointer">
+              Sign up here
+            </Link>
           </span>
         </Form>
       </main>

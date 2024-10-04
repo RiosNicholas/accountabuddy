@@ -19,9 +19,6 @@ export default function GoalPreferences() {
 
   return (
     <>
-      <div className="w-2/3 lg:w-1/2 mb-6">
-       <Progress value={66} />
-      </div>
       <h1 className="font-bold text-left mb-3">Which areas of your life do you seek growth in?</h1>
       <ul className='space-y-3 w-2/3 lg:w-1/2'>
         {goalBuckets.map((bucket) => (

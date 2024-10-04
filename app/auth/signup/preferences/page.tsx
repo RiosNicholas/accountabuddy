@@ -5,6 +5,7 @@ import MethodPreferences from './MethodPreferences';
 import GoalPreferences from './GoalPreferences';
 import AccountabilityPreferences from './AccountabilityPreferences';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 
 
 export default function SignupProfilePreferencesPage() {
@@ -24,7 +25,11 @@ export default function SignupProfilePreferencesPage() {
 
   return (
     <div className='w-full'>
+
       <main className="flex flex-col items-center">
+        <div className="w-2/3 lg:w-1/2 mb-6">
+          <Progress value={currentStep * 33} />
+        </div>
         {currentStep === 1 && <MethodPreferences />}
         {currentStep === 2 && <GoalPreferences />}
         {currentStep === 3 && <AccountabilityPreferences />}
@@ -39,7 +44,6 @@ export default function SignupProfilePreferencesPage() {
         {currentStep === 3 && <Button onClick={handleSubmit} type="submit">Save Preferences</Button>} 
         </div>
       </main>
-  
     </div>
   );
 };
