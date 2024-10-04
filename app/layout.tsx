@@ -37,43 +37,47 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="flex justify-between items-center z-10"> 
-            <h1 className="text-xl font-black col-span-2 px-2 mx-1">Accountabuddy</h1>
-            <ModeToggle/>
+          <div className="grid grid-rows-[auto_1fr_auto] min-h-screen">
+            <header className="flex justify-between items-center z-10"> 
+              <h1 className="text-xl font-black px-2 mx-1">Accountabuddy</h1>
+              <ModeToggle/>
+            </header>
+            <main className="z-10">
+              {children}
+            </main>
+            <footer className="flex gap-6 p-5 flex-wrap items-center justify-center text-sm z-10">
+              <a
+                className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+                href="https://sasn.rutgers.edu/mathematics-and-computer-science/ba-computer-science"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  aria-hidden
+                  src="https://nextjs.org/icons/file.svg"
+                  alt="File icon"
+                  width={16}
+                  height={16}
+                />
+                Made at Rutgers University–Newark
+              </a>
+              <a
+                className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+                href="https://github.com/RiosNicholas/accountabuddy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Image
+                  aria-hidden
+                  src="https://nextjs.org/icons/github.svg"
+                  alt="GitHub icon"
+                  width={16}
+                  height={16}
+                />
+                View on GitHub
+              </a>
+            </footer>
           </div>
-          {children}
-          <footer className="flex gap-6 p-5 flex-wrap items-center justify-center text-sm z-10">
-            <a
-              className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-              href="https://sasn.rutgers.edu/mathematics-and-computer-science/ba-computer-science"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                aria-hidden
-                src="https://nextjs.org/icons/file.svg"
-                alt="File icon"
-                width={16}
-                height={16}
-              />
-              Made at Rutgers University–Newark
-            </a>
-            <a
-              className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-              href="https://github.com/RiosNicholas/accountabuddy"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Image
-                aria-hidden
-                src="https://nextjs.org/icons/github.svg"
-                alt="GitHub icon"
-                width={16}
-                height={16}
-              />
-              View on GitHub
-            </a>
-          </footer>
         </ThemeProvider>
       </body>
     </html>
