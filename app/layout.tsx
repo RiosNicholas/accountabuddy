@@ -36,7 +36,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+        <div className="flex justify-between items-center"> 
+          <h1 className="text-xl font-black col-span-2 px-2 mx-1">Accountabuddy</h1>
           <ModeToggle/>
+        </div>
           {children}
         </ThemeProvider>
       </body>
