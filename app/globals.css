@@ -59,3 +59,8 @@
     --chart-5: 240 10% 40%;
   }
 }
+
+#MatchMakingHeader {
+  text-align:center;
+  font-size: 2rem;
+}
