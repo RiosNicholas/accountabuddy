@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 
-import { Progress } from '@/components/ui/progress';
-
 export default function AccountabilityPreferences() {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
 
@@ -15,30 +13,30 @@ export default function AccountabilityPreferences() {
     }
   };
 
-  // FIXME: turn this into a list of objects with a name and a value for the icon (library tbd)
-  const accountabilityBuckets = [
-    'Habit Tracking',
-    'Goal Setting',
-    'Time Management',
-    'Productivity',
-    'Wellness',
-    'Skill Development',
-    'Relationship Building',
-    'Financial Planning',
-    'Career Advancement',
-    'Personal Growth'
+  const accountabilityAreas = [
+    'Habit Building',
+    'Setting and Reaching Goals',
+    'Managing Time Effectively',
+    'Boosting Productivity',
+    'Focusing on Wellness',
+    'Developing Skills',
+    'Building Relationships',
+    'Planning Finances',
+    'Advancing Your Career',
   ];
 
   return (
     <>
-      <h1 className="font-bold text-left mb-3">How can we help you reach your goals?</h1>
+      <h1 className="font-bold text-left mb-3">Where do you seek accountability?</h1>
         <ul className='space-y-3 w-2/3 lg:w-1/2'>
-          {accountabilityBuckets.map((bucket) => (
+          {accountabilityAreas.map((bucket) => (
             // TODO: add an icon to the left of the each bucket name
             <li
               key={bucket}
               onClick={() => handleOptionClick(bucket)}
-              className='hover:cursor-pointer hover:bg-muted p-2 rounded outline outline-1 outline-accent'
+              className={`
+                hover:cursor-pointer p-2 rounded outline outline-1 outline-accent transition-colors duration-200 ${ selectedOptions.includes(bucket) ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'}`
+              }
             >
               {bucket}
             </li>

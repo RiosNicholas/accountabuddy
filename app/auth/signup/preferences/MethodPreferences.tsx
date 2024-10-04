@@ -21,7 +21,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Progress } from "@/components/ui/progress"
 
 const FormSchema = z.object({
   methodPreferences: z

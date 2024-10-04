@@ -1,20 +1,19 @@
 "use client"
 
-import { Progress } from '@/components/ui/progress';
 import { useState } from 'react';
 
 export default function GoalPreferences() {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  // NOTE: this should probably be cached later on so that a user can go back a step and not lose their selections. 
+  const [selectedGoalBuckets, setSelectedGoalBuckets] = useState<string[]>([]);
 
   const handleOptionClick = (option: string) => {
-    if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((selectedOption) => selectedOption !== option));
+    if (selectedGoalBuckets.includes(option)) {
+      setSelectedGoalBuckets(selectedGoalBuckets.filter((selectedGoalBuckets) => selectedGoalBuckets !== option));
     } else {
-      setSelectedOptions([...selectedOptions, option]);
+      setSelectedGoalBuckets([...selectedGoalBuckets, option]);
     }
   };
 
-  // FIXME: turn this into a list of objects with a name and a value for the icon (library tbd)
   const goalBuckets = ['Education', 'Health & Fitness', 'Finance', 'Career', 'Self Development', 'Social'];
 
   return (
@@ -24,9 +23,11 @@ export default function GoalPreferences() {
         {goalBuckets.map((bucket) => (
           // TODO: add an icon to the left of the each bucket name
           <li
-          key={bucket}
-          onClick={() => handleOptionClick(bucket)}
-          className='hover:cursor-pointer hover:bg-muted p-2 rounded outline outline-1 outline-accent'
+            key={bucket}
+            onClick={() => handleOptionClick(bucket)}
+            className={`
+              hover:cursor-pointer p-2 rounded outline outline-1 outline-accent transition-colors duration-200 ${ selectedGoalBuckets.includes(bucket) ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'}`
+            }
           >
             {bucket}
           </li>

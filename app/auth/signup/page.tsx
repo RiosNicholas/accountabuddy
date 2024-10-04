@@ -26,7 +26,7 @@ import Link from "next/link";
 
 export default function ProfileSignup() {
   return (
-    <main className="flex flex-col items-center justify-center p-3">
+    <main className="flex flex-col items-center justify-center p-3 w-full">
       <h1 className="text-left text-xl font-bold p-3">Create your account</h1>
       <Avatar className="h-20 w-20">
         <AvatarImage src="../../public/profile-picture.jpg"/>
@@ -35,7 +35,6 @@ export default function ProfileSignup() {
         
         {/* TODO: add form labels and create proper zod form. blur password details */}
       <form className="my-2 space-y-2">
-
         <Input placeholder="Name"/>
         <Input placeholder="Email"/>
         <Input placeholder="Password"/>
