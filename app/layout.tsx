@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { ModeToggle } from "@/components/ui/mode-toggle";
+import Image from "next/image";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -36,11 +37,43 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-        <div className="flex justify-between items-center"> 
-          <h1 className="text-xl font-black col-span-2 px-2 mx-1">Accountabuddy</h1>
-          <ModeToggle/>
-        </div>
+          <div className="flex justify-between items-center z-10"> 
+            <h1 className="text-xl font-black col-span-2 px-2 mx-1">Accountabuddy</h1>
+            <ModeToggle/>
+          </div>
           {children}
+          <footer className="flex gap-6 p-5 flex-wrap items-center justify-center text-sm z-10">
+            <a
+              className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+              href="https://sasn.rutgers.edu/mathematics-and-computer-science/ba-computer-science"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                aria-hidden
+                src="https://nextjs.org/icons/file.svg"
+                alt="File icon"
+                width={16}
+                height={16}
+              />
+              Made at Rutgers University–Newark
+            </a>
+            <a
+              className="flex items-center gap-2 hover:underline hover:underline-offset-4"
+              href="https://github.com/RiosNicholas/accountabuddy"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Image
+                aria-hidden
+                src="https://nextjs.org/icons/github.svg"
+                alt="GitHub icon"
+                width={16}
+                height={16}
+              />
+              View on GitHub
+            </a>
+          </footer>
         </ThemeProvider>
       </body>
     </html>
