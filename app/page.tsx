@@ -1,49 +1,44 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-  Form,
-  FormControl,
-  // FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
+import Link from 'next/link';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
-  password: z.string().min(2).max(50),
-  // TODO: add message for invalid username or password
-})
+  username: z.string().min(1, 'Username is required'),
+  password: z.string().min(1, 'Password is required'),
+});
 
-export default function Home() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+export default function HomePage() {
+  const form = useForm({
     defaultValues: {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
     },
-  })
- 
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
-    console.log(values)
+    console.log(values);
   }
 
   return (
-    <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <h1 className="text-2xl font-black">Accountabuddy</h1>
-      <main className="overflow-y-auto max-h-[calc(100vh-40px-64px)]"> 
+    // FIXME: padding and margins are off. there's a ton of whitespace
+    <div className="relative grid grid-rows-2 md:grid-cols-2 w-full sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <div className="absolute inset-0 md:relative md:row-start-1 md:col-span-1 flex items-center justify-center z-0 md:h-full">
+        <img
+          src="/pexels-minan1398-853168.jpg"
+          alt="Silhouette of people raising their hands together."
+          className="w-full h-full object-cover md:object-cover md:w-full md:h-full opacity-10 md:opacity-100"
+        />
+      </div>
+      <main className="relative row-start-1 col-span-2 md:col-span-1 flex flex-col justify-center items-center md:row-start-1 md:col-start-2 z-10 py-6">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 p-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 p-2 w-5/6 md:w-4/5 lg:w-3/5">
             <FormField
               control={form.control}
               name="username"
@@ -51,7 +46,7 @@ export default function Home() {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Username" {...field} />
+                    <Input className="bg-background" placeholder="Username" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -64,7 +59,7 @@ export default function Home() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="Password" {...field} />
+                    <Input className='bg-background' placeholder="Password" {...field} />
                     {/* TODO: Conceal password as it is typed in the input bar */}
                   </FormControl>
                   <FormMessage />
@@ -85,38 +80,6 @@ export default function Home() {
           </span>
         </Form>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center text-sm">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://sasn.rutgers.edu/mathematics-and-computer-science/ba-computer-science"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Made at Rutgers University–Newark
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://github.com/RiosNicholas/accountabuddy"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          GitHub
-        </a>
-      </footer>
     </div>
   );
 }
