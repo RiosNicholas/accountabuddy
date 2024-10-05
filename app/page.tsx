@@ -34,7 +34,7 @@ export default function HomePage() {
           alt="Silhouette of people raising their hands together."
           layout="fill" 
           objectFit="cover" 
-          className="opacity-100"
+          className="opacity-100 md:rounded-e"
         />
       </div>
 
