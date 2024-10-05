@@ -1,49 +1,46 @@
 "use client"
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
-
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-  Form,
-  FormControl,
-  // FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
+import Link from 'next/link';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
-  password: z.string().min(2).max(50),
-  // TODO: add message for invalid username or password
-})
+  username: z.string().min(1, 'Username is required'),
+  password: z.string().min(1, 'Password is required'),
+});
 
-export default function Home() {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+export default function HomePage() {
+  const form = useForm({
     defaultValues: {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
     },
-  })
- 
+  });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
-    console.log(values)
+    console.log(values);
   }
 
   return (
-    <div className="grid grid-rows-[auto_1fr_auto] items-center justify-items-center h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <h1 className="text-2xl font-black">Accountabuddy</h1>
-      <main className="overflow-y-auto max-h-[calc(100vh-40px-64px)]"> 
+    <div className="relative w-full min-h-screen grid grid-cols-1 md:grid-cols-3">
+      <div className="absolute inset-0 md:relative md:col-span-2">
+        <Image 
+          src="/pexels-minan1398-853168.jpg" 
+          alt="Silhouette of people raising their hands together."
+          layout="fill" 
+          objectFit="cover" 
+          className="opacity-100 md:rounded-e"
+        />
+      </div>
+
+      <main className="relative z-10 col-span-1 flex flex-col justify-center items-center md:col-start-3 bg-white bg-opacity-85 md:bg-transparent p-4 md:p-0 min-h-screen">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 p-2">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 p-4 w-5/6 md:w-4/5 lg:w-3/5">
             <FormField
               control={form.control}
               name="username"
@@ -51,7 +48,7 @@ export default function Home() {
                 <FormItem>
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Username" {...field} />
+                    <Input className="bg-background" placeholder="Username" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -64,8 +61,7 @@ export default function Home() {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="Password" {...field} />
-                    {/* TODO: Conceal password as it is typed in the input bar */}
+                    <Input className='bg-background' placeholder="Password" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -85,38 +81,6 @@ export default function Home() {
           </span>
         </Form>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center text-sm">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://sasn.rutgers.edu/mathematics-and-computer-science/ba-computer-science"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Made at Rutgers University–Newark
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://github.com/RiosNicholas/accountabuddy"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          GitHub
-        </a>
-      </footer>
     </div>
   );
 }
