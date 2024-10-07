@@ -91,7 +91,7 @@ export default function ProfileSignup() {
             />
             <div className="flex justify-center">
               <Button type="submit" className="my-2 w-full">
-                <Link href="/preferences">
+                <Link href="/auth/signup/preferences">
                   Sign up
                 </Link>
               </Button>
