@@ -63,4 +63,11 @@
 #MatchMakingHeader {
   text-align:center;
   font-size: 2rem;
+  padding: 2rem;
 }
+#MatchMakingBody{
+  display: flex;
+  justify-content: space-evenly;
+  
+}
+
