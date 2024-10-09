@@ -3,6 +3,8 @@
 import React from "react";
 import * as Avatar from "@radix-ui/react-avatar";
 import PromptDisplay from "@/components/PromptDisplay";
+import Image from 'next/image';
+import myImage from '@/public/profile-picture.jpg';
 
 export default function MatchMaking() {
 
@@ -21,11 +23,6 @@ export default function MatchMaking() {
         'name': "Corbin Grosso",
         prompts,
         'blurb': "Hi! I'm Corbin, and I'm one of the people who made this web app!"
-    }
-
-    function ProfileCard() {
-        
-    
     }
 
     let viewingProfile = false;
@@ -69,9 +66,18 @@ export default function MatchMaking() {
     
     
                         <div id="profile-details">
+
+                        <div className="p-8">
+                            <Image
+                                className="w-64 h-64  object-cover rounded-2xl float-left "
+                                src={myImage}  
+                                alt="My Image"
+                            />
+                        </div>
+                        
                         <div id="profile-college" className="p-4 text-2xl font-bold text-black">Rutgers University </div>
                             <div id="profile-name" className=" text-2xl font-bold text-black">John Doe ,25</div>
-                            <div id="profile-bio" className="p-5 text-base mt-2 text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque congue pellentesque auctor. 
+                            <div id="profile-bio" className="clear-both p-5 text-base font-[family-name:var(--font-geist-sans)] mt-2 text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque congue pellentesque auctor. 
                                 Curabitur malesuada volutpat odio, vel luctus tortor iaculis id. Duis rhoncus ornare purus, vel rutrum mi elementum 
                                 pharetra. Donec posuere ac risus nec viverra. Morbi sed metus a diam tristique pellentesque. Proin volutpat erat eget 
                                 sapien luctus, vitae consequat tortor tristique. Duis id vulputate diam, ac dictum justo. Ut laoreet dictum massa, 
@@ -118,9 +124,18 @@ export default function MatchMaking() {
     
     
                         <div id="profile-details">
-                        <div id="profile-college" className="p-6 text-2xl font-bold text-black">Rutgers University </div>
-                            <div id="profile-name" className="text-2xl font-bold text-black">John Doe ,25</div>
-                            <div id="profile-bio" className=" p-5 text-base mt-2 text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque congue pellentesque auctor. 
+
+                        <div className="p-8">
+                            <Image
+                                className="w-64 h-64  object-cover rounded-2xl float-left "
+                                src={myImage}  
+                                alt="My Image"
+                            />
+                        </div>
+                        
+                        <div id="profile-college" className="p-4 text-2xl font-bold text-black">Rutgers University </div>
+                            <div id="profile-name" className=" text-2xl font-bold text-black">John Doe ,25</div>
+                            <div id="profile-bio" className="clear-both p-5 text-base font-[family-name:var(--font-geist-sans)] mt-2 text-gray-700">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque congue pellentesque auctor. 
                                 Curabitur malesuada volutpat odio, vel luctus tortor iaculis id. Duis rhoncus ornare purus, vel rutrum mi elementum 
                                 pharetra. Donec posuere ac risus nec viverra. Morbi sed metus a diam tristique pellentesque. Proin volutpat erat eget 
                                 sapien luctus, vitae consequat tortor tristique. Duis id vulputate diam, ac dictum justo. Ut laoreet dictum massa, 
