@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import {
     Card,
     CardContent,
@@ -8,7 +8,7 @@ import {
 
 interface PromptDisplayProps {
     prompt: string,
-    response: string
+    response: string | ReactElement
 }
 
 export default function PromptDisplay(props:PromptDisplayProps) {
