@@ -53,15 +53,15 @@ export default function MatchMaking({}) {
                     <h1 className="w-80 text-2xl">{dummyData.name}'s Profile</h1>
                 </div>
                 <div>
-                    <Avatar.Root>
-                        <Avatar.Image
+                    <Avatar>
+                        <AvatarImage
                             src="none"
                             alt={dummyData.name}
                         />
-                        <Avatar.Fallback delayMs={600}>
+                        <AvatarFallback delayMs={600}>
                             CG
-                        </Avatar.Fallback>
-                    </Avatar.Root>
+                        </AvatarFallback>
+                    </Avatar>
                     {promptComponents}
                 </div>
             </div>
@@ -126,7 +126,7 @@ export default function MatchMaking({}) {
                             <button id="dislike-button" className="bg-white border-none rounded-full w-12 h-12 text-2xl cursor-pointer shadow-md hover:shadow-lg text-red-500">✋</button>
                             </div>
                     </div>
-                    <Card className="bg-primary text-primary-foreground">
+                    <Card className="bg-secondary text-secondary-foreground">
                         <div className="flex justify-center p-6 gap-4">
                             <Avatar className="h-20 w-20">
                                 <AvatarImage src="../../public/profile-picture.jpg"/>
@@ -140,6 +140,9 @@ export default function MatchMaking({}) {
                         </div>
                         <CardContent>
                             <p className="text-center">Intro Prop</p>
+                            <div className="bg-primary text-primary-foreground">
+                                stuff
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
