@@ -71,15 +71,14 @@ export default function Explore() {
 								</Avatar>
 								<div>
 									<h3 className="font-semibold">{chat.name}</h3>
-									<p className="text-sm text-neutral-600">{chat.lastMessage}</p>
+									<p className="text-sm text-muted-foreground">{chat.lastMessage}</p>
 								</div>
 							</div>
 						))}
 					</div>
 				</CardContent>
-
-
 			</Card>
+
 			<Card className="p-3">
 				<CardTitle className="text-xl font-bold">Matches</CardTitle>
 				<CardContent>
