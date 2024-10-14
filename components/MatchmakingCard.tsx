@@ -67,7 +67,7 @@ export default function MatchmakingCard({
         {/* PERSONAL INFO */}
         <div className="flex justify-center items-center">
           <Avatar 
-            className={`${compact ? 'h-12 w-12 mr-4 lg:mr-2' : 'h-20 w-20 mr-4'} ${compact ? 'hidden lg:block' : ''} flex-none`}>
+            className={`${compact ? 'h-12 w-12 mr-4 lg:mr-2' : 'h-16 w-16 mr-4'} ${compact ? 'hidden lg:block' : ''} flex-none`}>
             <AvatarImage src="https://github.com/shadcn.png" alt="@username" />
             <AvatarFallback>{name}</AvatarFallback>
           </Avatar>
