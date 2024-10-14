@@ -60,7 +60,7 @@ export default function RootLayout({
             <main className="z-10">
               {children}
             </main>
-            <footer className="flex gap-6 p-5 flex-wrap items-center justify-center text-sm z-10">
+            <footer className="flex gap-6 p-5 flex-wrap items-center justify-center text-sm font-mono z-10">
               <a
                 className="flex items-center gap-2 hover:underline hover:underline-offset-4"
                 href="https://sasn.rutgers.edu/mathematics-and-computer-science/ba-computer-science"

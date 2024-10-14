@@ -76,6 +76,7 @@ export default function Explore() {
 
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 m-3">
+			{/* CHATS */}
 			<Card>
 				<CardTitle className="text-xl font-extrabold p-3">Chats</CardTitle>
 				<CardContent className="p-0"> 
@@ -99,6 +100,7 @@ export default function Explore() {
 				</CardContent>
 			</Card>
 
+			{/* FIND ACCOUNTABUDDIES */}
 			<Card>
 				<div className="flex justify-between items-center">
 					<CardTitle className="text-xl font-extrabold p-3">Find Accountabuddies</CardTitle>
@@ -135,6 +137,7 @@ export default function Explore() {
 				</CardContent>
 			</Card>
 
+			{/* NOTIFICATION CENTER */}
 			<Card>
 				<CardTitle className="text-xl font-extrabold p-3">Notification Center</CardTitle>
 				<CardContent>
