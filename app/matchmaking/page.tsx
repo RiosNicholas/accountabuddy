@@ -9,8 +9,6 @@ import myImage from '@/public/profile-picture.jpg';
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
@@ -37,30 +35,24 @@ export default function Matchmaking({}) {
         'blurb': "Hi! I'm Corbin, and I'm one of the people who made this web app!"
     }
 
-    let viewingProfile = false;
+    const viewingProfile = false;
 
     if (viewingProfile) {
 
-        let promptComponents = []
-        for (var prompt in dummyData.prompts) {
+        const promptComponents = []
+        for (const prompt in dummyData.prompts) {
             promptComponents.push(<PromptDisplay prompt={prompt} response={dummyData.prompts[prompt]} />)
-
         }
 
         return (
             <div className="flex flex-col items-center">
                 <div>
-                    <h1 className="w-80 text-2xl">{dummyData.name}'s Profile</h1>
+                    <h1 className="w-80 text-2xl">{dummyData.name}'s Profile</h1> {/* eslint-disable-line react/no-unescaped-entities */}
                 </div>
                 <div>
                     <Avatar>
-                        <AvatarImage
-                            src="none"
-                            alt={dummyData.name}
-                        />
-                        <AvatarFallback delayMs={600}>
-                            CG
-                        </AvatarFallback>
+                        <AvatarImage src="none" alt={dummyData.name} />
+                        <AvatarFallback delayMs={600}>CG</AvatarFallback>
                     </Avatar>
                     {promptComponents}
                 </div>
