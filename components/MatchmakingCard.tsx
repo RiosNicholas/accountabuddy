@@ -95,7 +95,7 @@ export default function MatchmakingCard({
             </p>
           </div>
         </CardContent>
-        <CardContent className={`flex flex-col justify-center items-center p-2 lg:p-0 lg:text-sm`}>
+        <CardContent className={`flex flex-col justify-center items-center p-2 lg:p-0 lg:text-sm ${compact ? "lg: col-span-2" : "col-span-1"}`}>
           <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
             <h4 className="text-left font-semibold">Accountability Areas</h4>
             <p className={`bg-primary text-primary-foreground rounded p-1 w-full`}>
