@@ -3,13 +3,28 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "./ui/button";
 import { Cross1Icon, HandIcon } from "@radix-ui/react-icons";
 
+export enum MethodPreference {
+  InPerson = "In-Person",
+  Virtual = "Virtual",
+  NoPreference = "No Preference",
+}
+
+export enum MeetingPreference {
+  Daily = "Daily",
+  Weekly = "Weekly",
+  BiWeekly = "Bi-Weekly",
+  Monthly = "Monthly",
+}
+
 interface MatchmakingCardProps {
   name: string;
   age: number;
   university: string;
   intro: string;
-  accountability: string;  
-  growth: string;          
+  accountability: string;
+  growth: string;
+  meetingPreference: MeetingPreference;
+  methodPreference: MethodPreference;
   compact?: boolean;
 }
 
@@ -19,6 +34,8 @@ export default function MatchmakingCard({
   university,
   intro,
   accountability,
+  meetingPreference,
+  methodPreference,
   growth,
   compact = false,
 }: MatchmakingCardProps) {
@@ -44,10 +61,24 @@ export default function MatchmakingCard({
           {!compact && (
             <p className="text-center text-sm w-full text-muted-foreground">{intro}</p>
           )}
+          <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
+            <h3 className="text-left font-semibold">Meeting Preference</h3>
+            <p className={`bg-secondary text-secondary-foreground  rounded p-1 w-full`}>
+              {meetingPreference}
+            </p>
+          </div>
+          <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
+            <h3 className="text-left font-semibold">Method Preference</h3>
+            <p className="bg-secondary text-secondary-foreground rounded p-1 w-full">
+              {methodPreference}
+            </p>
+          </div>
+        </CardContent>
+        <CardContent className={`flex flex-col justify-center items-center p-2 lg:p-0 lg:text-sm`}>
           <div className={`bg-primary text-primary-foreground ${compact ? "mt-0" : "mt-2"} rounded p-1 w-full`}>
             {accountability}
           </div>
-          <div className="bg-primary text-primary-foreground mt-2 rounded p-1 w-full">
+          <div className={`bg-primary text-primary-foreground ${compact ? "mt-0" : "mt-2"} rounded p-1 w-full`}>
             {growth}
           </div>
         </CardContent>
