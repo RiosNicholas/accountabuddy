@@ -98,15 +98,23 @@ export default function MatchmakingCard({
         <CardContent className={`flex flex-col justify-center items-center p-2 lg:p-0 lg:text-sm ${compact ? "lg: col-span-2" : "col-span-1"}`}>
           <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
             <h4 className="text-left font-semibold">Accountability Areas</h4>
-            <p className={`bg-primary text-primary-foreground rounded p-1 w-full`}>
-              {accountabilityAreas.join(', ')}
-            </p>
+            <div className="flex flex-wrap gap-3">
+              {accountabilityAreas.map((area, index) => (
+                <p key={index} className="bg-primary text-primary-foreground rounded p-1">
+                  {area}
+                </p>
+              ))}
+            </div>
           </div>
           <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
             <h4 className="text-left font-semibold">Goal Buckets</h4>
-            <p className={`bg-primary text-primary-foreground rounded p-1 w-full`}>
-              {goalBuckets.join(', ')}
-            </p>
+            <div className="flex flex-wrap gap-3">
+              {goalBuckets.map((area, index) => (
+                <p key={index} className="bg-primary text-primary-foreground rounded p-1">
+                  {area}
+                </p>
+              ))}
+            </div>
           </div> 
         </CardContent>
       </div>
