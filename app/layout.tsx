@@ -37,7 +37,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="grid grid-rows-[auto_1fr_auto] min-h-screen">
+          <div className="grid grid-rows-[auto_1fr_auto] min-h-screen bg-background">
             <header className="flex justify-between items-center z-10"> 
               <div className="flex items-center px-2 mx-1 gap-2">
                 <Image
