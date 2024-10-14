@@ -101,7 +101,7 @@ export default function Explore() {
 							intro="I'm passionate about self-growth and looking for a partner to hold me accountable."
 							accountability="Seek accountability for time management"
 							growth="I want to grow in leadership skills"
-							compact={false} 
+							compact={true} 
 						/>
 					</div>
 				</CardContent>
