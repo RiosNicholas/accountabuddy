@@ -113,27 +113,26 @@ export default function Explore() {
 							age={22}
 							university="Rutgers University"
 							intro="I'm passionate about self-growth and looking for a partner to hold me accountable."
-							accountability="Seek accountability for time management"
-							growth="I want to grow in leadership skills"
+							accountabilityAreas={['Setting and Reaching Goals', 'Managing Time Effectively']}
+							goalBuckets={['Education', 'Career']}
 							meetingPreference={MeetingPreference.Weekly}
 							methodPreference={MethodPreference.InPerson}
 							compact={compactView}
 						/>
+						
 						<MatchmakingCard
 							name="Jane Smith"
 							age={24}
 							university="Stanford University"
 							intro="Excited to find someone who can help me stay consistent with my fitness goals."
-							accountability="Need help with consistent workout routines."
-							growth="I want to develop a habit of reading more books."
+							accountabilityAreas={['Focusing on Wellness', 'Habit Building']}
+							goalBuckets={['Health & Fitness', 'Self Development']}
 							meetingPreference={MeetingPreference.Daily}
 							methodPreference={MethodPreference.Virtual}
 							compact={compactView}
 						/>
 					</div>
 				</CardContent>
-
-				
 			</Card>
 
 			<Card>

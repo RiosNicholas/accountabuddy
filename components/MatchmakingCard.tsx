@@ -21,22 +21,43 @@ interface MatchmakingCardProps {
   age: number;
   university: string;
   intro: string;
-  accountability: string;
-  growth: string;
+  accountabilityAreas: string[]; 
+  goalBuckets: string[]; 
   meetingPreference: MeetingPreference;
   methodPreference: MethodPreference;
   compact?: boolean;
 }
+ 
+const accountabilityAreas = [
+  'Habit Building',
+  'Setting and Reaching Goals',
+  'Managing Time Effectively',
+  'Boosting Productivity',
+  'Focusing on Wellness',
+  'Developing Skills',
+  'Building Relationships',
+  'Planning Finances',
+  'Advancing Your Career',
+];
+
+const goalBuckets = [
+  'Education',
+  'Health & Fitness',
+  'Finance',
+  'Career',
+  'Self Development',
+  'Social',
+];
 
 export default function MatchmakingCard({
   name,
   age,
   university,
   intro,
-  accountability,
+  accountabilityAreas,
+  goalBuckets,
   meetingPreference,
   methodPreference,
-  growth,
   compact = false,
 }: MatchmakingCardProps) {
   return (
@@ -62,25 +83,31 @@ export default function MatchmakingCard({
             <p className="text-center text-sm w-full text-muted-foreground">{intro}</p>
           )}
           <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
-            <h3 className="text-left font-semibold">Meeting Preference</h3>
+            <h4 className="text-left font-semibold">Meeting Preference</h4>
             <p className={`bg-secondary text-secondary-foreground  rounded p-1 w-full`}>
               {meetingPreference}
             </p>
           </div>
           <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
-            <h3 className="text-left font-semibold">Method Preference</h3>
+            <h4 className="text-left font-semibold">Method Preference</h4>
             <p className="bg-secondary text-secondary-foreground rounded p-1 w-full">
               {methodPreference}
             </p>
           </div>
         </CardContent>
         <CardContent className={`flex flex-col justify-center items-center p-2 lg:p-0 lg:text-sm`}>
-          <div className={`bg-primary text-primary-foreground ${compact ? "mt-0" : "mt-2"} rounded p-1 w-full`}>
-            {accountability}
+          <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
+            <h4 className="text-left font-semibold">Accountability Areas</h4>
+            <p className={`bg-primary text-primary-foreground rounded p-1 w-full`}>
+              {accountabilityAreas.join(', ')}
+            </p>
           </div>
-          <div className={`bg-primary text-primary-foreground ${compact ? "mt-0" : "mt-2"} rounded p-1 w-full`}>
-            {growth}
-          </div>
+          <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
+            <h4 className="text-left font-semibold">Goal Buckets</h4>
+            <p className={`bg-primary text-primary-foreground rounded p-1 w-full`}>
+              {goalBuckets.join(', ')}
+            </p>
+          </div> 
         </CardContent>
       </div>
 
