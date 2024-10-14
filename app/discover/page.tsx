@@ -21,39 +21,48 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default function MatchMaking({}) {
 
     interface promptData {
-        [key: string]: string | ReactElement
+        [key: string]: string
     }
 
     const prompts: promptData = {
         'School': 'Rutgers University - Newark',
         "Meeting Preference": "Virtual",
         "Major": "Computer Science",
-        "Biggest Challenge": <b>Time Management</b>
+        "Biggest Challenge": "Time Management"
     }
 
     const dummyData = {
         'name': "Corbin Grosso",
-        prompts,
-        'blurb': "Hi! I'm Corbin, and I'm one of the people who made this web app!"
+        "prompts": prompts,
+        'Bio': "Hi! I'm Corbin, and I'm one of the people who made this web app!",
+        "test1": "content for test 1",
+        "test2": "content for test 2",
+        "test3": "content for test 3"
     }
 
-    let viewingProfile = false;
+    let viewingProfile = true;
 
     if (viewingProfile) {
 
-        let promptComponents = []
+        let infoCards = []
+        let aboutPrompt = []
         for (var prompt in dummyData.prompts) {
-            promptComponents.push(<PromptDisplay prompt={prompt} response={dummyData.prompts[prompt]} />)
-
+            aboutPrompt.push(<p><b>{prompt}:</b> {dummyData.prompts[prompt]}</p>)
         }
+        infoCards.push(<PromptDisplay prompt={"About"} response={aboutPrompt} />)
 
+        infoCards.push(<PromptDisplay prompt={"Bio"} response={dummyData["Bio"]} />)
+        infoCards.push(<PromptDisplay prompt={"test1"} response={dummyData["test1"]} />)
+        infoCards.push(<PromptDisplay prompt={"test2"} response={dummyData["test2"]} />)
+        infoCards.push(<PromptDisplay prompt={"test3"} response={dummyData["test3"]} />)
+        
         return (
             <div className="flex flex-col items-center">
                 <div>
-                    <h1 className="w-80 text-2xl">{dummyData.name}'s Profile</h1>
+                    <h1 className="w-380 text-2xl">{dummyData.name}'s Profile</h1>
                 </div>
-                <div>
-                    <Avatar>
+                <div className="flex flex-col items-center w-3/4">
+                    <Avatar className="m-4">
                         <AvatarImage
                             src="none"
                             alt={dummyData.name}
@@ -62,7 +71,9 @@ export default function MatchMaking({}) {
                             CG
                         </AvatarFallback>
                     </Avatar>
-                    {promptComponents}
+                    <div className="">
+                        {infoCards}
+                    </div>
                 </div>
             </div>
         );
