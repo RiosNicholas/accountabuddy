@@ -4,7 +4,7 @@ import { useState } from 'react';
 import MatchmakingCard, { MeetingPreference, MethodPreference } from "@/components/MatchmakingCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, } from "@/components/ui/card"
+import { Card, CardContent, CardTitle, } from "@/components/ui/card"
 
 interface Chat {
 	profileImageUrl: string;
@@ -13,14 +13,15 @@ interface Chat {
 	lastMessage: string;
 }
 
-interface Matches {
-	profileImageUrl: string;
-	name: string;
-	username: string;
-}
+// interface Matches {
+// 	profileImageUrl: string;
+// 	name: string;
+// 	username: string;
+// }
 
-interface Notifications {
-}
+// interface Notifications {
+// TODO 
+// }
 
 export default function Explore() {
 	const [compactView, setCompactView] = useState<boolean>(false);

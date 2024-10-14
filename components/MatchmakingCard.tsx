@@ -29,38 +29,28 @@ interface MatchmakingCardProps {
   compact?: boolean;
 }
  
-const accountabilityAreas = [
-  'Habit Building',
-  'Setting and Reaching Goals',
-  'Managing Time Effectively',
-  'Boosting Productivity',
-  'Focusing on Wellness',
-  'Developing Skills',
-  'Building Relationships',
-  'Planning Finances',
-  'Advancing Your Career',
-];
+// const accountabilityAreas = [
+//   'Habit Building',
+//   'Setting and Reaching Goals',
+//   'Managing Time Effectively',
+//   'Boosting Productivity',
+//   'Focusing on Wellness',
+//   'Developing Skills',
+//   'Building Relationships',
+//   'Planning Finances',
+//   'Advancing Your Career',
+// ];
 
-const goalBuckets = [
-  'Education',
-  'Health & Fitness',
-  'Finance',
-  'Career',
-  'Self Development',
-  'Social',
-];
+// const goalBuckets = [
+//   'Education',
+//   'Health & Fitness',
+//   'Finance',
+//   'Career',
+//   'Self Development',
+//   'Social',
+// ];
 
-export default function MatchmakingCard({
-  name,
-  age,
-  university,
-  intro,
-  accountabilityAreas,
-  goalBuckets,
-  meetingPreference,
-  methodPreference,
-  compact = false,
-}: MatchmakingCardProps) {
+export default function MatchmakingCard({ name, age, university, intro, accountabilityAreas, goalBuckets, meetingPreference, methodPreference, compact = false, }: MatchmakingCardProps) {
   return (
     <Card className="bg-muted text-background-foreground">
       <div className={`grid gap-4 lg:gap-1 ${compact ? 'lg:grid-cols-[1fr,1fr]' : 'grid-cols-1'} p-${compact ? '2' : '6'}`}>

@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { ModeToggle } from "./ui/mode-toggle";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "./ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,20 +12,10 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import {
-  Cloud,
-  CreditCard,
-  Github,
-  Keyboard,
   LifeBuoy,
   LogOut,
-  Mail,
-  MessageSquare,
-  Plus,
-  PlusCircle,
   Settings,
   User,
-  UserPlus,
-  Users,
 } from "lucide-react"
 
 
