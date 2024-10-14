@@ -24,11 +24,11 @@ export default function MatchmakingCard({
 }: MatchmakingCardProps) {
   return (
 
-    <Card className="bg-secondary text-secondary-foreground">
+    <Card className="bg-muted text-background-foreground">
       <div className={`grid gap-4 lg:gap-1 ${compact ? 'lg:grid-cols-[4fr,7fr]' : 'grid-cols-1'} p-${compact ? '2' : '6'}`}>
         <div className="flex justify-center items-center">
-          <Avatar className={`h-${compact ? '12' : '20'} w-${compact ? '12' : '20'} mr-4 lg:mr-2`}>
-            <AvatarImage src="../../public/profile-picture.jpg" />
+          <Avatar className={`h-${compact ? '12' : '20'} w-${compact ? '12' : '20'} mr-4 ${compact ? "lg:mr-2" : ""}`}>
+            <AvatarImage src="../../public/profile-picture.jpg"/>
             <AvatarFallback>{name}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col justify-center text-left">
@@ -42,7 +42,7 @@ export default function MatchmakingCard({
 
         <CardContent className={`flex flex-col justify-center items-center p-2 lg:p-0 lg:text-sm`}>
           {!compact && (
-            <p className="text-center text-sm w-full">{intro}</p>
+            <p className="text-center text-sm w-full text-muted-foreground">{intro}</p>
           )}
           <div className={`bg-primary text-primary-foreground ${compact ? "mt-0" : "mt-2"} rounded p-1 w-full`}>
             {accountability}

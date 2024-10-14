@@ -1,5 +1,9 @@
+"use client"
+import { useState } from 'react';
+
 import MatchmakingCard from "@/components/MatchmakingCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, } from "@/components/ui/card"
 
 interface Chat {
@@ -19,6 +23,12 @@ interface Notifications {
 }
 
 export default function Explore() {
+	const [compactView, setCompactView] = useState<boolean>(false);
+	
+	const toggleCompactView = () => {
+		setCompactView((prevState) => !prevState);
+	}
+	 
 	const exampleChats: Chat[] = [
 		{
 			profileImageUrl: "https://via.placeholder.com/150",
@@ -80,7 +90,7 @@ export default function Explore() {
 									<AvatarFallback>{chat.name}</AvatarFallback>
 								</Avatar>
 								<div>
-									<h3 className="font-semibold">{chat.name}</h3>
+									<h3 className="font-semibold text-secondary-foreground">{chat.name}</h3>
 									<p className="text-sm text-muted-foreground">{chat.lastMessage}</p>
 								</div>
 							</div>
@@ -90,7 +100,12 @@ export default function Explore() {
 			</Card>
 
 			<Card>
-				<CardTitle className="text-xl font-bold p-3">Find Accountabuddies</CardTitle>
+				<div className="flex justify-between items-center">
+					<CardTitle className="text-xl font-bold p-3">Find Accountabuddies</CardTitle>
+					<Button variant="link" className="text-accent" onClick={toggleCompactView}>
+						{compactView ? "Compact View" : "Detailed View"}
+					</Button>
+				</div>
 				<CardContent>
 					<div className="grid">
 						<MatchmakingCard
@@ -100,7 +115,7 @@ export default function Explore() {
 							intro="I'm passionate about self-growth and looking for a partner to hold me accountable."
 							accountability="Seek accountability for time management"
 							growth="I want to grow in leadership skills"
-							compact={true} 
+							compact={compactView} 
 						/>
 					</div>
 				</CardContent>
