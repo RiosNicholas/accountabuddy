@@ -1,14 +1,25 @@
+import MatchmakingCard from "@/components/MatchmakingCard";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Card, CardContent, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, } from "@/components/ui/card"
 
 interface Chat {
-  profileImageUrl: string;
-  name: string;
+	profileImageUrl: string;
+	name: string;
 	username: string;
-  lastMessage: string;
+	lastMessage: string;
+}
+
+interface Matches {
+	profileImageUrl: string;
+	name: string;
+	username: string;
+}
+
+interface Notifications {
 }
 
 export default function Explore() {
+
 	const exampleChats: Chat[] = [
 		{
 			profileImageUrl: "https://via.placeholder.com/150",
@@ -55,7 +66,7 @@ export default function Explore() {
 	];
 
 	return (
-		<div className="grid grid-cols-1 lg:grid-cols-2 gap-6 m-3">
+		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 m-3">
 			<Card>
 				<CardTitle className="text-xl font-bold p-3">Chats</CardTitle>
 				<CardContent className="p-0"> 
@@ -80,10 +91,27 @@ export default function Explore() {
 			</Card>
 
 			<Card className="p-3">
-				<CardTitle className="text-xl font-bold">Matches</CardTitle>
+				<CardTitle className="text-xl font-bold">Find Accountabuddies</CardTitle>
 				<CardContent>
 					<div className="grid">
-						test
+						<MatchmakingCard
+							name="John Doe"
+							age={22}
+							university="Rutgers University"
+							intro="I'm passionate about self-growth and looking for a partner to hold me accountable."
+							accountability="Seek accountability for time management"
+							growth="I want to grow in leadership skills"
+							compact={false} 
+						/>
+					</div>
+				</CardContent>
+			</Card>
+
+			<Card className="p-3">
+				<CardTitle className="text-xl font-bold">Notification Center</CardTitle>
+				<CardContent>
+					<div className="grid">
+						test.
 					</div>
 				</CardContent>
 			</Card>
