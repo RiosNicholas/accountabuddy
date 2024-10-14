@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
-import { ModeToggle } from "@/components/ui/mode-toggle";
 import Image from "next/image";
+import Header from "@/components/Header";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -37,23 +37,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="grid grid-rows-[auto_1fr_auto] min-h-screen">
-            <header className="flex justify-between items-center z-10"> 
-              <div className="flex items-center px-2 mx-1 gap-2">
-                <Image
-                  src="/icon.svg" 
-                  alt="Accountabuddy logo"
-                  width={32}
-                  height={32}
-                />
-                <h1 className="text-xl font-black">Accountabuddy</h1>
-              </div>
-              <ModeToggle/>
-            </header>
+          <div className="grid grid-rows-[auto_1fr_auto] min-h-screen bg-background">
+            <Header />
             <main className="z-10">
               {children}
             </main>
-            <footer className="flex gap-6 p-5 flex-wrap items-center justify-center text-sm z-10">
+            <footer className="flex gap-6 p-5 flex-wrap items-center justify-center text-sm font-mono z-10">
               <a
                 className="flex items-center gap-2 hover:underline hover:underline-offset-4"
                 href="https://sasn.rutgers.edu/mathematics-and-computer-science/ba-computer-science"
