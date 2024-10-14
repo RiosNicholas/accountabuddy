@@ -77,7 +77,7 @@ export default function Explore() {
 	return (
 		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 m-3">
 			<Card>
-				<CardTitle className="text-xl font-bold p-3">Chats</CardTitle>
+				<CardTitle className="text-xl font-extrabold p-3">Chats</CardTitle>
 				<CardContent className="p-0"> 
 					<div className="grid grid-cols-1 w-full">
 						{exampleChats.map((chat, index) => (
@@ -101,7 +101,7 @@ export default function Explore() {
 
 			<Card>
 				<div className="flex justify-between items-center">
-					<CardTitle className="text-xl font-bold p-3">Find Accountabuddies</CardTitle>
+					<CardTitle className="text-xl font-extrabold p-3">Find Accountabuddies</CardTitle>
 					<Button variant="link" className="text-accent" onClick={toggleCompactView}>
 						{compactView ? "Compact View" : "Detailed View"}
 					</Button>
@@ -136,7 +136,7 @@ export default function Explore() {
 			</Card>
 
 			<Card>
-				<CardTitle className="text-xl font-bold p-3">Notification Center</CardTitle>
+				<CardTitle className="text-xl font-extrabold p-3">Notification Center</CardTitle>
 				<CardContent>
 					<div className="grid">
 						test.
