@@ -123,7 +123,7 @@ export default function Explore() {
 						<MatchmakingCard
 							name="Jane Smith"
 							age={24}
-							university="Stanford University"
+							university="Rutgers University"
 							intro="Excited to find someone who can help me stay consistent with my fitness goals."
 							accountabilityAreas={['Focusing on Wellness', 'Habit Building']}
 							goalBuckets={['Health & Fitness', 'Self Development']}
