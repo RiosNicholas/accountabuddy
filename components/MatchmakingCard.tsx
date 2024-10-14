@@ -25,22 +25,22 @@ export default function MatchmakingCard({
   return (
 
     <Card className="bg-secondary text-secondary-foreground">
-      <div className={`grid gap-4 lg:gap-1 ${compact ? 'lg:grid-cols-[2fr,3fr]' : 'grid-cols-1'} p-${compact ? '2' : '6'}`}>
-        <div className="flex items-center">
+      <div className={`grid gap-4 lg:gap-1 ${compact ? 'lg:grid-cols-[4fr,7fr]' : 'grid-cols-1'} p-${compact ? '2' : '6'}`}>
+        <div className="flex justify-center items-center">
           <Avatar className={`h-${compact ? '12' : '20'} w-${compact ? '12' : '20'} mr-4 lg:mr-2`}>
             <AvatarImage src="../../public/profile-picture.jpg" />
             <AvatarFallback>{name}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col justify-center text-left">
-            <CardTitle className="lg:text-base">
+            <CardTitle className={`${compact ? "lg:text-base" : ""}`}>
               {name}
               {!compact && `, ${age}`}
             </CardTitle>
-            <CardHeader className="lg:text-xs p-0 font-medium">{university}</CardHeader>
+           <CardHeader className={`${compact ? "lg:text-xs" : ""} p-0 font-medium`}>{university}</CardHeader>
           </div>
         </div>
 
-        <CardContent className={`flex flex-col justify-center items-center ${compact ? 'p-2 lg:p-0' : 'p-6'} lg:text-sm`}>
+        <CardContent className={`flex flex-col justify-center items-center p-2 lg:p-0 lg:text-sm`}>
           {!compact && (
             <p className="text-center text-sm w-full">{intro}</p>
           )}
@@ -53,7 +53,7 @@ export default function MatchmakingCard({
         </CardContent>
       </div>
 
-      <div id="profile-actions" className={`flex justify-around ${compact ? 'p-1' : 'p-4'}`}>
+      <div id="profile-actions" className={`flex justify-around ${compact ? 'px-1 pt-1 pb-2' : 'p-3'}`}>
         <Button variant="destructive" id="reject-button" className={`bg-white border-none rounded-full ${compact ? 'w-10 h-10 text-xl' : 'w-12 h-12 text-2xl'} cursor-pointer shadow-md hover:shadow-lg text-red-500 hover:text-white`}>
           <Cross1Icon/> 
         </Button>

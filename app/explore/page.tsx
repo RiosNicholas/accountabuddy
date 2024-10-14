@@ -19,7 +19,6 @@ interface Notifications {
 }
 
 export default function Explore() {
-
 	const exampleChats: Chat[] = [
 		{
 			profileImageUrl: "https://via.placeholder.com/150",
@@ -90,8 +89,8 @@ export default function Explore() {
 				</CardContent>
 			</Card>
 
-			<Card className="p-3">
-				<CardTitle className="text-xl font-bold">Find Accountabuddies</CardTitle>
+			<Card>
+				<CardTitle className="text-xl font-bold p-3">Find Accountabuddies</CardTitle>
 				<CardContent>
 					<div className="grid">
 						<MatchmakingCard
@@ -107,8 +106,8 @@ export default function Explore() {
 				</CardContent>
 			</Card>
 
-			<Card className="p-3">
-				<CardTitle className="text-xl font-bold">Notification Center</CardTitle>
+			<Card>
+				<CardTitle className="text-xl font-bold p-3">Notification Center</CardTitle>
 				<CardContent>
 					<div className="grid">
 						test.
