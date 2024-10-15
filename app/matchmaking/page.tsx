@@ -2,17 +2,9 @@
 
 import React, { ReactElement } from "react";
 import PromptDisplay from "@/components/PromptDisplay";
-import Image from 'next/image';
-import myImage from '@/public/profile-picture.jpg';
 import MatchmakingCard, { MeetingPreference, MethodPreference } from "@/components/MatchmakingCard";
 
 
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-  } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 
