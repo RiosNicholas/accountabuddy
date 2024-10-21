@@ -49,9 +49,7 @@ export default function LoginPage() {
           <>
             <div className="flex flex-col lg:flex-row justify-center gap-2 w-5/6 max-w-lg mx-auto">
               <Button 
-                  onClick={() => signIn("google", { callbackUrl: "/" })} 
-                  className="flex-1 gap-1 text-xs bg-white text-black font-bold border border-background hover:text-secondary-foreground hover:bg-neutral-200 hover:text-black"
-                >
+                onClick={() => signIn("google", { callbackUrl: "/" })} className="flex-1 gap-1 text-xs bg-white text-black font-bold border border-background hover:text-secondary-foreground hover:bg-neutral-200 hover:text-black">
                 <Image
                   src="/google.svg"
                   alt="Google Logo"
