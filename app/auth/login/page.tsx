@@ -10,6 +10,7 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from '
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { signIn } from 'next-auth/react';
 import {useSession} from "next-auth/react";
 
 const formSchema = z.object({
@@ -47,16 +48,22 @@ export default function LoginPage() {
         {!session ? (
           <>
             <div className="flex flex-col lg:flex-row justify-center gap-2 w-5/6 max-w-lg mx-auto">
-              <Button className="flex-1 gap-1 text-xs bg-white text-black border border-background hover:border-background-foreground font-bold">
+              <Button 
+                  onClick={() => signIn("google", { callbackUrl: "/" })} 
+                  className="flex-1 gap-1 text-xs bg-white text-black font-bold border border-background hover:text-secondary-foreground hover:bg-neutral-200 hover:text-black"
+                >
                 <Image
                   src="/google.svg"
                   alt="Google Logo"
                   width={24}
                   height={24}
                 />
-                Login with Google
+                Sign in with Google
               </Button>
-              <Button className="flex-1 gap-1 text-xs bg-gradient-to-r from-[#f09433] via-[#e6683c] to-[#bc2a8d] text-white border border-transparent hover:border-background-foreground font-bold">
+              <Button
+                  // onClick={() => signIn("instagram", { callbackUrl: "/" })}
+                  className="flex-1 gap-1 text-xs bg-gradient-to-r from-[#f09433] via-[#e6683c] to-[#bc2a8d] text-white font-bold border border-transparent hover:border-background-foreground hover:text-secondary-foreground hover:bg-secondary hover:border-background-foreground"
+                >
                 <Image
                   src="/instagram.svg"
                   alt="Instagram Logo"
