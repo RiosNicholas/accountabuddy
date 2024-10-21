@@ -8,7 +8,7 @@ const LoginReminder: React.FC = () => {
         Don't miss out!
       </h2>
       <p className="text-secondary-foreground text-lg font-medium">
-        Please <Link href="/auth/login" className="text-accent hover:underline">sign in</Link> to access all the features.
+        Please <Link href="/auth/login" className="text-accent hover:underline">sign in</Link> to access all the features on this page.
       </p>
     </div>
   );
