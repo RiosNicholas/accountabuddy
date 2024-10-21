@@ -24,7 +24,7 @@ const formSchema = z.object({
   // TODO: add message for invalid username or password
 })
 
-export default function ProfileSignup() {
+export default function SignupPage() {
     const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
