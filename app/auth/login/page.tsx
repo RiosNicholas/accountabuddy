@@ -47,7 +47,7 @@ export default function LoginPage() {
       <main className="relative z-10 col-span-1 flex flex-col justify-center items-center md:col-start-3 bg-background-translucent bg-opacity-85 md:bg-transparent p-4 md:p-0 min-h-screen">
         {!session ? (
           <>
-            <div className="flex flex-col lg:flex-row justify-center gap-2 w-5/6 max-w-lg mx-auto">
+            <div className="flex flex-col justify-center gap-2 w-4/6 max-w-md mx-auto">
               <Button 
                 onClick={() => signIn("google", { callbackUrl: "/" })} className="flex-1 gap-1 text-xs bg-white text-black font-bold border border-background hover:text-secondary-foreground hover:bg-neutral-200 hover:text-black">
                 <Image
@@ -70,6 +70,11 @@ export default function LoginPage() {
                 />
                 Login with Instagram
               </Button>
+            </div>
+            <div className="flex items-center justify-center w-4/6 my-4">
+              <div className="border-t border-muted-foreground flex-grow mr-3"></div>
+              <span className="text-muted-foreground">or</span>
+              <div className="border-t border-muted-foreground flex-grow ml-3"></div>
             </div>
 
             <Form {...form}>
