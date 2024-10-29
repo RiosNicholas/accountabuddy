@@ -5,7 +5,6 @@ import PromptDisplay from "@/components/PromptDisplay";
 import Image from 'next/image';
 import myImage from '@/public/profile-picture.jpg';
 
-
 import {
     Card,
     CardContent,
@@ -16,7 +15,27 @@ import {
   } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
+const fetchUsersToDisplay = async () => {
+    console.log("Getting users that should be displayed");
 
+    try {
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+        const response = await fetch(`${baseUrl}/api/discover`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+            });
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        let data = await response.json();
+        console.log("Users fetched successfully", data.data);
+        return data.data;
+    } catch (e) {
+        console.error("Failed to fetch users:", e);
+    }
+};
 
 export default function MatchMaking({}) {
 
@@ -40,6 +59,9 @@ export default function MatchMaking({}) {
         "test3": "content for test 3"
     }
 
+    const userList = fetchUsersToDisplay()
+    console.log(`Output: ${userList}`)
+
     let viewingProfile = true;
 
     if (viewingProfile) {
@@ -47,7 +69,7 @@ export default function MatchMaking({}) {
         let infoCards = []
         let aboutPrompt = []
         for (var prompt in dummyData.prompts) {
-            aboutPrompt.push(<p><b>{prompt}:</b> {dummyData.prompts[prompt]}</p>)
+            aboutPrompt.push(<div>{prompt}: {dummyData.prompts[prompt]}</div>)
         }
         infoCards.push(<PromptDisplay prompt={"About"} response={aboutPrompt} />)
 
@@ -120,10 +142,10 @@ export default function MatchMaking({}) {
                                     <div>
                                         Areas of Growth:
                                         <ul className="py-4 px-4">
-                                            <li>Self Development</li>
-                                            <li>Health & Fitness</li>
-                                            <li>Education</li>
-                                            <li>Social</li>
+                                            <li key={0}>Self Development</li>
+                                            <li key={1}>Health & Fitness</li>
+                                            <li key={2}>Education</li>
+                                            <li key={3}>Social</li>
                                         </ul>
                                     </div>
                             </div>

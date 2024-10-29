@@ -19,7 +19,7 @@ export default function PromptDisplay(props:PromptDisplayProps) {
                 <CardTitle className="font-bold">{prompt}</CardTitle>
             </CardHeader>
             <CardContent>
-                <p className="max-w-prose text-l">{response}</p>
+                <div className="max-w-prose text-l">{response}</div>
             </CardContent>
         </Card>
     );
