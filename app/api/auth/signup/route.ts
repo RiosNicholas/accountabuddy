@@ -17,10 +17,13 @@ export async function POST(request: Request) {
     // Initializing Supabase client with request and response for SSR
     const supabase = createRouteHandlerClient({ cookies });
 
+    // Getting current time as the time of account creation
+    const created_at = new Date();
+
     // Inserting user data into the Users table
     const { error } = await supabase
       .from('Users')
-      .insert([{ name, username, email, password: hashedPassword }]);
+      .insert([{ created_at, name, username, email, password: hashedPassword }]);
 
     if (error) {
       console.error(error);
