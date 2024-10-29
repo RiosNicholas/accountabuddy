@@ -1,5 +1,6 @@
 "use client";
 
+import router from "next/router";
 import * as z from "zod";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -7,7 +8,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button"
-import Link from "next/link";
 import {
   Form,
   FormControl,
@@ -55,9 +55,10 @@ export default function SignupForm() {
       }
       console.log("Signup Successful", response);
       toast({ title: "Signup Successful" });
-    } catch (error: any) {
-      console.error("Signup Failed:", error);
-      toast({ title: "Signup Failed", description: error.message });
+      router.push("/auth/signup/preferences")
+    } catch (e) {
+      console.error("Signup Failed:", e);
+      toast({ title: "Signup Failed", description: e.message });
     }
   };
 
@@ -126,9 +127,7 @@ export default function SignupForm() {
             />
             <div className="flex justify-center">
               <Button type="submit" className="my-2 w-full">
-                <Link href="/auth/signup/preferences">
-                  Sign up
-                </Link>
+                Sign up
               </Button>
             </div>
           </form>
