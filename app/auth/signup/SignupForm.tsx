@@ -1,6 +1,6 @@
 "use client";
 
-import router from "next/router";
+import { useRouter } from "next/navigation";
 import * as z from "zod";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -28,7 +28,8 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 export default function SignupForm() {
-    const form = useForm<z.infer<typeof formSchema>>({
+  const router = useRouter(); // Initialize useRouter
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",

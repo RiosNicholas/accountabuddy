@@ -7,6 +7,7 @@ import { cookies } from "next/headers"; // required for SSR in `app` directory
 export async function POST(request: Request) {
   try {
     const { name, username, email, password } = await request.json();
+    const created_at = new Date();
 
     if (!name || !username || !email || !password) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
@@ -17,8 +18,6 @@ export async function POST(request: Request) {
     // Initializing Supabase client with request and response for SSR
     const supabase = createRouteHandlerClient({ cookies });
 
-    // Getting current time as the time of account creation
-    const created_at = new Date();
 
     // Inserting user data into the Users table
     const { error } = await supabase
