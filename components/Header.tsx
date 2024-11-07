@@ -1,29 +1,10 @@
 import Image from "next/image";
 import { ModeToggle } from "./ui/mode-toggle";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
-import {
-  LifeBuoy,
-  LogOut,
-  Settings,
-  User,
-} from "lucide-react"
-
-
-// NEXTAUTH
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import HeaderProfile from "./HeaderProfile";
 
 export default async function Header() {
   const session = await getServerSession(authOptions);
@@ -40,51 +21,23 @@ export default async function Header() {
         <h1 className="text-lg font-black">Accountabuddy</h1>
       </div>
       <div className="flex justify-end items-center">
-        { session && 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Avatar className="w-8 h-8 hover:cursor-pointer hover:shadow-md">
-                <AvatarImage src="https://github.com/shadcn.png" alt="@username" />
-                <AvatarFallback>User</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
-                </DropdownMenuItem>
-            
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <LifeBuoy className="mr-2 h-4 w-4" />
-                  <span>Support</span>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        }
-        {!session &&
+        {session ? (
+          <HeaderProfile user={session.user} />
+        ) : (
           <>
             <Link href="/auth/login">
-              <Button variant="link" className="text-primary">Login</Button>
+              <Button variant="link" className="text-primary">
+                Login
+              </Button>
             </Link>
             <Link href="/auth/signup">
-              <Button variant="link" className="text-primary">Signup</Button>
+              <Button variant="link" className="text-primary">
+                Signup
+              </Button>
             </Link>
           </>
-        }
-        <ModeToggle/>
+        )}
+        <ModeToggle />
       </div>
     </header>
   )
