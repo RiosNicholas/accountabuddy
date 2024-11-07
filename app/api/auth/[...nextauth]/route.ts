@@ -2,6 +2,14 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 // import GoogleProvider from "next-auth/providers/google";
 // import InstagramProvider from "next-auth/providers/instagram";
+import { cookies } from "next/headers"; 
+import { createClient } from '@supabase/supabase-js';
+import { compare } from 'bcrypt';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL as string;
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string;
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -11,15 +19,39 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "auth/login",
   },
-
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {
-        email: {},
-        password: {},
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
+
+        const { data: user, error } = await supabase
+          .from('Users')
+          .select('*')
+          .eq('email', credentials.email)
+          .single();
+
+        if (error || !user) {
+          console.error("User not found or error:", error);
+          return null;
+        }
+
+        const passwordCorrect = await compare(credentials.password, user.password);
+
+        if (passwordCorrect) {
+          return {
+            id: user.id,
+            email: user.email,
+          };
+        }
+
+        console.log("Invalid credentials", credentials);
         return null;
       },
     }),

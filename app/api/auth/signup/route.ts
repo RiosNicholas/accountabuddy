@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { hash } from "bcrypt";
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { cookies } from "next/headers"; // required for SSR in `app` directory
+import { cookies } from "next/headers"; 
 
 
 export async function POST(request: Request) {
@@ -17,7 +17,6 @@ export async function POST(request: Request) {
 
     // Initializing Supabase client with request and response for SSR
     const supabase = createRouteHandlerClient({ cookies });
-
 
     // Inserting user data into the Users table
     const { error } = await supabase
