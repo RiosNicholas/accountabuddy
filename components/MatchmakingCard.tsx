@@ -28,27 +28,6 @@ interface MatchmakingCardProps {
   methodPreference: MethodPreference;
   compact?: boolean;
 }
- 
-// const accountabilityAreas = [
-//   'Habit Building',
-//   'Setting and Reaching Goals',
-//   'Managing Time Effectively',
-//   'Boosting Productivity',
-//   'Focusing on Wellness',
-//   'Developing Skills',
-//   'Building Relationships',
-//   'Planning Finances',
-//   'Advancing Your Career',
-// ];
-
-// const goalBuckets = [
-//   'Education',
-//   'Health & Fitness',
-//   'Finance',
-//   'Career',
-//   'Self Development',
-//   'Social',
-// ];
 
 export default function MatchmakingCard({ name, age, university, intro, accountabilityAreas, goalBuckets, meetingPreference, methodPreference, compact = false, }: MatchmakingCardProps) {
   return (
