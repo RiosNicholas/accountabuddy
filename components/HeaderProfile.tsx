@@ -14,7 +14,6 @@ import { LifeBuoy, LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 
 import { signOut } from "next-auth/react"
-import { redirect } from "next/dist/server/api-utils";
 
 interface HeaderProfileProps {
   user: {

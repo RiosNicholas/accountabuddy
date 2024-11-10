@@ -11,15 +11,17 @@ export default async function Header() {
   
   return (
     <header className="flex justify-between items-center z-10"> 
-      <div className="flex items-center px-2 mx-1 gap-2 hover">
-        <Image
-          src="/icon.svg" 
-          alt="Accountabuddy logo"
-          width={32}
-          height={32}
-        />
-        <h1 className="text-lg font-black">Accountabuddy</h1>
-      </div>
+      <Link href={session ? "/dashboard" : "/"}>
+        <div className="flex items-center px-2 mx-1 gap-2 hover:cursor-pointer">
+          <Image
+            src="/icon.svg" 
+            alt="Accountabuddy logo"
+            width={32}
+            height={32}
+          />
+          <h1 className="text-lg font-black">Accountabuddy</h1>
+        </div>
+      </Link>
       <div className="flex justify-end items-center">
         {session ? (
           <HeaderProfile user={session.user} />
