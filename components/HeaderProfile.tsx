@@ -11,48 +11,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LifeBuoy, LogOut, Settings, User } from "lucide-react";
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface HeaderProfileProps {
   user: {
     name: string;
+    username: string;
     email: string;
     image: string;
   };
 }
 
 export default function HeaderProfile({ user }: HeaderProfileProps) {
-  const router = useRouter();
-
-  // FIXME: this function should be signing out the user but is not working. investigate signout api vs nextauth hook
-  const handleSignOut = async () => {
-    try {
-      const response = await fetch('/api/signout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (response.ok) {
-        router.push('/auth/login');
-      } else {
-        console.error('Error signing out:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error signing out:', error);
-    }
-  };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         {/* FIXME: these components aren't being properly passed/displaying user metadata */}
         <Avatar className="w-8 h-8 hover:cursor-pointer hover:shadow-md">
-          <AvatarImage src={user.image ?? "/default-avatar.png"} alt={user.name} />
-          <AvatarFallback>{user.name}</AvatarFallback>
+          <AvatarImage src={user.image ?? "/default-avatar.png"} alt={user.username} />
+          <AvatarFallback>{user.username}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
@@ -61,19 +38,19 @@ export default function HeaderProfile({ user }: HeaderProfileProps) {
         <DropdownMenuGroup>
           <DropdownMenuItem className="hover:cursor-pointer">
             <User className="mr-2 h-4 w-4" />
-            <span>Profile</span>
+            <Link href={`/user/${user.username}`}>Profile</Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="hover:cursor-pointer">
             <Settings className="mr-2 h-4 w-4" />
-            <span>Settings</span>
+            <Link href="/settings">Settings</Link>
           </DropdownMenuItem>
           <DropdownMenuItem className="hover:cursor-pointer">
             <LifeBuoy className="mr-2 h-4 w-4" />
-            <span>Support</span>
+            <Link href="/support">Support</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:cursor-pointer" onClick={handleSignOut}>
+        <DropdownMenuItem className="hover:cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>

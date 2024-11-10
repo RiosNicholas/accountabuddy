@@ -11,7 +11,7 @@ export default async function Header() {
   
   return (
     <header className="flex justify-between items-center z-10"> 
-      <div className="flex items-center px-2 mx-1 gap-2">
+      <div className="flex items-center px-2 mx-1 gap-2 hover">
         <Image
           src="/icon.svg" 
           alt="Accountabuddy logo"
