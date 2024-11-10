@@ -20,7 +20,7 @@ const fetchUsersToDisplay = async () => {
 
     try {
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
-        const response = await fetch(`${baseUrl}/api/discover`, {
+        const response = await fetch(`${baseUrl}/api/discover/getUserIds`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json"
@@ -34,6 +34,28 @@ const fetchUsersToDisplay = async () => {
         return data.data;
     } catch (e) {
         console.error("Failed to fetch users:", e);
+    }
+};
+
+const fetchUserProfile = async (userId:string) => {
+    console.log("Getting user profile");
+
+    try {
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
+        const response = await fetch(`${baseUrl}/api/discover/getUserProfile?user_id=${userId}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+            });
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        let data = await response.json();
+        console.log("User profile fetched successfully", data.data);
+        return data.data;
+    } catch (e) {
+        console.error("Failed to fetch user profile:", e);
     }
 };
 
@@ -59,8 +81,21 @@ export default function MatchMaking({}) {
         "test3": "content for test 3"
     }
 
-    const userList = fetchUsersToDisplay()
-    console.log(`Output: ${userList}`)
+    fetchUsersToDisplay()
+    .then(userList => {
+        var currUser = userList[0].user_id;
+        console.log(typeof(currUser))
+        fetchUserProfile(currUser)
+        .then(profile => {
+            console.log(profile)
+        })
+        .catch(error => {
+            console.error("Error fetching user profile:", error);
+        })
+    })
+    .catch(error => {
+        console.error("Error fetching users:", error);
+    })
 
     let viewingProfile = true;
 
