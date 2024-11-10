@@ -33,9 +33,7 @@ export default function LoginForm() {
 
 
   const onSubmit = async (data: FormData) => {
-    console.log("Submitting form", data);
     const { email, password } = data;
-
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const response: any = await signIn("credentials", {
@@ -44,9 +42,13 @@ export default function LoginForm() {
         redirect: false,
       });
       console.log({ response });
-      if (!response?.error) {
-        router.push("/dashboard");
-        router.refresh();
+      if (response?.error) {
+        if (response.error === "CredentialsSignin") {
+          toast({ title: "Login Failed", description: "Incorrect password" });
+        } else {
+          toast({ title: "Login Failed", description: response.error });
+        }
+        return;
       }
 
       if (!response.ok) {
@@ -55,6 +57,8 @@ export default function LoginForm() {
       // Process response here
       console.log("Login Successful", response);
       toast({ title: "Login Successful" });
+      router.push("/dashboard");
+      router.refresh();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.error("Login Failed:", error);

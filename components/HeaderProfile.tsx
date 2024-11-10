@@ -13,12 +13,14 @@ import {
 import { LifeBuoy, LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 
+import { signOut } from "next-auth/react"
+
 interface HeaderProfileProps {
   user: {
     name: string;
     username: string;
     email: string;
-    image: string;
+    image?: string;
   };
 }
 
@@ -50,7 +52,7 @@ export default function HeaderProfile({ user }: HeaderProfileProps) {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:cursor-pointer">
+        <DropdownMenuItem className="hover:cursor-pointer" onClick={() => signOut()}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>
