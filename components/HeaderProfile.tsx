@@ -14,6 +14,7 @@ import { LifeBuoy, LogOut, Settings, User } from "lucide-react";
 import Link from "next/link";
 
 import { signOut } from "next-auth/react"
+import { redirect } from "next/dist/server/api-utils";
 
 interface HeaderProfileProps {
   user: {
@@ -52,7 +53,7 @@ export default function HeaderProfile({ user }: HeaderProfileProps) {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="hover:cursor-pointer" onClick={() => signOut()}>
+        <DropdownMenuItem className="hover:cursor-pointer" onClick={() => signOut({callbackUrl: 'http://localhost:3000/auth/login'})}>
           <LogOut className="mr-2 h-4 w-4" />
           <span>Log out</span>
         </DropdownMenuItem>
