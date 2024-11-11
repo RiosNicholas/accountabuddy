@@ -1,38 +1,45 @@
 "use client"
 
-import { useState } from 'react';
+import { AreasProps, PreferencesData } from './PreferenceInterfaces';
 
-export default function GoalPreferences() {
-  // NOTE: this should probably be cached later on so that a user can go back a step and not lose their selections. 
-  const [selectedGoalBuckets, setSelectedGoalBuckets] = useState<string[]>([]);
-
-  const handleOptionClick = (option: string) => {
-    if (selectedGoalBuckets.includes(option)) {
-      setSelectedGoalBuckets(selectedGoalBuckets.filter((selectedGoalBuckets) => selectedGoalBuckets !== option));
+export default function GoalPreferences({ areas, preferencesData, setPreferencesData }: AreasProps) {
+  
+  const handleOptionClick = (option: number) => {
+    if (preferencesData.growthAreas.includes(option)) {
+      setPreferencesData({
+        ...preferencesData,
+        growthAreas: preferencesData.growthAreas.filter((area) => area !== option)
+      });
     } else {
-      setSelectedGoalBuckets([...selectedGoalBuckets, option]);
+      setPreferencesData({
+      ...preferencesData,
+      growthAreas: [...preferencesData.growthAreas, option]
+    });
     }
   };
-
-  const goalBuckets = ['Education', 'Health & Fitness', 'Finance', 'Career', 'Self Development', 'Social'];
 
   return (
     <>
       <h1 className="font-bold text-left mb-3">Which areas of your life do you seek growth in?</h1>
+      {areas==null ? (
+        <p>Loading...</p>
+      ) : (
       <ul className='space-y-3 w-2/3 lg:w-1/2'>
-        {goalBuckets.map((bucket) => (
+        {areas.map((bucket) => (
           // TODO: add an icon to the left of the each bucket name
+          
           <li
-            key={bucket}
-            onClick={() => handleOptionClick(bucket)}
+            key={bucket.id as React.Key}
+            onClick={() => handleOptionClick(bucket.id)}
             className={`
-              hover:cursor-pointer p-2 rounded outline outline-1 outline-accent transition-colors duration-200 ${ selectedGoalBuckets.includes(bucket) ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'}`
+              hover:cursor-pointer p-2 rounded outline outline-1 outline-accent transition-colors duration-200 ${ preferencesData.growthAreas.includes(bucket.id) ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'}`
             }
           >
-            {bucket}
+            {bucket.area}
           </li>
         ))}
       </ul>
+      )}
     </>
   );
 };

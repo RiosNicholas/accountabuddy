@@ -1,47 +1,44 @@
 "use client"
 
-import { useState } from 'react';
+import { AreasProps } from './PreferenceInterfaces';
 
-export default function AccountabilityPreferences() {
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-
-  const handleOptionClick = (option: string) => {
-    if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((selectedOption) => selectedOption !== option));
+export default function AccountabilityPreferences({ areas, preferencesData, setPreferencesData }: AreasProps) {
+  
+  const handleOptionClick = (option: number) => {
+    if (preferencesData.accountabilityAreas.includes(option)) {
+      setPreferencesData({
+        ...preferencesData,
+        accountabilityAreas: preferencesData.accountabilityAreas.filter((area) => area !== option)
+      });
     } else {
-      setSelectedOptions([...selectedOptions, option]);
+      setPreferencesData({
+      ...preferencesData,
+      accountabilityAreas: [...preferencesData.accountabilityAreas, option]
+    });
     }
   };
-
-  const accountabilityAreas = [
-    'Habit Building',
-    'Setting and Reaching Goals',
-    'Managing Time Effectively',
-    'Boosting Productivity',
-    'Focusing on Wellness',
-    'Developing Skills',
-    'Building Relationships',
-    'Planning Finances',
-    'Advancing Your Career',
-  ];
 
   return (
     <>
       <h1 className="font-bold text-left mb-3">Where do you seek accountability?</h1>
+      {areas==null ? (
+        <p>Loading...</p>
+      ) : (
         <ul className='space-y-3 w-2/3 lg:w-1/2'>
-          {accountabilityAreas.map((bucket) => (
+          {areas.map((bucket) => (
             // TODO: add an icon to the left of the each bucket name
             <li
-              key={bucket}
-              onClick={() => handleOptionClick(bucket)}
+              key={bucket.id as React.Key}
+              onClick={() => handleOptionClick(bucket.id)}
               className={`
-                hover:cursor-pointer p-2 rounded outline outline-1 outline-accent transition-colors duration-200 ${ selectedOptions.includes(bucket) ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'}`
+                hover:cursor-pointer p-2 rounded outline outline-1 outline-accent transition-colors duration-200 ${ preferencesData.accountabilityAreas.includes(bucket.id) ? 'bg-accent text-accent-foreground' : 'hover:bg-muted'}`
               }
             >
-              {bucket}
+              {bucket.area}
             </li>
           ))}
       </ul>
+      )}
     </>
   );
 }

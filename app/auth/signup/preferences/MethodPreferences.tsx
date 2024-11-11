@@ -4,6 +4,7 @@ import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { MethodsProps } from "./PreferenceInterfaces"
 
 import {
   Form,
@@ -33,28 +34,39 @@ const FormSchema = z.object({
 		})
 })
 
-export default function MethodPreferences() {
+export default function MethodPreferences({ preferencesData, setPreferencesData }: MethodsProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
-  }
+
+	const handleSelectionChange = (option: string, selection: string) => {
+		if (option == "meetingLocation") {
+			setPreferencesData({
+				...preferencesData,
+				meetingLocation: selection
+			})
+		} else if (option == "meetingFrequency") {
+			setPreferencesData({
+				...preferencesData,
+				meetingFrequency: selection
+			})
+		}
+	};
 
   return (
 		// TODO: Add a progress tracker for all of the settings. maybe replace the save preferences with forward and backwards arrow until the end.
     <>
 			<h1 className="font-bold text-left">How would you like to meet?</h1>
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 lg:w-1/2 space-y-3">
+				<div className="w-2/3 lg:w-1/2 space-y-3">
 					<FormField
 						control={form.control}
 						name="methodPreferences"
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Method Preferences</FormLabel>
-								<Select onValueChange={field.onChange} defaultValue={field.value}>
+								<Select onValueChange={(value) => handleSelectionChange("meetingLocation", value)} defaultValue={preferencesData.meetingLocation == "" ? field.value : preferencesData.meetingLocation}>
 									<FormControl>
 										<SelectTrigger>
 											<SelectValue placeholder="How do you prefer to meet with your accountability person?" />
@@ -81,7 +93,7 @@ export default function MethodPreferences() {
 						render={({ field }) => (
 							<FormItem>
 								<FormLabel>Meeting Frequency</FormLabel>
-								<Select onValueChange={field.onChange} defaultValue={field.value}>
+								<Select onValueChange={(value) => handleSelectionChange("meetingFrequency", value)} defaultValue={preferencesData.meetingFrequency == "" ? field.value : preferencesData.meetingFrequency}>
 									<FormControl>
 										<SelectTrigger>
 										<SelectValue placeholder="How often do you want to check-in with your partner?" />
@@ -102,7 +114,7 @@ export default function MethodPreferences() {
 						You can manage preferences in your{" "}
 						<Link href="/profile/settings" className="underline">profile settings</Link>.
 					</FormDescription>
-				</form>
+				</div>
 			</Form> 
     </>
   )

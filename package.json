@@ -19,6 +19,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-toast": "^1.2.2",
+    "@reduxjs/toolkit": "^2.3.0",
     "@supabase/auth-helpers-nextjs": "^0.10.0",
     "@supabase/ssr": "^0.5.1",
     "@supabase/supabase-js": "^2.45.6",
@@ -34,6 +35,8 @@
     "react-dom": "^18",
     "react-hook-form": "^7.53.0",
     "react-image": "^4.1.0",
+    "react-redux": "^9.1.2",
+    "redux": "^5.0.1",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.23.8"
