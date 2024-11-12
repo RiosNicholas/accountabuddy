@@ -36,3 +36,37 @@ export async function POST(request: Request) {
     }
   }
 }
+
+export async function GET(request: Request) {
+  try {
+    const { name, username, email } = await request.json();
+
+    if (!name || !username || !email) {
+      return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
+    }
+
+    // Initializing Supabase client with request and response for SSR
+    const supabase = createRouteHandlerClient({ cookies });
+
+    // Inserting user data into the Users table
+    const { data, error } = await supabase
+      .from('Users')
+      .select('*')
+      .eq("name", name)
+      .eq("username", username)
+      .eq("email", email)
+      .single();
+
+    if (error) {
+      console.error(error);
+      return NextResponse.json({ message: "Failed to create user" }, { status: 500 });
+    }
+
+    return NextResponse.json({ message: "User created successfully", data }, { status: 201 });
+  } catch (e: unknown) {
+    console.error("Unexpected Error:", e);
+    if (e instanceof Error) {
+      return NextResponse.json({ message: "An error occurred", error: e.message }, { status: 500 });
+    }
+  }
+}

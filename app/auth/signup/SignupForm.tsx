@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import * as z from "zod";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import store from '@redux/store';
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -53,8 +54,21 @@ export default function SignupForm() {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-      console.log("Signup Successful", response);
       toast({ title: "Signup Successful" });
+
+      const loginResponse = await fetch("/api/auth/signup", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      // TODO: Log in the user in Redux store on signup
+      // store.dispatch({ type:"auth/login", payload:loginResponse })
+
       router.push("/auth/signup/preferences")
     } catch (e) {
       console.error("Signup Failed:", e);
