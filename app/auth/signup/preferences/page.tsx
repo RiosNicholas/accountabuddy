@@ -7,7 +7,10 @@ import AccountabilityPreferences from './AccountabilityPreferences';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useRouter } from 'next/navigation';
-import { PreferencesData } from './PreferenceInterfaces';
+import { PreferencesData, User } from './PreferenceInterfaces';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import store from '@/redux/store';
 
 const getGrowthAreas = async () => {
 
@@ -22,7 +25,6 @@ const getGrowthAreas = async () => {
       throw new Error("Network response was not ok");
     }
     let data = await response.json();
-    console.log("Growth areas gotten successfully");
     return data.data;
   } catch (e) {
     console.error("Failed to get growth areas:", e);
@@ -42,7 +44,6 @@ const getAccountabilityAreas = async () => {
       throw new Error("Network response was not ok");
     }
     let data = await response.json();
-    console.log("Accountability areas gotten successfully");
     return data.data;
   } catch (e) {
     console.error("Failed to get accountability areas:", e);
@@ -64,6 +65,11 @@ export default function SignupProfilePreferencesPage() {
     accountabilityAreas: []
   })
 
+  const loggedUser = useSelector((state: RootState) => state.auth.user);
+  if (loggedUser === null) {
+    router.push("/auth/signup")
+  }
+
   useEffect(() => {
     const getData = async () => {
       const result = await getGrowthAreas();
@@ -83,7 +89,71 @@ export default function SignupProfilePreferencesPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    router.push('/dashboard');
+    try {
+
+      // Update meeting frequency
+      let response = await fetch("/api/auth/signup/preferences", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ type: "meeting frequency", user_id: (loggedUser as User).user_id, preference: preferencesData.meetingFrequency}),
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      // Update meeting location
+      response = await fetch("/api/auth/signup/preferences", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ type: "meeting location", user_id: (loggedUser as User).user_id, preference: preferencesData.meetingLocation}),
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      // Insert growth areas
+      for (let i=0; i<preferencesData.growthAreas.length; i++) {
+        response = await fetch("/api/auth/signup/preferences", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ type: "growth area", user_id: (loggedUser as User).user_id, preference: preferencesData.growthAreas[i]}),
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+      }
+
+      // Insert accountability areas
+      for (let i=0; i<preferencesData.accountabilityAreas.length; i++) {
+        response = await fetch("/api/auth/signup/preferences", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ type: "accountability area", user_id: (loggedUser as User).user_id, preference: preferencesData.accountabilityAreas[i]}),
+        });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+      }
+
+      const fullUser = {
+        ...preferencesData,
+        ...loggedUser
+      }
+
+      store.dispatch({ type:"auth/login", payload:fullUser })
+
+      router.push("/dashboard")
+    } catch (e) {
+      console.error("Signup Failed:", e);
+    }
   };
 
   const handleNext = () => {

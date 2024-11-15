@@ -56,7 +56,7 @@ export default function SignupForm() {
       }
       toast({ title: "Signup Successful" });
 
-      const loginResponse = await fetch("/api/auth/signup", {
+      const loginResponse = await fetch(`/api/auth/signup?username=${username}&email=${email}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -66,8 +66,9 @@ export default function SignupForm() {
         throw new Error("Network response was not ok");
       }
 
-      // TODO: Log in the user in Redux store on signup
-      // store.dispatch({ type:"auth/login", payload:loginResponse })
+      const data = await loginResponse.json()
+
+      store.dispatch({ type:"auth/login", payload:data.data })
 
       router.push("/auth/signup/preferences")
     } catch (e) {

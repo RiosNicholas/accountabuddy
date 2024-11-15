@@ -5,6 +5,9 @@ import MatchmakingCard, { MeetingPreference, MethodPreference } from "@/componen
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle, } from "@/components/ui/card"
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { useRouter } from 'next/navigation';
 
 interface Chat {
 	profileImageUrl: string;
@@ -24,6 +27,14 @@ interface Chat {
 // }
 
 export default function Explore() {
+
+	const router = useRouter()
+  const loggedUser = useSelector((state: RootState) => state.auth.user);
+  if (loggedUser === null) {
+    router.push("/auth/signup")
+  }
+	console.log(loggedUser)
+
 	const [compactView, setCompactView] = useState<boolean>(false);
 	
 	const toggleCompactView = () => {

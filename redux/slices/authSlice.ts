@@ -4,10 +4,12 @@ import { UUID } from 'crypto';
 interface User {
   user_id: UUID;
   name: string;
-  meetingLocation: string;
-  meetingFrequency: string;
-  growthAreas: number[];
-  accountabilityAreas: number[];
+  username: string;
+  email: string;
+  meetingLocation: string | null;
+  meetingFrequency: string | null;
+  growthAreas: number[] | null;
+  accountabilityAreas: number[] | null;
 }
 
 interface AuthState {
@@ -24,7 +26,6 @@ const authSlice = createSlice({
   reducers: {
     login: (state, action: PayloadAction<User>) => {
       state.user = action.payload; // Set the user on login
-      console.log(state.user)
     },
     logout: (state) => {
       state.user = null; // Clear the user on logout

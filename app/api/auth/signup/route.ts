@@ -39,30 +39,32 @@ export async function POST(request: Request) {
 
 export async function GET(request: Request) {
   try {
-    const { name, username, email } = await request.json();
 
-    if (!name || !username || !email) {
+    const { searchParams } = new URL(request.url);
+    const username = searchParams.get("username");
+    const email = searchParams.get("email");
+
+    if (!username || !email) {
       return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
     }
 
     // Initializing Supabase client with request and response for SSR
     const supabase = createRouteHandlerClient({ cookies });
 
-    // Inserting user data into the Users table
+    // Finding data in the Users table
     const { data, error } = await supabase
       .from('Users')
-      .select('*')
-      .eq("name", name)
+      .select('user_id, username, name, email')
       .eq("username", username)
       .eq("email", email)
-      .single();
-
+      .single()
+      
     if (error) {
       console.error(error);
-      return NextResponse.json({ message: "Failed to create user" }, { status: 500 });
+      return NextResponse.json({ message: "Failed to find user" }, { status: 500 });
     }
 
-    return NextResponse.json({ message: "User created successfully", data }, { status: 201 });
+    return NextResponse.json({ message: "User found successfully", data }, { status: 201 });
   } catch (e: unknown) {
     console.error("Unexpected Error:", e);
     if (e instanceof Error) {
