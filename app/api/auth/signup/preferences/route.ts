@@ -55,9 +55,9 @@ export async function POST(request: Request) {
     } else if (type === "accountability area") {
 
       const { error } = await supabase
-      .from('UserAccountabilityAreas')
-      .insert([{ user_id, accountability_area_id: preference }])
-      queryError = error;
+        .from('UserAccountabilityAreas')
+        .insert([{ user_id, accountability_area_id: preference }])
+        queryError = error;
 
     } else {
       return NextResponse.json({ message: "Failed to insert preference: invalid preference type" }, { status: 500 });
