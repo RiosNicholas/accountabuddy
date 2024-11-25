@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import Discover from "./Discover";
+import Discover from "./ProfileDiscovery";
 
 export default function DiscoverPage() {
   return (
