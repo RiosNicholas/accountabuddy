@@ -36,7 +36,7 @@ export default function ChatList ({ chats }: DashboardChatsProps) {
               </div>
             ))
           ) : (
-            <div className="flex justify-center font-light items-center p-3 text-muted-foreground">
+            <div className="flex justify-center font-light items-center px-3 py-6 text-muted-foreground">
               No chats to show.
             </div>
           )}
