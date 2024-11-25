@@ -8,18 +8,18 @@ import {
 
 interface PromptDisplayProps {
     prompt: string,
-    response: string | ReactElement
+    response: string | ReactElement[]
 }
 
 export default function PromptDisplay(props:PromptDisplayProps) {
     const {prompt, response} = props;
     return (
-        <Card className="w-fit">
+        <Card className="flex-col m-4">
             <CardHeader>
                 <CardTitle className="font-bold">{prompt}</CardTitle>
             </CardHeader>
             <CardContent>
-                <p className="max-w-prose text-l">{response}</p>
+                <div className="max-w-prose text-l">{response}</div>
             </CardContent>
         </Card>
     );

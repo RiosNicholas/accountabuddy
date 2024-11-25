@@ -39,7 +39,7 @@ export default function UserPage() {
     //   </>
     // );
     <main className="flex justify-center w-screen">
-      <Card className="bg-background text-background-foreground border-muted border-2 p-6 m-2 w-full lg:w-3/4 xl:w-2/3 max-w-screen-xl">
+      <Card className="bg-background text-background-foreground border-muted border2 p-6 m-2 w-full lg:w-3/4 xl:w-2/3 max-w-screen-xl">
         <div className="flex flex-col justify-center items-start m-6">
           <Avatar className="h-20 w-20">
             <AvatarImage src="profile-picture.jpg" alt={`@username`} />
