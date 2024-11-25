@@ -7,10 +7,9 @@ import { Button } from "@/components/ui/button";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { HandIcon } from "lucide-react";
 
-}
 export default function ProfileDiscovery() {
   const [viewingProfile, setViewingProfile] = useState(false);
-  const [matches, setMatches] = useState([]);
+  // const [matches, setMatches] = useState([]);
 
   const fetchUsersToDisplay = async () => {
     console.log("Fetching users to display...");
