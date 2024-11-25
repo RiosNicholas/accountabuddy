@@ -7,27 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { HandIcon } from "lucide-react";
 
-interface promptData {
-  [key: string]: string
-}
-
-const prompts: promptData = {
-  'School': 'Rutgers University - Newark',
-  "Meeting Preference": "Virtual",
-  "Major": "Computer Science",
-  "Biggest Challenge": "Time Management"
-}
-
-const dummyData = {
-  'name': "Corbin Grosso",
-  "prompts": prompts,
-  'Bio': "Hi! I'm Corbin, and I'm one of the people who made this web app!",
-  "test1": "content for test 1",
-  "test2": "content for test 2",
-  "test3": "content for test 3"
 }
 export default function ProfileDiscovery() {
   const [viewingProfile, setViewingProfile] = useState(false);
+  const [matches, setMatches] = useState([]);
 
   const fetchUsersToDisplay = async () => {
     console.log("Fetching users to display...");
@@ -72,7 +55,6 @@ export default function ProfileDiscovery() {
   };
 
   
-
   fetchUsersToDisplay()
     .then(userList => {
         var currUser = userList[0].user_id;
@@ -88,21 +70,6 @@ export default function ProfileDiscovery() {
     .catch(error => {
       console.error("Error fetching users:", error);
     }); 
-
-
-  if (viewingProfile) {
-    let infoCards = []
-    let aboutPrompt = []
-    for (var prompt in dummyData.prompts) {
-      let infoCards = []
-    }
-    // infoCards.push(<PromptDisplay prompt={"About"} response={aboutPrompt} />)
-
-    // infoCards.push(<PromptDisplay prompt={"Bio"} response={dummyData["Bio"]} />)
-    // infoCards.push(<PromptDisplay prompt={"test1"} response={dummyData["test1"]} />)
-    // infoCards.push(<PromptDisplay prompt={"test2"} response={dummyData["test2"]} />)
-    // infoCards.push(<PromptDisplay prompt={"test3"} response={dummyData["test3"]} />)
-  } 
 
   return (
     ( viewingProfile ) ? (
@@ -123,10 +90,8 @@ export default function ProfileDiscovery() {
       </div>
     ) : (
       <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
-        <h1 className="text-center font-bold text-4xl pb-16">Matchmaking</h1>
         <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
           <MatchmakingCard
-            onClick={() => setViewingProfile(true)}
             name="John Doe"
             age={22}
             university="Rutgers University"
