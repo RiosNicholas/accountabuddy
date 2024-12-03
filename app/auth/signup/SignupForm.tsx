@@ -71,9 +71,13 @@ export default function SignupForm() {
       store.dispatch({ type:"auth/login", payload:data.data })
 
       router.push("/auth/signup/preferences")
-    } catch (e) {
+    } catch (e: unknown) {
       console.error("Signup Failed:", e);
-      toast({ title: "Signup Failed", description: e.message });
+      if (e instanceof Error) {
+        toast({ title: "Signup Failed", description: e.message });
+      } else {
+        toast({ title: "Signup Failed", description: "An unknown error occurred" });
+      }
     }
   };
 

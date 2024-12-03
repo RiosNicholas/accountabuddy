@@ -3,15 +3,15 @@ import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from "next/headers"; // required for SSR in `app` directory
 
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
-
     // Initializing Supabase client with request and response for SSR
     const supabase = createRouteHandlerClient({ cookies });
     
     const { data, error } = await supabase
-    .from('Users')
-    .select('user_id')
+      // Fetching all user IDs
+      .from('Users')
+      .select('user_id')
 
     if (error) {
       console.error(error);

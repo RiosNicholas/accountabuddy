@@ -4,7 +4,7 @@
 // import {useSession} from "next-auth/react";
 // import LoginReminder from "@/components/LoginReminder";
 import { useParams } from 'next/navigation';
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import ProfileCard from '@/components/ProfileCard';
 
 // interface UserPageProps {

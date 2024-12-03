@@ -24,7 +24,7 @@ const getGrowthAreas = async () => {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-    let data = await response.json();
+    const data = await response.json();
     return data.data;
   } catch (e) {
     console.error("Failed to get growth areas:", e);
@@ -43,7 +43,7 @@ const getAccountabilityAreas = async () => {
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
-    let data = await response.json();
+    const data = await response.json();
     return data.data;
   } catch (e) {
     console.error("Failed to get accountability areas:", e);

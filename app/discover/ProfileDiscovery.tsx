@@ -56,7 +56,7 @@ export default function ProfileDiscovery() {
   
   fetchUsersToDisplay()
     .then(userList => {
-        var currUser = userList[0].user_id;
+        const currUser = userList[0].user_id;
         console.log(typeof(currUser))
         fetchUserProfile(currUser)
       .then(profile => {
