@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle, } from "@/components/ui/card"
 import Image from "next/image";
+import Link from "next/link";
 
 type User = {
   id: string;
@@ -18,7 +19,9 @@ export default function DashboardMatchmaking() {
     <Card>
       <CardTitle className="text-xl font-extrabold p-3">Accountabuddies</CardTitle>
       <CardContent>
-        <Button className="w-full font-bold mb-2">Find Accountabuddies</Button>
+        <Button className="w-full font-bold mb-2">
+          <Link href="/discover">Find Accountabuddies</Link>
+        </Button>
           <ul className="grid grid-cols-1 gap-4">
             {accountabuddies.length === 0 ? (
             <li className="flex justify-center font-light items-center p-3 text-sm text-muted-foreground">
