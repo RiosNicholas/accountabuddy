@@ -7,15 +7,13 @@ import AccountabilityPreferences from './AccountabilityPreferences';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { useRouter } from 'next/navigation';
-import { PreferencesData, User } from './PreferenceInterfaces';
-import { useSelector } from 'react-redux';
-import { RootState } from '@/redux/store';
+import { PreferencesData } from './PreferenceInterfaces';
 import store from '@/redux/store';
+import { useSession } from "next-auth/react";
 
 const getGrowthAreas = async () => {
-
   try {
-    const response = await fetch(`/api/auth/signup/preferences/getGrowthAreas`, {
+    const response = await fetch(`/api/auth/signup/preferences/growth-areas`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -32,9 +30,8 @@ const getGrowthAreas = async () => {
 };
 
 const getAccountabilityAreas = async () => {
-
   try {
-    const response = await fetch(`/api/auth/signup/preferences/getAccountabilityAreas`, {
+    const response = await fetch(`/api/auth/signup/preferences/accountability`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -52,9 +49,20 @@ const getAccountabilityAreas = async () => {
 
 export default function SignupProfilePreferencesPage() {
 
-  const [currentStep, setCurrentStep] = useState(1);
+  const { data: session, status } = useSession();
   const router = useRouter();
 
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/auth/login");
+    }
+  }, [status, router]);
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  const [currentStep, setCurrentStep] = useState(1);
   const [growthAreas, setGrowthAreas] = useState(null);
   const [accountabilityAreas, setAccountabilityAreas] = useState(null);
 
@@ -64,11 +72,6 @@ export default function SignupProfilePreferencesPage() {
     growthAreas: [],
     accountabilityAreas: []
   })
-
-  const loggedUser = useSelector((state: RootState) => state.auth.user);
-  if (loggedUser === null) {
-    router.push("/auth/signup")
-  }
 
   useEffect(() => {
     const getData = async () => {
@@ -97,7 +100,7 @@ export default function SignupProfilePreferencesPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ type: "meeting frequency", user_id: (loggedUser as User).user_id, preference: preferencesData.meetingFrequency}),
+        body: JSON.stringify({ type: "meeting frequency", user_id: session?.user.id, preference: preferencesData.meetingFrequency}),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -109,7 +112,7 @@ export default function SignupProfilePreferencesPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ type: "meeting location", user_id: (loggedUser as User).user_id, preference: preferencesData.meetingLocation}),
+        body: JSON.stringify({ type: "meeting location", user_id: session?.user.id, preference: preferencesData.meetingLocation}),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -122,7 +125,7 @@ export default function SignupProfilePreferencesPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ type: "growth area", user_id: (loggedUser as User).user_id, preference: preferencesData.growthAreas[i]}),
+          body: JSON.stringify({ type: "growth area", user_id: session?.user.id, preference: preferencesData.growthAreas[i]}),
         });
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -136,19 +139,14 @@ export default function SignupProfilePreferencesPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ type: "accountability area", user_id: (loggedUser as User).user_id, preference: preferencesData.accountabilityAreas[i]}),
+          body: JSON.stringify({ type: "accountability area", user_id: session?.user.id, preference: preferencesData.accountabilityAreas[i]}),
         });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
       }
 
-      const fullUser = {
-        ...preferencesData,
-        ...loggedUser
-      }
-
-      store.dispatch({ type:"auth/login", payload:fullUser })
+      store.dispatch({ type:"auth/login", payload:preferencesData })
 
       router.push("/dashboard")
     } catch (e) {

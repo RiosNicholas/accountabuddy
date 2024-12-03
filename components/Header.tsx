@@ -27,10 +27,9 @@ export default async function Header() {
           session.user && (
             <HeaderProfile user={{
               name: session.user.name || '',
-              // FIXME: username is not being passed 
-              // username: session.user.username || '',
+              username: session.user.username || '',
               email: session.user.email || '',
-              image: session.user.image || undefined
+              // image: session.user.image || undefined
             }} />
           )
         ) : (

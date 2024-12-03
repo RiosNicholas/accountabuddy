@@ -1,13 +1,13 @@
 
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
-import Discover from "./ProfileDiscovery";
+import ProfileDiscovery from "./ProfileDiscovery";
 
 export default function DiscoverPage() {
   return (
     <Card className="m-3 h-full">
       <CardTitle className="text-xl font-extrabold p-3">Matchmaking</CardTitle>
       <CardContent className="p-0"> 
-        <Discover />
+        <ProfileDiscovery />
       </CardContent>
     </Card>
   )

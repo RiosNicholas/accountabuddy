@@ -18,7 +18,7 @@ import { signOut } from "next-auth/react"
 interface HeaderProfileProps {
   user: {
     name: string;
-    username?: string;
+    username: string;
     email: string;
     image?: string;
   };
