@@ -5,6 +5,8 @@ import * as z from "zod";
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import store from '@redux/store';
+import { signIn, getSession } from "next-auth/react";
+import { useState } from 'react';
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -39,8 +41,13 @@ export default function SignupForm() {
       password: "",
     },
   })
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
  
   const onSubmit = async (data: FormData) => {
+
+    setIsSubmitting(true);
+    
     const { name, username, email, password } = data;
 
     try {
@@ -56,21 +63,27 @@ export default function SignupForm() {
       }
       toast({ title: "Signup Successful" });
 
-      const loginResponse = await fetch(`/api/auth/signup?username=${username}&email=${email}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const result = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
       });
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+
+      if (result?.ok) {
+        // Wait for session to be initialized; nextauth may not set the session instantly.
+        // Without this, the session may not be available when the user is redirected to /auth/signup/preferences,
+        // causing an instant redirect to the login page.
+        let session = null;
+        while (!session) {
+          session = await getSession();
+          if (!session) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+          }
+        }
+        
+        router.push("/auth/signup/preferences");
       }
 
-      const data = await loginResponse.json()
-
-      store.dispatch({ type:"auth/login", payload:data.data })
-
-      router.push("/auth/signup/preferences")
     } catch (e) {
       console.error("Signup Failed:", e);
       toast({ title: "Signup Failed", description: e.message });
@@ -141,8 +154,8 @@ export default function SignupForm() {
               )}
             />
             <div className="flex justify-center">
-              <Button type="submit" className="my-2 w-full">
-                Sign up
+              <Button type="submit" className="my-2 w-full" disabled={isSubmitting}>
+                {isSubmitting ? "Signing up..." : "Sign up"}
               </Button>
             </div>
           </form>

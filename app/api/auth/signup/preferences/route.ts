@@ -6,6 +6,7 @@ import { UUID } from "crypto";
 export async function POST(request: Request) {
   try {
     const { type, user_id, preference } = await request.json();
+    console.log(type, user_id, preference);
 
     // TODO: Create safeguards against not choosing an option for a preference
 

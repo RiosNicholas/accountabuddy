@@ -1,6 +1,7 @@
 import Dashboard from './Dashboard';
 import LoginReminder from '@/components/LoginReminder';
 import { getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]/route';
 
 
 // interface Matches {
@@ -14,7 +15,8 @@ import { getServerSession } from 'next-auth';
 // }
 
 export default async function DashboardPage() {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
+  console.log(session);
   return (
     <>
       {session ? (

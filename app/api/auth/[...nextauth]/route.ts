@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
 
         const { data: user, error } = await supabase
           .from('Users')
-          .select('*')
+          .select('user_id, name, username, email, password')
           .eq('email', credentials.email)
           .single();
 
@@ -42,10 +42,12 @@ export const authOptions: NextAuthOptions = {
         }
 
         const passwordCorrect = await compare(credentials.password, user.password);
-
+        
         if (passwordCorrect) {
           return {
-            id: user.id,
+            id: user.user_id,
+            name: user.name,
+            username: user.username,
             email: user.email,
           };
         }
@@ -63,6 +65,22 @@ export const authOptions: NextAuthOptions = {
     //   clientSecret: process.env.INSTAGRAM_SECRET_ID as string,
     // }))
   ],
+  callbacks: {
+    async session({ session, token }) {
+      // Add user id and username to the session
+      session.user.id = token.id as string; // Assuming you set token.id in the jwt callback
+      session.user.username = token.username as string; // Assuming you set token.username in the jwt callback
+      return session;
+    },
+    async jwt({ token, user }) {
+      // Add user id and username to the token
+      if (user) {
+        token.id = user.id;
+        token.username = user.username;
+      }
+      return token;
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
