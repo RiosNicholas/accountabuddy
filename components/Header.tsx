@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { ModeToggle } from "./ui/mode-toggle";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/lib/auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import HeaderProfile from "./HeaderProfile";
@@ -24,15 +24,7 @@ export default async function Header() {
       </Link>
       <div className="flex justify-end items-center">
         {session ? (
-          session.user && (
-            <HeaderProfile user={{
-              name: session.user.name || '',
-              // FIXME: username is not being passed 
-              // username: session.user.username || '',
-              email: session.user.email || '',
-              image: session.user.image || undefined
-            }} />
-          )
+          <HeaderProfile user={session.user} />
         ) : (
           <>
             <Link href="/auth/login">

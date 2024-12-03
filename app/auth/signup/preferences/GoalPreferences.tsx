@@ -1,6 +1,6 @@
 "use client"
 
-import { AreasProps } from './PreferenceInterfaces';
+import { AreasProps, PreferencesData } from './PreferenceInterfaces';
 
 export default function GoalPreferences({ areas, preferencesData, setPreferencesData }: AreasProps) {
   

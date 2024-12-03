@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 export default function EditProfilePage () {
   return (
     <main className="flex flex-col items-center justify-center min-h-[50vh] p-4 text-center">

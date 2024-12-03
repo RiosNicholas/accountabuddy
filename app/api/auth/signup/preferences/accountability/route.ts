@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from "next/headers";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     // Initializing Supabase client with request and response for SSR
     const supabase = createRouteHandlerClient({ cookies });

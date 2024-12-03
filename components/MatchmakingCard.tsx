@@ -27,12 +27,11 @@ interface MatchmakingCardProps {
   meetingPreference: MeetingPreference;
   methodPreference: MethodPreference;
   compact?: boolean;
-  onClick?: () => void;
 }
 
 export default function MatchmakingCard({ name, age, university, intro, accountabilityAreas, goalBuckets, meetingPreference, methodPreference, compact = false, }: MatchmakingCardProps) {
   return (
-    <Card className="bg-muted text-background-foreground hover:cursor-pointer">
+    <Card className="bg-muted text-background-foreground">
       <div className={`grid gap-4 lg:gap-1 ${compact ? 'lg:grid-cols-[1fr,1fr]' : 'grid-cols-1'} p-${compact ? '2' : '6'}`}>
         {/* PERSONAL INFO */}
         <div className="flex justify-center items-center">

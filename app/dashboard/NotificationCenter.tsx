@@ -15,7 +15,7 @@ export default function NotificationCenter({ notifications }: NotificationCenter
       <CardTitle className="text-xl font-extrabold p-3">Notification Center</CardTitle>
       <CardContent>
         {notifications.length === 0 ? (
-          <div className="flex justify-center font-light items-center px-3 py-6 text-muted-foreground">
+          <div className="flex justify-center font-light items-center p-3 text-muted-foreground">
             No notifications to show.
           </div>
         ) : (
