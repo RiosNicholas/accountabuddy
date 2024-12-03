@@ -85,7 +85,11 @@ export default function SignupForm() {
 
     } catch (e) {
       console.error("Signup Failed:", e);
-      toast({ title: "Signup Failed", description: e.message });
+      if (e instanceof Error) {
+        toast({ title: "Signup Failed", description: e.message });
+      } else {
+        toast({ title: "Signup Failed", description: "An unknown error occurred" });
+      }
     }
   };
 
