@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from "next/headers"; 
-import { UUID } from "crypto";
 
 export async function POST(request: Request) {
   try {
@@ -14,7 +13,7 @@ export async function POST(request: Request) {
     const supabase = createRouteHandlerClient({ cookies });
 
     let queryError = null;
-    let setError = null;
+    const setError = null;
 
     if (type === "meeting frequency") {
 

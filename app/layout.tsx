@@ -5,11 +5,8 @@ import { ThemeProvider } from "@/components/ui/theme-provider";
 import Image from "next/image";
 import Header from "@/components/Header";
 
-// Redux
 import ReduxWrapper from "@/components/ReduxWrapper";
-
-// NEXTAUTH
-import {Providers} from "./providers";
+import { Providers } from "./providers";
 
 
 const geistSans = localFont({
