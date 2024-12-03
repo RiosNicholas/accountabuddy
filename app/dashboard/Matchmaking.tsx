@@ -1,50 +1,42 @@
-import MatchmakingCard, { MeetingPreference, MethodPreference } from "@/components/MatchmakingCard";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle, } from "@/components/ui/card"
 import { useState } from "react";
 
-export default function DashboardMatchmaking() {
-	const [compactView, setCompactView] = useState<boolean>(false);
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardTitle, } from "@/components/ui/card"
+import Image from "next/image";
 
-  const toggleCompactView = () => {
-		setCompactView((prevState) => !prevState);
-	}
-  
+type User = {
+  id: string;
+  name: string;
+  username: string;
+  profilePicture?: string;
+};
+
+export default function DashboardMatchmaking() {
+  const [accountabuddies, setAccountabuddies] = useState<User[]>([]);
+
   return (
     <Card>
-      <div className="flex justify-between items-center">
-        <CardTitle className="text-xl font-extrabold p-3">Find Accountabuddies</CardTitle>
-        <Button variant="link" className="text-accent" onClick={toggleCompactView}>
-          {compactView ? "Compact View" : "Detailed View"}
-        </Button>
-      </div>
+      <CardTitle className="text-xl font-extrabold p-3">Accountabuddies</CardTitle>
       <CardContent>
-        <div className="grid grid-cols-1 gap-4">
-          <MatchmakingCard
-            name="John Doe"
-            age={22}
-            university="Rutgers University"
-            intro="I'm passionate about self-growth and looking for a partner to hold me accountable."
-            accountabilityAreas={['Setting and Reaching Goals', 'Managing Time Effectively']}
-            goalBuckets={['Education', 'Career']}
-            meetingPreference={MeetingPreference.Weekly}
-            methodPreference={MethodPreference.InPerson}
-            compact={compactView}
-          />
-          
-          <MatchmakingCard
-            name="Jane Smith"
-            age={24}
-            university="Rutgers University"
-            intro="Excited to find someone who can help me stay consistent with my fitness goals."
-            accountabilityAreas={['Focusing on Wellness', 'Habit Building']}
-            goalBuckets={['Health & Fitness', 'Self Development']}
-            meetingPreference={MeetingPreference.Daily}
-            methodPreference={MethodPreference.Virtual}
-            compact={compactView}
-          />
-        </div>
+        <Button className="w-full font-bold mb-2">Find Accountabuddies</Button>
+          <ul className="grid grid-cols-1 gap-4">
+            {accountabuddies.length === 0 ? (
+            <li className="flex justify-center font-light items-center p-3 text-sm text-muted-foreground">
+              No accountabuddies yet.
+            </li>
+          ) : (
+            accountabuddies.map(user => (
+              <li key={user.id} className="flex items-center space-x-4 my-2 py-1 px-2 bg-secondary">
+                <Image src={user.profilePicture} alt={`${user.name}'s profile`} className="w-12 h-12 rounded-full" />
+                <div>
+                  <div className="capitalize">{user.name}</div>
+                  <div className="text-sm font-light lowercase">@{user.username}</div>
+                </div>
+              </li>
+            ))
+          )}
+        </ul>
       </CardContent>
     </Card>
   )
-}
+};

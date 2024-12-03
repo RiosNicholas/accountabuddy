@@ -21,9 +21,21 @@ type Profile = {
 
 
 export default function Discovery() {
+  /* TODO: 
+    - add compact view/detailed view from dashboard
+    - add animations from sank?
+    - redux store to track profile array. buttons in card component should pop the profile from the array and display the next one
+    - matchmaking card component buttons should make API calls to update the matches in db. might need to add some more tables to db
+  */
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0); 
   const [viewingProfile, setViewingProfile] = useState(false);
+  const [compactView, setCompactView] = useState<boolean>(false);
+
+  const toggleCompactView = () => {
+		setCompactView((prevState) => !prevState);
+	}
+
 
   // Fetch all profiles once when the component mounts
   useEffect(() => {
@@ -52,22 +64,13 @@ export default function Discovery() {
     fetchUsersToDisplay();
   }, []);
 
-  // Navigate to the next set of profiles
-  const handleNext = () => {
-    if (currentIndex + 2 < profiles.length) {
-      setCurrentIndex(currentIndex + 2);
-    }
-  };
-
-  // Navigate to the previous set of profiles
-  const handlePrevious = () => {
-    if (currentIndex - 2 >= 0) {
-      setCurrentIndex(currentIndex - 2);
-    }
-  };
-
   return (
-    <div id="ProfileDiscovery">
+    <main id="ProfileDiscovery">
+      <div className="flex justify-between items-center">
+        <Button variant="link" className="text-accent" onClick={toggleCompactView}>
+          {compactView ? "Compact View" : "Detailed View"}
+        </Button>
+      </div>
       {viewingProfile ? (
         <div className="flex flex-col justify-center items-center p-3">
           <div className="flex justify-between items-center w-full lg:w-3/4 xl:w-2/3">
@@ -98,11 +101,12 @@ export default function Discovery() {
                 goalBuckets={profile.goalBuckets || []}
                 meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
                 methodPreference={profile.methodPreference || MethodPreference.Virtual}
+                compact={compactView}
               />
             ))}
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }
