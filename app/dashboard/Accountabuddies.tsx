@@ -12,7 +12,7 @@ type User = {
   profilePicture?: string;
 };
 
-export default function DashboardMatchmaking() {
+export default function Accountabuddies() {
   const [accountabuddies, setAccountabuddies] = useState<User[]>([]);
 
   return (

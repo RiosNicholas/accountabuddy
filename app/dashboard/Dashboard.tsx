@@ -1,8 +1,8 @@
 "use client"
 
 import ChatList from './ChatList';
-import DashboardMatchmaking from './Matchmaking';
 import NotificationCenter from './NotificationCenter';
+import Accountabuddies from './Accountabuddies';
 
 interface Chat {
 	profileImageUrl: string;
@@ -30,7 +30,7 @@ export default function Dashboard() {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 m-3">
         <ChatList chats={exampleChats}/>
-        <DashboardMatchmaking />
+        <Accountabuddies />
         <NotificationCenter notifications={exampleNotifications}/>
       </div>
     </>
