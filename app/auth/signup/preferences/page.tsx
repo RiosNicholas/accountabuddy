@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { FormEvent, useState, useEffect } from 'react';
 import MethodPreferences from './MethodPreferences';
@@ -48,9 +48,18 @@ const getAccountabilityAreas = async () => {
 };
 
 export default function SignupProfilePreferencesPage() {
-
   const { data: session, status } = useSession();
   const router = useRouter();
+
+  const [currentStep, setCurrentStep] = useState(1);
+  const [growthAreas, setGrowthAreas] = useState(null);
+  const [accountabilityAreas, setAccountabilityAreas] = useState(null);
+  const [preferencesData, setPreferencesData] = useState<PreferencesData>({
+    meetingLocation: "",
+    meetingFrequency: "",
+    growthAreas: [],
+    accountabilityAreas: []
+  });
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -58,26 +67,11 @@ export default function SignupProfilePreferencesPage() {
     }
   }, [status, router]);
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
-  const [currentStep, setCurrentStep] = useState(1);
-  const [growthAreas, setGrowthAreas] = useState(null);
-  const [accountabilityAreas, setAccountabilityAreas] = useState(null);
-
-  const [preferencesData, setPreferencesData] = useState<PreferencesData>({
-    meetingLocation: "",
-    meetingFrequency: "",
-    growthAreas: [],
-    accountabilityAreas: []
-  })
-
   useEffect(() => {
     const getData = async () => {
       const result = await getGrowthAreas();
       setGrowthAreas(result);
-    }
+    };
     getData();
   }, []);
 
@@ -85,22 +79,25 @@ export default function SignupProfilePreferencesPage() {
     const getData = async () => {
       const result = await getAccountabilityAreas();
       setAccountabilityAreas(result);
-    }
+    };
     getData();
   }, []);
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     try {
-
       // Update meeting frequency
       let response = await fetch("/api/auth/signup/preferences", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ type: "meeting frequency", user_id: session?.user.id, preference: preferencesData.meetingFrequency}),
+        body: JSON.stringify({ type: "meeting frequency", user_id: session?.user.id, preference: preferencesData.meetingFrequency }),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -112,20 +109,20 @@ export default function SignupProfilePreferencesPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ type: "meeting location", user_id: session?.user.id, preference: preferencesData.meetingLocation}),
+        body: JSON.stringify({ type: "meeting location", user_id: session?.user.id, preference: preferencesData.meetingLocation }),
       });
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
 
       // Insert growth areas
-      for (let i=0; i<preferencesData.growthAreas.length; i++) {
+      for (let i = 0; i < preferencesData.growthAreas.length; i++) {
         response = await fetch("/api/auth/signup/preferences", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ type: "growth area", user_id: session?.user.id, preference: preferencesData.growthAreas[i]}),
+          body: JSON.stringify({ type: "growth area", user_id: session?.user.id, preference: preferencesData.growthAreas[i] }),
         });
         if (!response.ok) {
           throw new Error("Network response was not ok");
@@ -133,22 +130,22 @@ export default function SignupProfilePreferencesPage() {
       }
 
       // Insert accountability areas
-      for (let i=0; i<preferencesData.accountabilityAreas.length; i++) {
+      for (let i = 0; i < preferencesData.accountabilityAreas.length; i++) {
         response = await fetch("/api/auth/signup/preferences", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ type: "accountability area", user_id: session?.user.id, preference: preferencesData.accountabilityAreas[i]}),
+          body: JSON.stringify({ type: "accountability area", user_id: session?.user.id, preference: preferencesData.accountabilityAreas[i] }),
         });
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
       }
 
-      store.dispatch({ type:"auth/login", payload:preferencesData })
+      store.dispatch({ type: "auth/login", payload: preferencesData });
 
-      router.push("/dashboard")
+      router.push("/dashboard");
     } catch (e) {
       console.error("Signup Failed:", e);
     }
@@ -161,7 +158,7 @@ export default function SignupProfilePreferencesPage() {
   const handlePrevious = () => {
     setCurrentStep((prevStep) => (prevStep > 1 ? prevStep - 1 : prevStep));
   };
-  
+
   return (
     <div className='w-full'>
       <main className="flex flex-col items-center">
