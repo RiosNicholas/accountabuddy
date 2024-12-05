@@ -13,9 +13,14 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     const supabase = createRouteHandlerClient({ cookies });
 
+    // Query to join UserAccountabilityAreas with AccountabilityAreas table
     const { data, error } = await supabase
       .from("UserAccountabilityAreas")
-      .select("user_id, accountability_area_id")
+      .select(`
+        user_id,
+        accountability_area_id,
+        AccountabilityAreas (id, accountability_area)
+      `)
       .eq("user_id", id);
 
     if (error) {
@@ -23,7 +28,13 @@ export async function GET(request: Request, { params }: { params: { id: string }
       return NextResponse.json({ error: "Failed to fetch accountability areas" }, { status: 500 });
     }
 
-    return NextResponse.json({ data: data || [] });
+    const formattedData = data.map((item: any) => ({
+      user_id: item.user_id,
+      accountability_area_id: item.accountability_area_id,
+      accountability_area: item.AccountabilityAreas?.accountability_area || null,
+    }));
+
+    return NextResponse.json({ data: formattedData });
   } catch (error) {
     console.error("Unexpected error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
