@@ -134,7 +134,7 @@ export default function Discovery() {
                 onClick={() => setViewingProfile(true)}
                 key={profile.user_id}
                 name={profile.name || `User ${index + 1}`}
-                age={profile.age || 0}
+                age={profile.age} 
                 university={profile.university || "Unknown University"}
                 biography={profile.biography || "No intro provided."}
                 accountabilityAreas={profile.accountabilityAreas?.map(area => 

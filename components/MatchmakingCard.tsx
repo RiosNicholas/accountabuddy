@@ -19,7 +19,7 @@ export enum MeetingPreference {
 
 interface MatchmakingCardProps {
   name: string;
-  age: number;
+  age?: number;
   university: string;
   biography: string;
   accountabilityAreas: string[]; 
