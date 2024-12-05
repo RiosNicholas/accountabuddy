@@ -7,17 +7,18 @@ import { Button } from "@/components/ui/button";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { HandIcon } from "lucide-react";
 
-type Profile = {
+
+interface UserProfile {
   user_id: string;
-  name: string;
-  age: number;
-  university: string;
-  intro: string;
-  accountabilityAreas: string[];
-  goalBuckets: string[];
-  meetingPreference: MeetingPreference;
-  methodPreference: MethodPreference;
-};
+  name?: string;
+  age?: number;
+  university?: string;
+  biography?: string;
+  accountabilityAreas: Array<{ accountability_area_id: number }>;
+  growthAreas: Array<{ growth_area_id: number }>;
+  meetingPreference?: MeetingPreference;
+  methodPreference?: MethodPreference;
+}
 
 
 export default function Discovery() {
@@ -27,37 +28,66 @@ export default function Discovery() {
     - redux store to track profile array. buttons in card component should pop the profile from the array and display the next one
     - matchmaking card component buttons should make API calls to update the matches in db. might need to add some more tables to db
   */
-  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [profiles, setProfiles] = useState<UserProfile[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0); 
   const [viewingProfile, setViewingProfile] = useState(false);
   const [compactView, setCompactView] = useState<boolean>(false);
+  const [loading, setLoading] = useState(true);
 
   const toggleCompactView = () => {
 		setCompactView((prevState) => !prevState);
 	}
 
-
   // Fetch all profiles once when the component mounts
+ 
   useEffect(() => {
     const fetchUsersToDisplay = async () => {
       console.log("Fetching users to display...");
+      setLoading(true);
 
       try {
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
-        const response = await fetch(`${baseUrl}/api/users/ids`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const data = await response.json();
-        console.log("Successfully fetched users:", data.data);
-        setProfiles(data.data); // Update state with fetched profiles
+        
+        // Fetching user ids
+        const userResponse = await fetch(`${baseUrl}/api/users/ids`);
+        const userData = await userResponse.json();
+        const userIds = userData.data.map((user: { user_id: { user_id: string } }) => user.user_id.user_id);
+
+        // Enriching user objects by fetching associated data for each profile
+        const enhancedProfiles = await Promise.all(
+          userIds.data.map(async (userId: string) => {
+            const id = userId.toString();
+            const [accountabilityResponse, growthResponse, profileResponse] = await Promise.all([
+              fetch(`${baseUrl}/api/users/${id}/accountability-areas`),
+              fetch(`${baseUrl}/api/users/${id}/growth-areas`),
+              fetch(`${baseUrl}/api/users/${id}`)
+            ]);
+
+            const [
+              { data: accountabilityAreas },
+              { data: growthAreas },
+              { data: profile }
+            ] = await Promise.all([
+              accountabilityResponse.json(),
+              growthResponse.json(),
+              profileResponse.json()
+            ]);
+
+            return {
+              user_id: id,
+              ...profile,
+              accountabilityAreas,
+              growthAreas
+            };
+          })
+        );
+
+        console.log("Successfully fetched users:", enhancedProfiles);
+        setProfiles(enhancedProfiles);
       } catch (e) {
         console.error("Failed to fetch users:", e);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -97,9 +127,13 @@ export default function Discovery() {
                 name={profile.name || `User ${index + 1}`}
                 age={profile.age || 0}
                 university={profile.university || "Unknown University"}
-                intro={profile.intro || "No intro provided."}
-                accountabilityAreas={profile.accountabilityAreas || []}
-                goalBuckets={profile.goalBuckets || []}
+                biography={profile.biography || "No intro provided."}
+                accountabilityAreas={profile.accountabilityAreas?.map(area => 
+                  area.accountability_area_id.toString()
+                ) || []}
+                growthAreas={profile.growthAreas?.map(area => 
+                  area.growth_area_id.toString()
+                ) || []}
                 meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
                 methodPreference={profile.methodPreference || MethodPreference.Virtual}
                 compact={compactView}

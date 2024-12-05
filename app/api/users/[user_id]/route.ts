@@ -2,48 +2,53 @@ import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from "next/headers";
 
-export async function GET(request: Request, { params }: { params: { user_id: string } }) {
-  const userId = params.user_id;
-
-  // Initializing Supabase client
-  const supabase = createRouteHandlerClient({ cookies });
-
+export async function GET(request: Request, { params }: {params: { user_id: string }}) {
   try {
-    if (userId) {
-      // Fetch user by user_id
-      const { data, error } = await supabase
-        .from('Users')
-        .select(`
-          name,
-          meeting_preference,
-          meeting_frequency,
-          UserGrowthAreas (
-            GrowthAreas (
-              growth_area
-            )
-          ),
-          UserAccountabilityAreas (
-            AccountabilityAreas (
-              accountability_area
-            )
-          )
-        `)
-        .eq('user_id', userId)
-        .single();
-
-      if (error) {
-        console.error('Error fetching user by user_id:', error);
-        return NextResponse.json({ message: "Failed to fetch user" }, { status: 500 });
-      }
-      return NextResponse.json(data, { status: 200 });
-    } else {
-      return NextResponse.json({ message: "user_id is required" }, { status: 400 });
+    const user_id = params.user_id;
+    
+    if (!user_id) {
+      return NextResponse.json(
+        { message: "user_id is required" }, 
+        { status: 400 }
+      );
     }
+
+    // Validating UUID format for user_id
+    const isValidUUID = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/.test(user_id);
+    if (!isValidUUID) {
+      return NextResponse.json({ error: "Invalid UUID format" }, { status: 400 });
+    }
+
+    // Initializing Supabase client
+    const supabase = createRouteHandlerClient({ cookies });
+
+    // Fetch user by user_id
+    const { data, error } = await supabase
+      .from('Users')
+      .select(`
+        name,
+        username,
+        meeting_preference,
+        meeting_frequency
+      `)
+      .eq('user_id', user_id)
+      .single();
+
+    if (error) {
+      console.error('Error fetching user by user_id:', error);
+      return NextResponse.json(
+        { message: "Failed to fetch user" }, 
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(data, { status: 200 });
+
   } catch (e: unknown) {
     console.error("Unexpected Error:", e);
-    if (e instanceof Error) {
-      return NextResponse.json({ message: "An error occurred", error: e.message }, { status: 500 });
-    }
-    return NextResponse.json({ message: "An unknown error occurred" }, { status: 500 });
+    return NextResponse.json(
+      { message: "An error occurred" }, 
+      { status: 500 }
+    );
   }
 }

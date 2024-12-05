@@ -21,16 +21,16 @@ interface MatchmakingCardProps {
   name: string;
   age: number;
   university: string;
-  intro: string;
+  biography: string;
   accountabilityAreas: string[]; 
-  goalBuckets: string[]; 
+  growthAreas: string[]; 
   meetingPreference: MeetingPreference;
   methodPreference: MethodPreference;
   compact?: boolean;
   onClick?: () => void;
 }
 
-export default function MatchmakingCard({ name, age, university, intro, accountabilityAreas, goalBuckets, meetingPreference, methodPreference, compact = false, }: MatchmakingCardProps) {
+export default function MatchmakingCard({ name, age, university, biography, accountabilityAreas, growthAreas, meetingPreference, methodPreference, compact = false, }: MatchmakingCardProps) {
   return (
     <Card className="bg-muted text-background-foreground hover:cursor-pointer">
       <div className={`grid gap-4 lg:gap-1 ${compact ? 'lg:grid-cols-[1fr,1fr]' : 'grid-cols-1'} p-${compact ? '2' : '6'}`}>
@@ -56,7 +56,7 @@ export default function MatchmakingCard({ name, age, university, intro, accounta
         {/* PREFERENCES */}
         <CardContent className={`flex flex-col justify-center items-center p-2 lg:p-0 lg:text-sm text-center`}>
           {!compact && (
-            <p className="text-center text-sm font-medium w-full text-secondary-foreground">{intro}</p>
+            <p className="text-center text-sm font-medium w-full text-secondary-foreground">{biography}</p>
           )}
           <div className={`${compact ? " lg:flex-col" : "lg:flex w-full "}justify-center items-center gap-1`}>
             <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
@@ -89,7 +89,7 @@ export default function MatchmakingCard({ name, age, university, intro, accounta
           <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
             <h4 className="text-muted-foreground text-left font-semibold">Goal Buckets</h4>
             <div className="flex flex-wrap gap-3">
-              {goalBuckets.map((area, index) => (
+              {growthAreas.map((area, index) => (
                 <Badge key={index} className={`bg-primary text-primary-foreground ${compact ? "text-xs" : "text-sm"} font-normal`}>
                   {area}
                 </Badge>
