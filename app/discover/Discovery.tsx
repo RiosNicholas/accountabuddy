@@ -39,60 +39,69 @@ export default function Discovery() {
 	}
 
   // Fetch all profiles once when the component mounts
- 
   useEffect(() => {
     const fetchUsersToDisplay = async () => {
       console.log("Fetching users to display...");
       setLoading(true);
-
+  
       try {
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
         
-        // Fetching user ids
+        // Fetching user IDs
         const userResponse = await fetch(`${baseUrl}/api/users/ids`);
-        const userData = await userResponse.json();
-        const userIds = userData.data.map((user: { user_id: { user_id: string } }) => user.user_id.user_id);
-
-        // Enriching user objects by fetching associated data for each profile
+        const { data } = await userResponse.json();
+  
+        console.log("Raw user data:", data);
+  
+        // Extracting user IDs
+        const userIds = data.map((user: { user_id: string }) => user.user_id);
+  
+        // Fetching individual profiles
         const enhancedProfiles = await Promise.all(
-          userIds.data.map(async (userId: string) => {
-            const id = userId.toString();
-            const [accountabilityResponse, growthResponse, profileResponse] = await Promise.all([
-              fetch(`${baseUrl}/api/users/${id}/accountability-areas`),
-              fetch(`${baseUrl}/api/users/${id}/growth-areas`),
-              fetch(`${baseUrl}/api/users/${id}`)
-            ]);
-
-            const [
-              { data: accountabilityAreas },
-              { data: growthAreas },
-              { data: profile }
-            ] = await Promise.all([
-              accountabilityResponse.json(),
-              growthResponse.json(),
-              profileResponse.json()
-            ]);
-
-            return {
-              user_id: id,
-              ...profile,
-              accountabilityAreas,
-              growthAreas
-            };
+          userIds.map(async (id: string) => {
+            try {
+              const [accountabilityResponse, growthResponse, profileResponse] = await Promise.all([
+                fetch(`${baseUrl}/api/users/${id}/accountability-areas`),
+                fetch(`${baseUrl}/api/users/${id}/growth-areas`),
+                fetch(`${baseUrl}/api/users/${id}`)
+              ]);
+  
+              const [
+                accountabilityData,
+                growthData,
+                profileData
+              ] = await Promise.all([
+                accountabilityResponse.json(),
+                growthResponse.json(),
+                profileResponse.json()
+              ]);
+  
+              return {
+                user_id: id,
+                accountabilityAreas: accountabilityData.data || [],
+                growthAreas: growthData.data || [],
+                ...profileData
+              };
+            } catch (error) {
+              console.error(`Error fetching data for user ID ${id}:`, error);
+              return null; // Skip this user if there was an error
+            }
           })
         );
-
-        console.log("Successfully fetched users:", enhancedProfiles);
-        setProfiles(enhancedProfiles);
-      } catch (e) {
-        console.error("Failed to fetch users:", e);
+  
+        // Filtering out null profiles (failed fetches)
+        setProfiles(enhancedProfiles.filter(profile => profile !== null));
+        console.log("Successfully fetched profiles:", enhancedProfiles);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchUsersToDisplay();
   }, []);
+
 
   return (
     <main id="ProfileDiscovery">
