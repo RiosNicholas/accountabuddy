@@ -30,7 +30,7 @@ export default function Accountabuddies() {
           ) : (
             accountabuddies.map(user => (
               <li key={user.id} className="flex items-center space-x-4 my-2 py-1 px-2 bg-secondary">
-                <Image src={user.profilePicture} alt={`${user.name}'s profile`} className="w-12 h-12 rounded-full" />
+                <Image src="https://github.com/shadcn.png" alt={`${user.name}'s profile`} className="w-12 h-12 rounded-full" />
                 <div>
                   <div className="capitalize">{user.name}</div>
                   <div className="text-sm font-light lowercase">@{user.username}</div>

@@ -66,7 +66,7 @@ export default function Discovery() {
 
   return (
     <main id="ProfileDiscovery">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-start items-start">
         <Button variant="link" className="text-accent" onClick={toggleCompactView}>
           {compactView ? "Compact View" : "Detailed View"}
         </Button>
@@ -92,6 +92,7 @@ export default function Discovery() {
           <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
             {profiles.slice(currentIndex, currentIndex + 2).map((profile, index) => (
               <MatchmakingCard
+                onClick={() => setViewingProfile(true)}
                 key={profile.user_id}
                 name={profile.name || `User ${index + 1}`}
                 age={profile.age || 0}
