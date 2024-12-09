@@ -2,11 +2,11 @@ import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+export async function GET(request: Request, { params }: { params: { user_id: string } }) {
+  const { user_id } = params;
   try {
-    const { id } = params;
 
-    if (!id) {
+    if (!user_id) {
       console.error("User ID is missing");
       return NextResponse.json({ error: "User ID is required" }, { status: 400 });
     }
@@ -17,22 +17,19 @@ export async function GET(request: Request, { params }: { params: { id: string }
     const { data, error } = await supabase
       .from("UserAccountabilityAreas")
       .select(`
-        user_id,
         accountability_area_id,
         AccountabilityAreas (id, accountability_area)
       `)
-      .eq("user_id", id);
+      .eq("user_id", user_id);
 
     if (error) {
       console.error("Supabase query error:", error);
       return NextResponse.json({ error: "Failed to fetch accountability areas" }, { status: 500 });
     }
 
-    const formattedData = data.map((item: any) => ({
-      user_id: item.user_id,
-      accountability_area_id: item.accountability_area_id,
-      accountability_area: item.AccountabilityAreas?.accountability_area || null,
-    }));
+    const formattedData = data
+      .map((item) => item.AccountabilityAreas[0]?.accountability_area)
+      .filter((accountability_area) => accountability_area !== undefined && accountability_area !== null);
 
     return NextResponse.json({ data: formattedData });
   } catch (error) {
