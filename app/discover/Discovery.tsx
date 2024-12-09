@@ -14,12 +14,11 @@ interface UserProfile {
   age?: number;
   university?: string;
   biography?: string;
-  accountabilityAreas: Array<{ accountability_area_id: number }>;
-  growthAreas: Array<{ growth_area_id: number }>;
+  accountabilityAreas: string[];
+  growthAreas: string[];
   meetingPreference?: MeetingPreference;
   methodPreference?: MethodPreference;
 }
-
 
 export default function Discovery() {
   /* TODO: 
@@ -46,52 +45,49 @@ export default function Discovery() {
   
       try {
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
-        
+  
         // Fetching user IDs
         const userResponse = await fetch(`${baseUrl}/api/users/ids`);
-        const { data } = await userResponse.json();
+        const { data: userIds } = await userResponse.json();
   
-        console.log("Raw user data:", data);
-  
-        // Extracting user IDs
-        const userIds = data.map((user: { user_id: string }) => user.user_id);
+        // Helper function to transform areas
+        const transformAreas = (rawData: { GrowthAreas?: { growth_area: string } }[]) =>
+          rawData?.map((item: { GrowthAreas?: { growth_area: string } }) => item.GrowthAreas?.growth_area).filter(Boolean) || ["N/A"];
   
         // Fetching individual profiles
         const enhancedProfiles = await Promise.all(
-          userIds.map(async (id: string) => {
+          userIds.map(async ({ user_id }: { user_id: string }) => {
             try {
               const [accountabilityResponse, growthResponse, profileResponse] = await Promise.all([
-                fetch(`${baseUrl}/api/users/${id}/accountability-areas`),
-                fetch(`${baseUrl}/api/users/${id}/growth-areas`),
-                fetch(`${baseUrl}/api/users/${id}`)
+                fetch(`${baseUrl}/api/users/${user_id}/accountability-areas`),
+                fetch(`${baseUrl}/api/users/${user_id}/growth-areas`),
+                fetch(`${baseUrl}/api/users/${user_id}`)
               ]);
+
   
-              const [
-                accountabilityData,
-                growthData,
-                profileData
-              ] = await Promise.all([
+              const [rawAccountability, rawGrowthAreas, { data: profile }] = await Promise.all([
                 accountabilityResponse.json(),
                 growthResponse.json(),
                 profileResponse.json()
               ]);
+
   
               return {
-                user_id: id,
-                accountabilityAreas: accountabilityData.data || [],
-                growthAreas: growthData.data || [],
-                ...profileData
+                user_id,
+                ...profile,
+                accountabilityAreas: transformAreas(rawAccountability.data),
+                growthAreas: transformAreas(rawGrowthAreas.data),
               };
             } catch (error) {
-              console.error(`Error fetching data for user ID ${id}:`, error);
+              console.error(`Error fetching data for user ID ${user_id}:`, error);
               return null; // Skip this user if there was an error
             }
           })
         );
   
-        // Filtering out null profiles (failed fetches)
-        setProfiles(enhancedProfiles.filter(profile => profile !== null));
-        console.log("Successfully fetched profiles:", enhancedProfiles);
+        // Set profiles and filter out null results
+        setProfiles(enhancedProfiles.filter(Boolean));
+        console.log("Successfully fetched profiles");
       } catch (error) {
         console.error("Failed to fetch users:", error);
       } finally {
@@ -101,8 +97,7 @@ export default function Discovery() {
   
     fetchUsersToDisplay();
   }, []);
-
-
+   
   return (
     <main id="ProfileDiscovery">
       <div className="flex justify-start items-start">
@@ -131,21 +126,17 @@ export default function Discovery() {
           <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
             {profiles.slice(currentIndex, currentIndex + 2).map((profile, index) => (
               <MatchmakingCard
-                onClick={() => setViewingProfile(true)}
-                key={profile.user_id}
-                name={profile.name || `User ${index + 1}`}
-                age={profile.age} 
-                university={profile.university || "Unknown University"}
-                biography={profile.biography || "No intro provided."}
-                accountabilityAreas={profile.accountabilityAreas?.map(area => 
-                  area.accountability_area_id.toString()
-                ) || []}
-                growthAreas={profile.growthAreas?.map(area => 
-                  area.growth_area_id.toString()
-                ) || []}
-                meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
-                methodPreference={profile.methodPreference || MethodPreference.Virtual}
-                compact={compactView}
+              onClick={() => setViewingProfile(true)}
+              key={profile.user_id}
+              name={profile.name || `User ${index + 1}`}
+              age={profile.age} 
+              university={profile.university || "Unknown University"}
+              biography={profile.biography || "No intro provided."}
+              accountabilityAreas={profile.accountabilityAreas?.length > 0 ? profile.accountabilityAreas : ["N/A"]}
+              growthAreas={profile.growthAreas?.length > 0 ? profile.growthAreas : ["N/A"]}
+              meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
+              methodPreference={profile.methodPreference || MethodPreference.Virtual}
+              compact={compactView}
               />
             ))}
           </div>
