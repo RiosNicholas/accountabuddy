@@ -1,4 +1,4 @@
-import { useState } from "react";
+// import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle, } from "@/components/ui/card"
@@ -13,7 +13,9 @@ type User = {
 };
 
 export default function Accountabuddies() {
-  const [accountabuddies, setAccountabuddies] = useState<User[]>([]);
+  // TODO: Fetch accountabuddies from the API
+  // const [accountabuddies, setAccountabuddies] = useState<User[]>([]);
+  const accountabuddies: User[] = [];
 
   return (
     <Card>

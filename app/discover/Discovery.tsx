@@ -124,6 +124,7 @@ export default function Discovery() {
       ) : (
         <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
           <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
+            {loading && <p className="p-2 font-light">Loading profiles...</p>} 
             {profiles.slice(currentIndex, currentIndex + 2).map((profile, index) => (
               <MatchmakingCard
               onClick={() => setViewingProfile(true)}
