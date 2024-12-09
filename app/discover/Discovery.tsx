@@ -28,7 +28,9 @@ export default function Discovery() {
     - matchmaking card component buttons should make API calls to update the matches in db. might need to add some more tables to db
   */
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0); 
+  // TODO: Implement pagination for profiles using currentIndex
+  // const [currentIndex, setCurrentIndex] = useState(0); 
+  const [currentIndex] = useState(0); 
   const [viewingProfile, setViewingProfile] = useState(false);
   const [compactView, setCompactView] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
