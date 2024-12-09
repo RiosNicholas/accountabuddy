@@ -6,6 +6,7 @@ import ProfileCard from "@/components/ProfileCard";
 import { Button } from "@/components/ui/button";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { HandIcon } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 interface UserProfile {
@@ -126,7 +127,7 @@ export default function Discovery() {
       ) : (
         <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
           <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
-            {loading && <p className="p-2 font-light">Loading profiles...</p>} 
+            {loading && <Skeleton className="h-12 w-full" />}
             {profiles.slice(currentIndex, currentIndex + 2).map((profile, index) => (
               <MatchmakingCard
               onClick={() => setViewingProfile(true)}

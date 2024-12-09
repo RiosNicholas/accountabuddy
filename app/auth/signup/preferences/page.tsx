@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { PreferencesData } from './PreferenceInterfaces';
 import store from '@/redux/store';
 import { useSession } from "next-auth/react";
+import { Skeleton } from '@/components/ui/skeleton';
 
 const getGrowthAreas = async () => {
   try {
@@ -84,7 +85,7 @@ export default function SignupProfilePreferencesPage() {
   }, []);
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <div className='text-sm p-4 font-light'>Loading...</div>
   }
 
   const handleSubmit = async (e: FormEvent) => {

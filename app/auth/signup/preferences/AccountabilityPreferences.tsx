@@ -1,5 +1,6 @@
 "use client"
 
+import { Skeleton } from '@/components/ui/skeleton';
 import { AreasProps } from './PreferenceInterfaces';
 
 export default function AccountabilityPreferences({ areas, preferencesData, setPreferencesData }: AreasProps) {
@@ -22,7 +23,11 @@ export default function AccountabilityPreferences({ areas, preferencesData, setP
     <>
       <h1 className="font-bold text-left mb-3">Where do you seek accountability?</h1>
       {areas==null ? (
-        <p>Loading...</p>
+        <div className='space-y-3 w-2/3 lg:w-1/2'>
+          <Skeleton className="h-12 w-full" />
+          <Skeleton className="h-12 w-full" />
+          <Skeleton className="h-12 w-full" />
+        </div>
       ) : (
         <ul className='space-y-3 w-2/3 lg:w-1/2'>
           {areas.map((bucket) => (
