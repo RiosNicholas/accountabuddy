@@ -1,0 +1,54 @@
+import React, { useState } from 'react';
+
+const Profile = () => {
+  // State to hold the bio text
+  const [bio, setBio] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Handle changes to the bio
+  const handleBioChange = (e) => {
+    setBio(e.target.value);
+  };
+
+  // Toggle between editing and viewing mode
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
+
+  // Handle sa
+  Save = () => {
+    setIsEditing(false); // Close the editor when saved
+    // You can add logic to save the bio to a server here, if needed
+  };
+
+  return (
+    <div className="profile">
+      <h2>User Profile</h2>
+
+      {/* Display bio */}
+      <div className="bio-section">
+        <h3>Bio</h3>
+        {isEditing ? (
+          <div>
+            <textarea
+              value={bio}
+              onChange={handleBioChange}
+              rows="4"
+              cols="50"
+            />
+            <br />
+            <button onClick={handleSave}>Save</button>
+            <button onClick={toggleEdit}>Cancel</button>
+          </div>
+        ) : (
+          <div>
+            <p>{bio || 'No bio added yet.'}</p>
+            <button onClick={toggleEdit}>Edit Bio</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Profile;
