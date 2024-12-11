@@ -26,11 +26,12 @@ interface UserProfile {
 }
 
 export default function UserPage() {
-  const params = useParams(); 
+  const params = useParams();
   const username = params?.username;
   const { data: session, status } = useSession();
   const [userInfo, setUserInfo] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!username) {
@@ -39,37 +40,51 @@ export default function UserPage() {
       return;
     }
 
+    async function fetchUserId() {
+      try {
+        const response = await fetch(`/api/usernames/${username}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch user ID");
+        }
+        const { user_id } = await response.json();
+        setUserId(user_id);
+      } catch (err) {
+        console.error("Error fetching user ID:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchUserId();
+  }, [username]);
+
+  useEffect(() => {
+    if (!userId) return;
+
     async function fetchUserData() {
       try {
         setLoading(true);
 
-        // Fetching user_id by username
-        const userIdResponse = await fetch(`/api/usernames/${username}`);
-        if (!userIdResponse.ok) {
-          throw new Error("Failed to fetch user ID");
-        }
-        const { user_id } = await userIdResponse.json();
-
         // Fetching core user data by user_id
-        const userResponse = await fetch(`/api/users/${user_id}`);
+        const userResponse = await fetch(`/api/users/${userId}`);
         if (!userResponse.ok) {
           throw new Error("Failed to fetch user data");
         }
         const userData = await userResponse.json();
 
         // Fetching accountability areas
-        const accountabilityResponse = await fetch(`/api/users/${user_id}/accountability-areas`);
+        const accountabilityResponse = await fetch(`/api/users/${userId}/accountability-areas`);
         if (!accountabilityResponse.ok) {
           throw new Error("Failed to fetch accountability areas");
         }
-        const accountabilityData = await accountabilityResponse.json()
+        const accountabilityData = await accountabilityResponse.json();
 
         // Fetching growth areas
-        const growthResponse = await fetch(`/api/users/${user_id}/growth-areas`);
+        const growthResponse = await fetch(`/api/users/${userId}/growth-areas`);
         if (!growthResponse.ok) {
           throw new Error("Failed to fetch growth areas");
         }
-        const growthData = await growthResponse.json()
+        const growthData = await growthResponse.json();
 
         setUserInfo({
           username: userData.username,
@@ -87,9 +102,7 @@ export default function UserPage() {
           growthAreas: growthData.data || [],
         });
 
-        console.log("Successfully fetched user data", userData);
-        console.log("Successfully fetched growth data", growthData);
-        console.log("Successfully fetched accountability data", accountabilityData);
+        console.log("Successfully fetched user data");
       } catch (err) {
         console.error(err);
       } finally {
@@ -98,11 +111,13 @@ export default function UserPage() {
     }
 
     fetchUserData();
-  }, [username]);
+  }, [userId]);
 
   if (status === "loading" || loading) {
     return <LoadingUser />;
   }
+
+  const isCurrentUser = session?.user?.id === userId;
 
   return (
     <>
@@ -119,6 +134,7 @@ export default function UserPage() {
               methodPreference={userInfo.methodPreference || "Not specified"}
               accountabilityAreas={userInfo.accountabilityAreas}
               growthAreas={userInfo.growthAreas}
+              isCurrentUser={isCurrentUser}
             />
           )}
         </main>
