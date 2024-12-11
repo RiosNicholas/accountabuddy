@@ -10,7 +10,6 @@ import { useRouter } from 'next/navigation';
 import { PreferencesData } from './PreferenceInterfaces';
 import store from '@/redux/store';
 import { useSession } from "next-auth/react";
-import { Skeleton } from '@/components/ui/skeleton';
 
 const getGrowthAreas = async () => {
   try {
