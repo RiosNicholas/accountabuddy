@@ -2,11 +2,10 @@ import { NextResponse } from "next/server";
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from "next/headers"; 
 
-export async function GET(request: Request) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const username = searchParams.get('username');
+export async function GET(request: Request, { params }: { params: { username: string } }) {
+  const { username } = params;
 
+  try {
     if (!username) {
       return NextResponse.json({ message: "Username is required" }, { status: 400 });
     }

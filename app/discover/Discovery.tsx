@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 interface UserProfile {
   user_id: string;
+  username: string;
   name?: string;
   age?: number;
   university?: string;
@@ -122,7 +123,7 @@ export default function Discovery() {
             </div>
           </div>
 
-          <ProfileCard username="TestUsername" />
+          <ProfileCard username="TestUsername" name={""} accountabilityAreas={[]} growthAreas={[]} />
         </div>
       ) : (
         <div id="MatchMakingPage" className="flex flex-col justify-center items-center">

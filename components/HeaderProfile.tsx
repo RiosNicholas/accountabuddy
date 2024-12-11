@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LifeBuoy, LogOut, Settings, User } from "lucide-react"; // Optimized icon imports
+import { LifeBuoy, LogOut, Settings, User } from "lucide-react"; 
 import Link from "next/link";
 import { signOut } from "next-auth/react";
 
