@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const UserProfile = () => {
+const UserBio = () => {
   const [bio, setBio] = useState("");
   const [editing, setEditing] = useState(false);
 
@@ -46,4 +46,4 @@ const UserProfile = () => {
   );
 };
 
-export default UserProfile;
+export default UserBio;
