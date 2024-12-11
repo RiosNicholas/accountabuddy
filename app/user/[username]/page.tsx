@@ -114,7 +114,11 @@ export default function UserPage() {
   }, [userId]);
 
   if (status === "loading" || loading) {
-    return <LoadingUser />;
+    return (
+      <div className="flex justify-center w-full h-auto">
+        <LoadingUser />
+      </div>
+    );
   }
 
   const isCurrentUser = session?.user?.id === userId;
