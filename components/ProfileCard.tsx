@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Instagram, Mail, MessageCircle } from "lucide-react";
 
 interface ContactInfo {
   email: string;
@@ -53,12 +54,23 @@ export default function ProfileCard({
           <h4 className="text-muted-foreground font-medium text-base">Contact Information</h4>
           {contactInfo ? (
             <ul className="text-xs p-1">
-              <li>
-                Email: <a className="hover:underline" href={`mailto:${contactInfo.email}`} target="_blank">{contactInfo.email}</a>
-              </li>
-              <li>Instagram: {contactInfo.instagram}</li>
-              <li>Discord: {contactInfo.discord}</li>
-            </ul>
+            <li className="flex items-center">
+              <Mail className="w-4 h-4 mr-1" />
+              Email:{" "}
+              <a className="hover:underline ml-1" href={`mailto:${contactInfo.email}`} target="_blank">
+                {contactInfo.email}
+              </a>
+            </li>
+            <li className="flex items-center">
+              <Instagram className="w-4 h-4 mr-1" />
+              Instagram: {contactInfo.instagram}
+            </li>
+            <li className="flex items-center">
+              <MessageCircle className="w-4 h-4 mr-1" />
+              Discord: {contactInfo.discord}
+            </li>
+          </ul>
+            
           ) : (
             <p className="text-sm p-1">No contact information provided.</p>
           )}
