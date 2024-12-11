@@ -13,7 +13,7 @@ interface ProfileCardProps {
   university?: string;
   contactInfo?: ContactInfo;
   biography?: string;
-  meetingPreference?: string;
+  meetingFrequency?: string;
   methodPreference?: string;
   accountabilityAreas: string[];
   growthAreas: string[];
@@ -25,7 +25,7 @@ export default function ProfileCard({
   university = "Not specified",
   contactInfo,
   biography = "No biography provided.",
-  meetingPreference = "Not specified",
+  meetingFrequency = "Not specified",
   methodPreference = "Not specified",
   accountabilityAreas,
   growthAreas,
@@ -65,16 +65,16 @@ export default function ProfileCard({
         </div>
       </CardContent>
       <CardContent>
-        <h4 className="text-muted-foreground font-semibold mb-2">Meeting Preference</h4>
-        <div className="rounded bg-muted text-muted-foreground p-3">{meetingPreference}</div>
+        <h4 className="text-muted-foreground font-semibold mb-2">Meeting Frequency Preference</h4>
+        <div className="rounded bg-muted text-muted-foreground p-3 capitalize">{meetingFrequency}</div>
       </CardContent>
       <CardContent>
         <h4 className="text-muted-foreground font-semibold mb-2">Method Preference</h4>
-        <div className="rounded bg-muted text-muted-foreground p-3">{methodPreference}</div>
+        <div className="rounded bg-muted text-muted-foreground p-3 capitalize">{methodPreference}</div>
       </CardContent>
       <CardContent>
         <h4 className="text-accent font-semibold mb-2">Accountability Areas</h4>
-        <div className="rounded bg-accent text-accent-foreground p-3">
+        <div className="rounded bg-accent text-accent-foreground p-3 capitalize">
           {accountabilityAreas.length > 0 ? (
             accountabilityAreas.map((area, index) => <div key={index}>{area}</div>)
           ) : (
@@ -84,7 +84,7 @@ export default function ProfileCard({
       </CardContent>
       <CardContent>
         <h4 className="text-accent font-semibold mb-2">Growth Areas</h4>
-        <div className="rounded bg-accent text-accent-foreground p-3">
+        <div className="rounded bg-accent text-accent-foreground p-3 capitalize">
           {growthAreas.length > 0 ? (
             growthAreas.map((area, index) => <div key={index}>{area}</div>)
           ) : (

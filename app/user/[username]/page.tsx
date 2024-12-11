@@ -19,7 +19,7 @@ interface UserProfile {
     instagram: string;
     discord: string;
   };
-  meetingPreference?: string;
+  meetingFrequency?: string;
   methodPreference?: string;
   accountabilityAreas: string[];
   growthAreas: string[];
@@ -81,8 +81,8 @@ export default function UserPage() {
             instagram: userData.contact_info?.instagram || "",
             discord: userData.contact_info?.discord || "",
           },
-          meetingPreference: userData.meeting_preference || null,
-          methodPreference: userData.method_preference || null,
+          meetingFrequency: userData.meeting_frequency || null,
+          methodPreference: userData.meeting_preference || null,
           accountabilityAreas: accountabilityData.data || [],
           growthAreas: growthData.data || [],
         });
@@ -115,7 +115,7 @@ export default function UserPage() {
               university={userInfo.university || "University not specified"}
               contactInfo={userInfo.contactInfo || { email: "", instagram: "", discord: "" }}
               biography={userInfo.biography || "No biography provided."}
-              meetingPreference={userInfo.meetingPreference || "Not specified"}
+              meetingFrequency={userInfo.meetingFrequency || "Not specified"}
               methodPreference={userInfo.methodPreference || "Not specified"}
               accountabilityAreas={userInfo.accountabilityAreas}
               growthAreas={userInfo.growthAreas}
