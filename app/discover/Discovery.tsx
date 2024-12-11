@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { HandIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import DiscoverSkeleton from "./DiscoverSkeleton";
 
 
 interface UserProfile {
@@ -100,6 +101,10 @@ export default function Discovery() {
   
     fetchUsersToDisplay();
   }, []);
+
+  if (loading) {
+    return <DiscoverSkeleton />;
+  }
    
   return (
     <main id="ProfileDiscovery">
