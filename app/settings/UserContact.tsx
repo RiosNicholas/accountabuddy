@@ -17,7 +17,7 @@ export default function UserContact() {
 
   return (
     <div className="w-4/5 md:w-4/6 lg:w-3/5 xl:w-2/5">
-      <div className="flex justify-between">
+      <div className="flex items-center justify-between">
         <h2 className="font-bold text-primary">Contact Information</h2>
         <Button variant="link" onClick={toggleEditing}>{isEditing ? "Cancel" : "Edit"}</Button>
       </div>

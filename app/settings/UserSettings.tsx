@@ -1,6 +1,6 @@
 "use client"
 
-import UserBio from "./UserBio"
+import UserBio from "./UserInfo"
 import UserContact from "./UserContact"
 
 export default function UserSettings() { 
