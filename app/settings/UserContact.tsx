@@ -2,8 +2,9 @@ import { useState } from "react";
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+
+import { Instagram, Mail, MessageCircle } from "lucide-react";
 
 export default function UserContact() {
   const [isEditing, setIsEditing] = useState(false);
@@ -16,7 +17,8 @@ export default function UserContact() {
   }
 
   return (
-    <div className="w-4/5 md:w-4/6 lg:w-3/5 xl:w-2/5">
+    <div className="mb-6 w-4/5 md:w-4/6 lg:w-3/5 xl:w-2/5">
+
       <div className="flex items-center justify-between">
         <h2 className="font-bold text-primary">Contact Information</h2>
         <Button variant="link" onClick={toggleEditing}>{isEditing ? "Cancel" : "Edit"}</Button>

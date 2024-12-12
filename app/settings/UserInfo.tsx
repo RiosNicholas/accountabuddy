@@ -54,7 +54,7 @@ export default function UserInfo() {
   }
 
   return (
-    <div className="w-4/5 md:w-4/6 lg:w-3/5 xl:w-2/5">
+    <div className="my-6 w-4/5 md:w-4/6 lg:w-3/5 xl:w-2/5">
       <div className="flex items-center justify-between">
         <h2 className="font-bold text-primary">User Info</h2>
         <Button variant="link" onClick={toggleEditing}>{isEditing ? "Cancel" : "Edit"}</Button>
@@ -66,7 +66,7 @@ export default function UserInfo() {
             name="bio"
             render={({ field }) => (
               <>
-                <FormItem>
+                <FormItem className="mb-3">
                   <FormLabel>Name</FormLabel>
                   <Input disabled={!isEditing} id="name" placeholder="Your name" value="" />
                 </FormItem>
