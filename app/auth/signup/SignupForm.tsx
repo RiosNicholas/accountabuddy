@@ -18,7 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/components/hooks/use-toast";
 
 const formSchema = z.object({
   name: z.string().min(2).max(50),
