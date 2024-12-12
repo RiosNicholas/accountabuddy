@@ -16,9 +16,13 @@ export default function UserContact() {
   }
 
   return (
-    <>
-      <div className="grid w-full max-w-sm items-center gap-1.5">
+    <div className="w-4/5 md:w-4/6 lg:w-3/5 xl:w-2/5">
+      <div className="flex justify-between">
+        <h2 className="font-bold text-primary">Contact Information</h2>
         <Button variant="link" onClick={toggleEditing}>{isEditing ? "Cancel" : "Edit"}</Button>
+      </div>
+      
+      <div className="grid w-full max-w-sm items-center gap-1.5">
         <Label htmlFor="email">Email</Label>
         <div className="flex items-center">
           <Mail className="w-4 h-4 mr-2" />
@@ -39,7 +43,7 @@ export default function UserContact() {
         { isEditing && <Button variant="outline" type="submit">Save Changes</Button> }
       </div>
 
-    </>
+    </div>
   );
 }
 
