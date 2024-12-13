@@ -1,3 +1,14 @@
+# AccountaBuddy 👥
+
+AccountaBuddy is a social platform designed to help students connect with accountability partners to achieve their goals. Whether you're focusing on habit building, goal setting, or skill development, AccountaBuddy pairs you with like-minded individuals to stay on track. The project is built using Next.js, with features such as user profiles, matchmaking, and customizable preferences.
+
+## Features
+
+- **User Profiles**: Create and customize your personal profile to showcase your goals and accountability preferences.
+- **Goal Buckets & Accountability Areas**: Select from predefined options to specify your focus areas and the type of support you need.
+- **Matchmaking**: Swipe to find accountability partners with similar goals and interests.
+- **Chat Integration**: Connect and communicate with matches directly on the platform.
+- **Customizable Preferences**: Choose how you'd like to meet and collaborate with your accountability partner.
 
 ## Technologies Used
 
