@@ -12,15 +12,31 @@ import { authOptions } from '../api/auth/[...nextauth]/route';
 
 // interface Notifications {
 // TODO 
-// }
+// }x
+
+interface Profile {
+  userId: string;
+  name: string;
+  growthAreas: string[];
+  accountabilityAreas: string[];
+  meetingFrequency: string;
+  meetingLocation: string;
+}
+
+interface getProfilesProps {
+  profiles: Profile[];
+  setProfiles: Function;
+  page: number;
+  setPage: Function;
+}
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
-  console.log(session);
+
   return (
     <>
       {session ? (
-        <Dashboard />
+        <Dashboard session={session} />
       ) : (
         <LoginReminder />
       )}
