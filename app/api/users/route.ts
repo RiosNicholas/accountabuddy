@@ -11,7 +11,7 @@ export async function GET(request: Request) {
 
     const { searchParams } = new URL(request.url);
     const currUserId = searchParams.get('currentUserId');
-    const page = parseInt(searchParams.get('page') || '1');
+    const start = parseInt(searchParams.get('start') || '1');
     const pageSize = 5;
 
     if (!currUserId) {
@@ -19,8 +19,7 @@ export async function GET(request: Request) {
     }
 
     // calculate pagination range
-    const start = (page-1) * pageSize;
-    const end = start + pageSize - 1;
+    const end = start + pageSize;
     
     // Fetch IDs of liked and disliked users
     const { data: likedUsers, error: likesError } = await supabase

@@ -21,7 +21,7 @@ interface Chat {
 // }
 
 interface Profile {
-  userId: string;
+  user_id: string;
   name: string;
   growthAreas: string[];
   accountabilityAreas: string[];
@@ -51,7 +51,7 @@ export default function Dashboard({ session }: DashboardProps ) {
     if (isLoading) return;
     setIsLoading(true);
     try {
-      const response = await fetch(`/api/users?currentUserId=${session.user.id}&page=${page}`, {
+      const response = await fetch(`/api/users?currentUserId=${session.user.id}&start=${numProfiles}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
