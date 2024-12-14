@@ -26,7 +26,8 @@ interface UserInfoProps {
 
 export default function UserInfo({ userId, userName, initialBio }: UserInfoProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [localUserName, setLocalUserName] = useState(userName); 
+  const [localUserName, setLocalUserName] = useState(userName);
+  const [localBio, setLocalBio] = useState(initialBio);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -38,32 +39,34 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
-
     if (isEditing) {
-      // Reset form values when canceling edit mode
-      form.reset({
-        name: localUserName,
-        bio: initialBio,
-      });
+      form.reset({ name: localUserName, bio: localBio });
     }
   };
 
   const onSubmit = async (data: FormValues) => {
     try {
-      const response = await fetch(`/api/users/${userId}`, {
+      // Update name
+      const nameResponse = await fetch(`/api/users/${userId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: data.name }),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update user information");
-      }
+      if (!nameResponse.ok) throw new Error("Failed to update name");
 
-      const updatedUser = await response.json();
+      // Update biography
+      const bioResponse = await fetch(`/api/users/${userId}/biography`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ biography: data.bio }),
+      });
 
-      // Update local state
-      setLocalUserName(updatedUser.name);
+      if (!bioResponse.ok) throw new Error("Failed to update biography");
+
+      setLocalUserName(data.name);
+      setLocalBio(data.bio);
+
       toast({
         title: "Profile updated",
         description: "Your profile information has been updated successfully.",
@@ -73,7 +76,7 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
     } catch (error) {
       toast({
         title: "Error updating profile",
-        description: "Unable to update your profile. Please try again.",
+        description: error.message || "Unable to update profile. Please try again.",
         variant: "destructive",
       });
       console.error(error);
@@ -102,10 +105,10 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
                     {...field}
                     disabled={!isEditing}
                     placeholder="Your name"
-                    value={field.value || localUserName} // Sync with local state
+                    value={field.value || localUserName}
                     onChange={(e) => {
-                      field.onChange(e); // Update react-hook-form
-                      setLocalUserName(e.target.value); // Update local state
+                      field.onChange(e);
+                      setLocalUserName(e.target.value);
                     }}
                   />
                 </FormControl>
@@ -126,7 +129,11 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
                     {...field}
                     disabled={!isEditing}
                     placeholder="Tell us a little bit about yourself"
-                    className="resize-none"
+                    value={field.value || localBio}
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setLocalBio(e.target.value);
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
