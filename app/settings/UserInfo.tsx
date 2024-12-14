@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,64 +12,73 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 
 const FormSchema = z.object({
-  name: z
-    .string()
-    .min(2, {
-      message: "Name must be at least 2 characters.",
-    })
-    .max(40, {
-      message: "Name must not be longer than 40 characters.",
-    }),
-  bio: z
-    .string()
-    .min(2, {
-      message: "Bio must be at least 2 characters.",
-    })
-    .max(160, {
-      message: "Bio must not be longer than 300 characters.",
-    }),
+  name: z.string().min(2, { message: "Name must be at least 2 characters." }).max(40),
+  bio: z.string().min(2, { message: "Bio must be at least 2 characters." }).max(300),
 });
 
+type FormValues = z.infer<typeof FormSchema>;
+
 interface UserInfoProps {
-  name: string;
-  biography?: string | null;
+  userId: string;
+  userName: string;
+  initialBio: string;
 }
 
-export default function UserInfo({ name, biography }: UserInfoProps) {
+export default function UserInfo({ userId, userName, initialBio }: UserInfoProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [localUserName, setLocalUserName] = useState(userName); 
 
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name,
-      bio: biography ?? "",
+      name: userName,
+      bio: initialBio,
     },
   });
 
-  function toggleEditing() {
+  const toggleEditing = () => {
     setIsEditing((prev) => !prev);
 
-    // Reset form state when toggling off editing mode
     if (isEditing) {
+      // Reset form values when canceling edit mode
       form.reset({
-        name,
-        bio: biography ?? "",
+        name: localUserName,
+        bio: initialBio,
       });
     }
-  }
+  };
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  const onSubmit = async (data: FormValues) => {
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: data.name }),
+      });
 
-    setIsEditing(false);
-  }
+      if (!response.ok) {
+        throw new Error("Failed to update user information");
+      }
+
+      const updatedUser = await response.json();
+
+      // Update local state
+      setLocalUserName(updatedUser.name);
+      toast({
+        title: "Profile updated",
+        description: "Your profile information has been updated successfully.",
+      });
+
+      setIsEditing(false);
+    } catch (error) {
+      toast({
+        title: "Error updating profile",
+        description: "Unable to update your profile. Please try again.",
+        variant: "destructive",
+      });
+      console.error(error);
+    }
+  };
 
   return (
     <div className="my-6 w-4/5 md:w-4/6 lg:w-3/5 xl:w-2/5">
@@ -82,6 +90,7 @@ export default function UserInfo({ name, biography }: UserInfoProps) {
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+          {/* Name Field */}
           <FormField
             control={form.control}
             name="name"
@@ -93,7 +102,11 @@ export default function UserInfo({ name, biography }: UserInfoProps) {
                     {...field}
                     disabled={!isEditing}
                     placeholder="Your name"
-                    className="peer"
+                    value={field.value || localUserName} // Sync with local state
+                    onChange={(e) => {
+                      field.onChange(e); // Update react-hook-form
+                      setLocalUserName(e.target.value); // Update local state
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -101,14 +114,13 @@ export default function UserInfo({ name, biography }: UserInfoProps) {
             )}
           />
 
+          {/* Bio Field */}
           <FormField
             control={form.control}
             name="bio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Bio
-                </FormLabel>
+                <FormLabel>Bio</FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}

@@ -9,7 +9,6 @@ export async function GET() {
     const supabase = createRouteHandlerClient({ cookies });
     
     const { data, error } = await supabase
-      // Fetching all users
       .from('Users')
       .select('*')
 

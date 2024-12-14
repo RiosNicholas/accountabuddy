@@ -15,9 +15,9 @@ export async function GET(request: Request, { params }: { params: { user_id: str
 
     const { data, error } = await supabase
       .from("UserBiographies")
-      .select("user_bio")
+      .select("biography")
       .eq("user_id", user_id)
-      .single();
+      .maybeSingle();
 
     if (error) {
       console.error("Supabase query error:", error);
@@ -41,9 +41,9 @@ export async function POST(request: Request, { params }: { params: { user_id: st
     }
 
     const body = await request.json();
-    const { user_bio } = body;
+    const { biography } = body;
 
-    if (!user_bio || user_bio.length > 300) {
+    if (!biography || biography.length > 300) {
       return NextResponse.json(
         { error: "Invalid bio. It must be between 1 and 300 characters." },
         { status: 400 }
@@ -54,7 +54,7 @@ export async function POST(request: Request, { params }: { params: { user_id: st
 
     const { error } = await supabase
       .from("UserBiographies")
-      .upsert({ user_id, user_bio }, { onConflict: "user_id" });
+      .upsert({ user_id, biography }, { onConflict: "user_id" });
 
     if (error) {
       console.error("Supabase upsert error:", error);
