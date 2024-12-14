@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { toast } from "@/hooks/use-toast"
-import { Button } from "@/components/ui/button"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, } from "@/components/ui/form"
-import { Textarea } from "@/components/ui/textarea"
-import { Input } from "@/components/ui/input"
+import { toast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 
 const FormSchema = z.object({
   name: z
@@ -29,17 +29,34 @@ const FormSchema = z.object({
     .max(160, {
       message: "Bio must not be longer than 300 characters.",
     }),
-})
+});
 
-export default function UserInfo() {
+interface UserInfoProps {
+  name: string;
+  biography?: string | null;
+}
+
+export default function UserInfo({ name, biography }: UserInfoProps) {
   const [isEditing, setIsEditing] = useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-  })
+    defaultValues: {
+      name,
+      bio: biography ?? "",
+    },
+  });
 
   function toggleEditing() {
-    setIsEditing(!isEditing);
+    setIsEditing((prev) => !prev);
+
+    // Reset form state when toggling off editing mode
+    if (isEditing) {
+      form.reset({
+        name,
+        bio: biography ?? "",
+      });
+    }
   }
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -50,44 +67,68 @@ export default function UserInfo() {
           <code className="text-white">{JSON.stringify(data, null, 2)}</code>
         </pre>
       ),
-    })
+    });
+
+    setIsEditing(false);
   }
 
   return (
     <div className="my-6 w-4/5 md:w-4/6 lg:w-3/5 xl:w-2/5">
       <div className="flex items-center justify-between">
         <h2 className="font-bold text-primary">User Info</h2>
-        <Button variant="link" onClick={toggleEditing}>{isEditing ? "Cancel" : "Edit"}</Button>
+        <Button variant="link" onClick={toggleEditing}>
+          {isEditing ? "Cancel" : "Edit"}
+        </Button>
       </div>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-3">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={!isEditing}
+                    placeholder="Your name"
+                    className="peer"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="bio"
             render={({ field }) => (
-              <>
-                <FormItem className="mb-3">
-                  <FormLabel>Name</FormLabel>
-                  <Input disabled={!isEditing} id="name" placeholder="Your name" value="" />
-                </FormItem>
-                <FormItem>
-                  <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Bio</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Tell us a little bit about yourself"
-                      disabled={!isEditing}
-                      // TODO: add value from query value={}
-                      className="resize-none"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              </>
+              <FormItem>
+                <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Bio
+                </FormLabel>
+                <FormControl>
+                  <Textarea
+                    {...field}
+                    disabled={!isEditing}
+                    placeholder="Tell us a little bit about yourself"
+                    className="resize-none"
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
           />
-          {isEditing && <Button variant="outline" type="submit">Save Changes</Button> }
+
+          {isEditing && (
+            <Button variant="outline" type="submit">
+              Save Changes
+            </Button>
+          )}
         </form>
       </Form>
     </div>
-  )
+  );
 }

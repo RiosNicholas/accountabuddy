@@ -8,33 +8,51 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 import { Instagram, Mail, MessageCircle } from "lucide-react";
- 
+
 const contactSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  discordUsername: z.string().nonempty("Discord username cannot be empty"),
-  instagramUsername: z.string().regex(/^@?\w+$/, "Invalid Instagram username").optional(),
+  email: z
+    .string()
+    .email("Invalid email address")
+    .optional(),
+  discordUsername: z
+    .string()
+    .optional(),
+  instagramUsername: z
+    .string()
+    .regex(/^@?\w+$/, "Invalid Instagram username")
+    .nullable()
+    .optional(),
 });
 
-export default function UserContact() {
+interface UserContactProps {
+  email?: string | null;
+  discordUsername?: string | null;
+  instagramUsername?: string | null;
+}
+
+export default function UserContact({ email, discordUsername, instagramUsername }: UserContactProps) {
   const [isEditing, setIsEditing] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      email: "email@email.com",
-      discordUsername: "username",
-      instagramUsername: "@username",
+      email,
+      discordUsername,
+      instagramUsername,
     },
   });
 
-  const toggleEditing = () => setIsEditing(!isEditing);
+  const toggleEditing = () => {
+    setIsEditing(!isEditing);
+
+    if (isEditing) {
+      reset({ email, discordUsername, instagramUsername });
+    }
+  };
 
   const onSubmit = (data) => {
     console.log("Form data:", data);
+    // TODO: trigger upsert api call
     toggleEditing();
   };
 
