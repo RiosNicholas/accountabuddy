@@ -12,6 +12,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default function UserSettings() {
   const { data: session, status } = useSession();
   const [bio, setBio] = useState("");
+  const [isLoadingBio, setIsLoadingBio] = useState(true);  
 
   // Use useCallback to define fetchUserBio so it doesn't get redefined on every render
   const fetchUserBio = useCallback(async () => {
@@ -26,6 +27,8 @@ export default function UserSettings() {
         }
       } catch (error) {
         console.error("Error fetching user bio:", error);
+      } finally {
+        setIsLoadingBio(false); // Ensure loading is updated
       }
     }
   }, [session?.user.id]);
@@ -34,9 +37,9 @@ export default function UserSettings() {
     if (status === "authenticated") {
       fetchUserBio();
     }
-  }, [status, fetchUserBio]); 
+  }, [status, fetchUserBio]);
 
-  if (status === "loading") return <UserSettingsLoading />;
+  if (status === "loading" || isLoadingBio) return <UserSettingsLoading />;
 
   return (
     <>
@@ -52,6 +55,7 @@ export default function UserSettings() {
                 </Avatar>
               </div>
             </div>
+            {/* Pass the bio only after it has loaded */}
             <UserInfo userId={session.user.id} userName={session.user.name || ""} initialBio={bio} />
             <UserContact />
           </main>
