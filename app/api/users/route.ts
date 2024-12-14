@@ -1,4 +1,5 @@
 // import SupabaseClient from '@supabase/supabase-js';
+import MatchMaking from '@/app/discover/page';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { error } from 'console';
 import { UUID } from 'crypto';
@@ -107,6 +108,31 @@ export async function POST(request: Request) {
     if (isLike) {
       table = "Likes";
       params = {liker: liker, likee: likee};
+
+      // Check for a match
+      const {data, error:matchCheckError} = await supabase
+      .from(table)
+      .select("*")
+      .eq("liker", likee)
+      .eq("likee", liker)
+
+      if (matchCheckError) {
+        console.error(matchCheckError);
+        return NextResponse.json({ message: "Failed to check for a match" }, { status: 500 });
+      }
+
+      if (data.length > 0) {
+        let matchParams = {user1:liker, user2:likee}
+        const {error: matchMadeError} = await supabase
+        .from("Matches")
+        .insert(matchParams)
+
+        if (matchMadeError) {
+          console.error(matchMadeError);
+          return NextResponse.json({ message: "Failed to store match" }, { status: 500 });
+        }
+      }
+    
     } else {
       table = "Dislikes";
       params = {disliker: liker, dislikee: likee};
@@ -114,7 +140,6 @@ export async function POST(request: Request) {
     const { error } = await supabase
     .from(table)
     .insert(params);
-    
 
     if (error) {
       console.error(error);
