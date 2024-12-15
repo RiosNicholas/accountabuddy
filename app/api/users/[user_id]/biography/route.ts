@@ -19,9 +19,6 @@ export async function GET(request: Request, { params }: { params: { user_id: str
       .eq("user_id", user_id)
       .maybeSingle(); 
 
-    console.log("Query result data:", data); // Debugging
-    console.log("Query error:", error); // Debugging
-
     if (error) {
       console.error("Supabase query error:", error);
       return NextResponse.json({ error: "Failed to fetch user biography" }, { status: 500 });
