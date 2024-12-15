@@ -12,34 +12,60 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default function UserSettings() {
   const { data: session, status } = useSession();
   const [bio, setBio] = useState("");
-  const [isLoadingBio, setIsLoadingBio] = useState(true);  
+  const [instagram, setInstagram] = useState("");
+  const [discord, setDiscord] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Use useCallback to define fetchUserBio so it doesn't get redefined on every render
+  // Fetch user biography
   const fetchUserBio = useCallback(async () => {
     if (session?.user.id) {
       try {
         const bioResponse = await fetch(`/api/users/${session.user.id}/biography`);
         if (bioResponse.ok) {
           const bioJson = await bioResponse.json();
-          setBio(bioJson.biography || "");
+          setBio(bioJson.biography || null);
         } else {
           console.error("Failed to fetch user bio");
         }
       } catch (error) {
         console.error("Error fetching user bio:", error);
-      } finally {
-        setIsLoadingBio(false); // Ensure loading is updated
       }
     }
   }, [session?.user.id]);
 
+  // Fetch user contact info
+  const fetchUserContactInfo = useCallback(async () => {
+    if (session?.user.id) {
+      try {
+        const contactResponse = await fetch(`/api/users/${session.user.id}/contact-info`);
+        if (contactResponse.ok) {
+          const contactJson = await contactResponse.json();
+          setInstagram(contactJson.instagram || null);
+          setDiscord(contactJson.discord || null);
+          setUserEmail(contactJson.email || null);
+        } else {
+          console.error("Failed to fetch user contact info");
+        }
+      } catch (error) {
+        console.error("Error fetching user contact info:", error);
+      }
+    }
+  }, [session?.user.id]);
+
+  // Fetch both biography and contact info
+  const fetchUserData = useCallback(async () => {
+    await Promise.all([fetchUserBio(), fetchUserContactInfo()]);
+    setIsLoading(false); 
+  }, [fetchUserBio, fetchUserContactInfo]);
+
   useEffect(() => {
     if (status === "authenticated") {
-      fetchUserBio();
+      fetchUserData();
     }
-  }, [status, fetchUserBio]);
+  }, [status, fetchUserData]);
 
-  if (status === "loading" || isLoadingBio) return <UserSettingsLoading />;
+  if (status === "loading" || isLoading) return <UserSettingsLoading />;
 
   return (
     <>
@@ -55,9 +81,8 @@ export default function UserSettings() {
                 </Avatar>
               </div>
             </div>
-            {/* Pass the bio only after it has loaded */}
             <UserInfo userId={session.user.id} userName={session.user.name || ""} initialBio={bio} />
-            <UserContact />
+            <UserContact email={userEmail} discordUsername={discord} instagramUsername={instagram} />
           </main>
         </div>
       ) : (

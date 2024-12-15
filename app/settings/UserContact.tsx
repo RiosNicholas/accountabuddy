@@ -12,16 +12,32 @@ import { Instagram, Mail, MessageCircle } from "lucide-react";
 const contactSchema = z.object({
   email: z
     .string()
-    .email("Invalid email address")
-    .optional(),
+    .nullable()
+    .optional()
+    .refine(
+      (value) => !value || z.string().email().max(255).safeParse(value).success,
+      { message: "Invalid email address or exceeds 255 characters" }
+    ),
   discordUsername: z
     .string()
-    .optional(),
+    .nullable()
+    .optional()
+    .refine(
+      (value) => !value || value.length <= 50,
+      { message: "Discord username must be at most 50 characters" }
+    ),
   instagramUsername: z
     .string()
-    .regex(/^@?\w+$/, "Invalid Instagram username")
     .nullable()
-    .optional(),
+    .optional()
+    .refine(
+      (value) => !value || /^@?\w+$/.test(value),
+      { message: "Invalid Instagram username" }
+    )
+    .refine(
+      (value) => !value || value.length <= 50,
+      { message: "Instagram username must be at most 50 characters" }
+    ),
 });
 
 interface UserContactProps {
@@ -46,14 +62,29 @@ export default function UserContact({ email, discordUsername, instagramUsername 
     setIsEditing(!isEditing);
 
     if (isEditing) {
+      // Reset fields to initial values if editing is canceled
       reset({ email, discordUsername, instagramUsername });
     }
   };
 
-  const onSubmit = (data) => {
-    console.log("Form data:", data);
-    // TODO: trigger upsert api call
-    toggleEditing();
+  const onSubmit = async (data: any) => {
+    console.log("Form data submitted:", data);
+    try {
+      const response = await fetch(`/api/users/{user_id}/contact-info`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update contact information");
+      }
+
+      console.log("Contact information updated successfully");
+      toggleEditing();
+    } catch (error) {
+      console.error("Error updating contact information:", error);
+    }
   };
 
   return (
@@ -73,6 +104,7 @@ export default function UserContact({ email, discordUsername, instagramUsername 
             <Input
               type="email"
               id="email"
+              placeholder="your_email@email.com"
               disabled={!isEditing}
               {...register("email")}
               className={errors.email ? "border-red-500" : ""}
@@ -90,6 +122,7 @@ export default function UserContact({ email, discordUsername, instagramUsername 
             <Input
               type="text"
               id="discord"
+              placeholder="username"
               disabled={!isEditing}
               {...register("discordUsername")}
               className={errors.discordUsername ? "border-red-500" : ""}
@@ -109,6 +142,7 @@ export default function UserContact({ email, discordUsername, instagramUsername 
             <Input
               type="text"
               id="instagram"
+              placeholder="@username"
               disabled={!isEditing}
               {...register("instagramUsername")}
               className={errors.instagramUsername ? "border-red-500" : ""}
@@ -122,9 +156,7 @@ export default function UserContact({ email, discordUsername, instagramUsername 
         </div>
 
         {isEditing && (
-          <Button variant="outline" type="submit">
-            Save Changes
-          </Button>
+          <Button variant="outline" type="submit">Save Changes</Button>
         )}
       </form>
     </div>
