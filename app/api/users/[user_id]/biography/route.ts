@@ -17,11 +17,19 @@ export async function GET(request: Request, { params }: { params: { user_id: str
       .from("UserBiographies")
       .select("biography")
       .eq("user_id", user_id)
-      .maybeSingle();
+      .maybeSingle(); 
+
+    console.log("Query result data:", data); // Debugging
+    console.log("Query error:", error); // Debugging
 
     if (error) {
       console.error("Supabase query error:", error);
       return NextResponse.json({ error: "Failed to fetch user biography" }, { status: 500 });
+    }
+
+    if (!data || data.biography === undefined || data.biography === null) {
+      console.error(`Biography not found for user_id: ${user_id}`);
+      return NextResponse.json({ error: "Biography not found" }, { status: 404 });
     }
 
     return NextResponse.json(data, { status: 200 });
@@ -31,37 +39,30 @@ export async function GET(request: Request, { params }: { params: { user_id: str
   }
 }
 
-export async function POST(request: Request, { params }: { params: { user_id: string } }) {
+
+export async function PUT(request: Request, { params }: { params: { user_id: string } }) {
   const { user_id } = params;
 
   try {
-    if (!user_id) {
-      console.error("User ID is missing");
-      return NextResponse.json({ error: "User ID is required" }, { status: 400 });
-    }
-
     const body = await request.json();
     const { biography } = body;
 
-    if (!biography || biography.length > 300) {
-      return NextResponse.json(
-        { error: "Invalid bio. It must be between 1 and 300 characters." },
-        { status: 400 }
-      );
+    if (!biography) {
+      return NextResponse.json({ error: "Biography is required" }, { status: 400 });
     }
 
     const supabase = createRouteHandlerClient({ cookies });
 
     const { error } = await supabase
       .from("UserBiographies")
-      .upsert({ user_id, biography }, { onConflict: "user_id" });
+      .update({ biography })
+      .eq("user_id", user_id);
 
     if (error) {
-      console.error("Supabase upsert error:", error);
-      return NextResponse.json({ error: "Failed to update user biography" }, { status: 500 });
+      return NextResponse.json({ error: "Failed to update biography" }, { status: 500 });
     }
 
-    return NextResponse.json({ message: "User biography updated successfully" }, { status: 200 });
+    return NextResponse.json({ message: "Biography updated successfully" }, { status: 200 });
   } catch (error) {
     console.error("Unexpected error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

@@ -40,6 +40,7 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
     if (isEditing) {
+      // Reset the form on cancel
       form.reset({ name: localUserName, bio: localBio });
     }
   };
@@ -64,6 +65,7 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
 
       if (!bioResponse.ok) throw new Error("Failed to update biography");
 
+      // Update local state
       setLocalUserName(data.name);
       setLocalBio(data.bio);
 
@@ -72,7 +74,7 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
         description: "Your profile information has been updated successfully.",
       });
 
-      setIsEditing(false);
+      setIsEditing(false); 
     } catch (error) {
       toast({
         title: "Error updating profile",
@@ -97,7 +99,7 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
           <FormField
             control={form.control}
             name="name"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
@@ -110,6 +112,7 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
                       field.onChange(e);
                       setLocalUserName(e.target.value);
                     }}
+                    className={fieldState.invalid ? "border-red-500" : ""}
                   />
                 </FormControl>
                 <FormMessage />
@@ -121,7 +124,7 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
           <FormField
             control={form.control}
             name="bio"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem>
                 <FormLabel>Bio</FormLabel>
                 <FormControl>
@@ -129,6 +132,7 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
                     {...field}
                     disabled={!isEditing}
                     placeholder="Tell us a little bit about yourself"
+                    className={`resize-none ${fieldState.invalid ? "border-red-500" : ""}`}
                     value={field.value || localBio}
                     onChange={(e) => {
                       field.onChange(e);
