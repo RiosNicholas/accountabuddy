@@ -77,7 +77,7 @@ export async function PUT(request: Request, props: { params: Promise<{ user_id: 
     }
 
     const body = await request.json();
-    const { name, bio } = body;
+    const { name } = body;
 
     // Validate name
     if (name && (typeof name !== "string" || name.trim().length === 0 || name.length > 100)) {
@@ -87,27 +87,42 @@ export async function PUT(request: Request, props: { params: Promise<{ user_id: 
       );
     }
 
-    // Validate bio
-    if (bio && (typeof bio !== "string" || bio.trim().length === 0 || bio.length > 300)) {
-      return NextResponse.json(
-        { error: "Invalid bio. Must be a non-empty string and less than 300 characters." },
-        { status: 400 }
-      );
-    }
-
     // Initializing Supabase client
     const supabase = createRouteHandlerClient({ cookies });
 
-    // Upsert user data
-    const { error } = await supabase
-      .from('Users')
-      .upsert(
-        { user_id, name, bio },
-        { onConflict: 'user_id' } // Ensure we upsert based on user_id
-      );
+    // Fetch the current user data
+    const { data: existingUser, error: fetchError } = await supabase
+      .from("Users")
+      .select("*")
+      .eq("user_id", user_id)
+      .single();
 
-    if (error) {
-      console.error('Error updating user data:', error);
+    if (fetchError) {
+      console.error("Error fetching user data:", fetchError);
+      return NextResponse.json(
+        { message: "Failed to fetch existing user data" },
+        { status: 500 }
+      );
+    }
+
+    if (!existingUser) {
+      return NextResponse.json(
+        { message: "User not found" },
+        { status: 404 }
+      );
+    }
+
+    const updatedUser = {
+      ...existingUser,
+      name, 
+    };
+
+    const { error: updateError } = await supabase
+      .from("Users")
+      .upsert(updatedUser, { onConflict: "user_id" });
+
+    if (updateError) {
+      console.error("Error updating user data:", updateError);
       return NextResponse.json(
         { message: "Failed to update user data" },
         { status: 500 }
