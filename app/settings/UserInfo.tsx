@@ -26,8 +26,7 @@ interface UserInfoProps {
 
 export default function UserInfo({ userId, userName, initialBio }: UserInfoProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [localUserName, setLocalUserName] = useState(userName);
-  const [localBio, setLocalBio] = useState(initialBio);
+  const [latestChanges, setLatestChanges] = useState({ name: userName, bio: initialBio });
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -40,41 +39,29 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
     if (isEditing) {
-      // Reset the form on cancel
-      form.reset({ name: localUserName, bio: localBio });
+      form.reset(latestChanges); // Reset to the latest changes if editing is canceled
     }
   };
 
   const onSubmit = async (data: FormValues) => {
     try {
-      // Update name
-      const nameResponse = await fetch(`/api/users/${userId}`, {
+      const response = await fetch(`/api/users/${userId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: data.name }),
+        body: JSON.stringify(data),
       });
 
-      if (!nameResponse.ok) throw new Error("Failed to update name");
+      if (!response.ok) throw new Error("Failed to update profile");
 
-      // Update biography
-      const bioResponse = await fetch(`/api/users/${userId}/biography`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ biography: data.bio }),
-      });
-
-      if (!bioResponse.ok) throw new Error("Failed to update biography");
-
-      // Update local state
-      setLocalUserName(data.name);
-      setLocalBio(data.bio);
+      // Update latestChanges state
+      setLatestChanges(data);
 
       toast({
         title: "Profile updated",
         description: "Your profile information has been updated successfully.",
       });
 
-      setIsEditing(false); 
+      setIsEditing(false);
     } catch (error) {
       toast({
         title: "Error updating profile",
@@ -107,10 +94,10 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
                     {...field}
                     disabled={!isEditing}
                     placeholder="Your name"
-                    value={field.value || localUserName}
+                    value={field.value || latestChanges.name}
                     onChange={(e) => {
                       field.onChange(e);
-                      setLocalUserName(e.target.value);
+                      setLatestChanges((prev) => ({ ...prev, name: e.target.value }));
                     }}
                     className={fieldState.invalid ? "border-red-500" : ""}
                   />
@@ -132,12 +119,12 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
                     {...field}
                     disabled={!isEditing}
                     placeholder="Tell us a little bit about yourself"
-                    className={`resize-none ${fieldState.invalid ? "border-red-500" : ""}`}
-                    value={field.value || localBio}
+                    value={field.value || latestChanges.bio}
                     onChange={(e) => {
                       field.onChange(e);
-                      setLocalBio(e.target.value);
+                      setLatestChanges((prev) => ({ ...prev, bio: e.target.value }));
                     }}
+                    className={`resize-none ${fieldState.invalid ? "border-red-500" : ""}`}
                   />
                 </FormControl>
                 <FormMessage />

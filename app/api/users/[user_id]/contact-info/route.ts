@@ -49,14 +49,18 @@ export async function POST(request: Request, { params }: { params: { user_id: st
     const body = await request.json();
     const { email, discord, instagram } = body;
 
+    console.log("Received payload:", { email, discord, instagram });
+
     const supabase = createRouteHandlerClient({ cookies });
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from("UserContactInfo")
       .upsert(
-        { user_id, email, discord, instagram }, // Pass the data to upsert
-        { onConflict: "user_id" } // Ensure conflicts are resolved based on user_id
+        { user_id, email, discord, instagram },
+        { onConflict: "user_id" }
       );
+
+    console.log("Supabase upsert result:", { data, error });
 
     if (error) {
       console.error("Supabase upsert error:", error);

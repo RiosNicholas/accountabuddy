@@ -17,7 +17,6 @@ export default function UserSettings() {
   const [userEmail, setUserEmail] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  // Fetch user biography
   const fetchUserBio = useCallback(async () => {
     if (session?.user.id) {
       try {
@@ -34,7 +33,6 @@ export default function UserSettings() {
     }
   }, [session?.user.id]);
 
-  // Fetch user contact info
   const fetchUserContactInfo = useCallback(async () => {
     if (session?.user.id) {
       try {
@@ -82,7 +80,7 @@ export default function UserSettings() {
               </div>
             </div>
             <UserInfo userId={session.user.id} userName={session.user.name || ""} initialBio={bio} />
-            <UserContact email={userEmail} discordUsername={discord} instagramUsername={instagram} />
+            <UserContact userId={session.user.id} email={userEmail} discordUsername={discord} instagramUsername={instagram} />
           </main>
         </div>
       ) : (

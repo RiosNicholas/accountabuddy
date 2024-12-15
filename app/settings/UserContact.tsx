@@ -1,11 +1,14 @@
+"use client";
+
 import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 import { Instagram, Mail, MessageCircle } from "lucide-react";
 
@@ -40,16 +43,24 @@ const contactSchema = z.object({
     ),
 });
 
+type FormValues = z.infer<typeof contactSchema>;
+
 interface UserContactProps {
+  userId: string;
   email?: string | null;
   discordUsername?: string | null;
   instagramUsername?: string | null;
 }
 
-export default function UserContact({ email, discordUsername, instagramUsername }: UserContactProps) {
+export default function UserContact({ userId, email, discordUsername, instagramUsername }: UserContactProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const [latestChanges, setLatestChanges] = useState({
+    email: email ?? null,
+    discordUsername: discordUsername ?? null,
+    instagramUsername: instagramUsername ?? null,
+  });
 
-  const { register, handleSubmit, formState: { errors }, reset } = useForm({
+  const form = useForm<FormValues>({
     resolver: zodResolver(contactSchema),
     defaultValues: {
       email,
@@ -59,106 +70,154 @@ export default function UserContact({ email, discordUsername, instagramUsername 
   });
 
   const toggleEditing = () => {
-    setIsEditing(!isEditing);
-
+    setIsEditing((prev) => !prev);
     if (isEditing) {
-      // Reset fields to initial values if editing is canceled
-      reset({ email, discordUsername, instagramUsername });
+      form.reset(latestChanges);
     }
   };
 
-  const onSubmit = async (data: any) => {
-    console.log("Form data submitted:", data);
+  const onSubmit = async (data: FormValues) => {
+    const mappedData = {
+      email: data.email,
+      discord: data.discordUsername,
+      instagram: data.instagramUsername,
+    };
+
+    console.log("Mapped payload:", mappedData);
+
     try {
-      const response = await fetch(`/api/users/{user_id}/contact-info`, {
+      const response = await fetch(`/api/users/${userId}/contact-info`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
+        body: JSON.stringify(mappedData),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update contact information");
-      }
+      if (!response.ok) throw new Error("Failed to update contact information");
 
-      console.log("Contact information updated successfully");
-      toggleEditing();
+      setLatestChanges((prev) => ({
+        ...prev,
+        email: mappedData.email ?? prev.email,
+        discordUsername: mappedData.discord ?? prev.discordUsername,
+        instagramUsername: mappedData.instagram ?? prev.instagramUsername,
+      }));
+
+      toast({
+        title: "Contact updated",
+        description: "Your contact information has been updated successfully.",
+      });
+
+      setIsEditing(false);
     } catch (error) {
-      console.error("Error updating contact information:", error);
+      toast({
+        title: "Error updating contact information",
+        description: error.message || "Unable to update contact information. Please try again.",
+        variant: "destructive",
+      });
+      console.error(error);
     }
   };
 
   return (
-    <div className="mb-6 w-4/5 md:w-4/6 lg:w-3/5 xl:w-2/5">
+    <div className="my-6 w-4/5 md:w-4/6 lg:w-3/5 xl:w-2/5">
       <div className="flex items-center justify-between">
         <h2 className="font-bold text-primary">Contact Information</h2>
         <Button variant="link" onClick={toggleEditing}>
           {isEditing ? "Cancel" : "Edit"}
         </Button>
       </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-4">
+          {/* Email Field */}
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <div className="flex items-center">
+                    <Mail className="w-4 h-4 mr-2" />
+                    <Input
+                      {...field}
+                      disabled={!isEditing}
+                      placeholder="your_email@email.com"
+                      value={field.value || latestChanges.email || ""}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        setLatestChanges((prev) => ({ ...prev, email: e.target.value }));
+                      }}
+                      className={fieldState.invalid ? "border-red-500" : ""}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="grid w-full max-w-sm gap-4">
-        <div>
-          <Label htmlFor="email">Email</Label>
-          <div className="flex items-center">
-            <Mail className="w-4 h-4 mr-2" />
-            <Input
-              type="email"
-              id="email"
-              placeholder="your_email@email.com"
-              disabled={!isEditing}
-              {...register("email")}
-              className={errors.email ? "border-red-500" : ""}
-            />
-          </div>
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email.message}</p>
+          {/* Discord Field */}
+          <FormField
+            control={form.control}
+            name="discordUsername"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>Discord</FormLabel>
+                <FormControl>
+                  <div className="flex items-center">
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    <Input
+                      {...field}
+                      disabled={!isEditing}
+                      placeholder="username"
+                      value={field.value || latestChanges.discordUsername || ""}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        setLatestChanges((prev) => ({ ...prev, discordUsername: e.target.value }));
+                      }}
+                      className={fieldState.invalid ? "border-red-500" : ""}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Instagram Field */}
+          <FormField
+            control={form.control}
+            name="instagramUsername"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>Instagram</FormLabel>
+                <FormControl>
+                  <div className="flex items-center">
+                    <Instagram className="w-4 h-4 mr-2" />
+                    <Input
+                      {...field}
+                      disabled={!isEditing}
+                      placeholder="@username"
+                      value={field.value || latestChanges.instagramUsername || ""}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        setLatestChanges((prev) => ({ ...prev, instagramUsername: e.target.value }));
+                      }}
+                      className={fieldState.invalid ? "border-red-500" : ""}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {isEditing && (
+            <Button variant="outline" type="submit">
+              Save Changes
+            </Button>
           )}
-        </div>
-
-        <div>
-          <Label htmlFor="discord">Discord</Label>
-          <div className="flex items-center">
-            <MessageCircle className="w-4 h-4 mr-2" />
-            <Input
-              type="text"
-              id="discord"
-              placeholder="username"
-              disabled={!isEditing}
-              {...register("discordUsername")}
-              className={errors.discordUsername ? "border-red-500" : ""}
-            />
-          </div>
-          {errors.discordUsername && (
-            <p className="text-red-500 text-sm">
-              {errors.discordUsername.message}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <Label htmlFor="instagram">Instagram</Label>
-          <div className="flex items-center">
-            <Instagram className="w-4 h-4 mr-2" />
-            <Input
-              type="text"
-              id="instagram"
-              placeholder="@username"
-              disabled={!isEditing}
-              {...register("instagramUsername")}
-              className={errors.instagramUsername ? "border-red-500" : ""}
-            />
-          </div>
-          {errors.instagramUsername && (
-            <p className="text-red-500 text-sm">
-              {errors.instagramUsername.message}
-            </p>
-          )}
-        </div>
-
-        {isEditing && (
-          <Button variant="outline" type="submit">Save Changes</Button>
-        )}
-      </form>
+        </form>
+      </Form>
     </div>
   );
 }
