@@ -117,7 +117,7 @@ export default function UserInfo({ userId, userName, initialBio, userUniversity 
     } catch (error) {
       toast({
         title: "Error updating profile",
-        description: error.message || "Unable to update profile. Please try again.",
+        description: (error instanceof Error ? error.message : "Unable to update profile. Please try again."),
         variant: "destructive",
       });
       console.error(error);
