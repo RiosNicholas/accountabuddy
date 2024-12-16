@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import DiscoverSkeleton from "./DiscoverSkeleton";
 import MatchmakingCard, { MeetingPreference, MethodPreference } from "@/components/MatchmakingCard";
 import { Button } from "@/components/ui/button";
+import { motion } from "motion/react"
 
 interface UserProfile {
   user_id: string;
@@ -140,8 +141,16 @@ export default function Discovery() {
           {compactView ? "Compact View" : "Detailed View"}
         </Button>
       </div>
+
       <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
         <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
+
+        <motion.div
+                        initial={{ x: -100, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+                    >
+          
           {visibleProfiles.map((profile) => (
             <MatchmakingCard
               key={profile.user_id}
@@ -158,7 +167,8 @@ export default function Discovery() {
               setIsDecisionMade={setIsDecisionMade}
             />
           ))}
-        </div>
+          </motion.div>
+        </div>   
       </div>
     </main>
   );

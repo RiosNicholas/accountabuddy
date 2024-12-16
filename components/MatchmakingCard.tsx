@@ -3,6 +3,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "./ui/button";
 import { Cross1Icon, HandIcon } from "@radix-ui/react-icons";
 import { Badge } from "./ui/badge";
+import { motion } from "motion/react"
 // import store from "@/redux/store";
 
 export enum MethodPreference {
@@ -152,12 +153,19 @@ export default function MatchmakingCard({ name, university, biography, accountab
 
       {/* PROFILE ACTIONS */}
       <div id="profile-actions" className={`flex justify-around ${compact ? 'px-1 pt-1 pb-2' : 'p-3'}`}>
-        <Button variant="destructive" id="reject-button" onClick={onDislike} className={`bg-white border-none rounded-full ${compact ? 'w-10 h-10 text-xl' : 'w-12 h-12 text-2xl'} cursor-pointer shadow-md hover:shadow-lg text-red-500 hover:text-white`}>
+      <motion.a
+        whileHover={{ scale: 1.1 }}
+        onHoverStart={event => {}}
+        onHoverEnd={event => {}}
+        className="flex items-center justify-around w-full"
+    >
+        <Button variant="destructive" id="reject-button" className={`bg-white border-none rounded-full ${compact ? 'w-10 h-10 text-xl' : 'w-12 h-12 text-2xl'} cursor-pointer shadow-md hover:shadow-lg text-red-500 hover:text-white`}>
           <Cross1Icon/> 
         </Button>
-        <Button variant="default" id="connect-button" onClick={onLike} className={`bg-white border-none rounded-full ${compact ? 'w-10 h-10 text-xl' : 'w-12 h-12 text-2xl'} cursor-pointer shadow-md hover:shadow-lg text-green-500 hover:text-white`}>
+        <Button variant="default" id="connect-button" className={`bg-white border-none rounded-full ${compact ? 'w-10 h-10 text-xl' : 'w-12 h-12 text-2xl'} cursor-pointer shadow-md hover:shadow-lg text-green-500 hover:text-white`}>
           <HandIcon/> 
         </Button>
+    </motion.a>
       </div>
     </Card>
   );
