@@ -117,7 +117,7 @@ export default function Discovery() {
     if (status == "authenticated" && !profilesLoaded) {
       fetchUsersToDisplay();
     }
-  }, [status, profilesLoaded]);
+  }, [status, profilesLoaded, session?.user.id]);
 
   // Show only one or two profiles at a time based on the currentIndex
   const visibleProfiles = profiles.slice(currentIndex, currentIndex + 2);
