@@ -26,14 +26,23 @@ interface UserProfile {
 
 export default function Discovery() {
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0); // Placeholder for pagination
   const [viewingProfile, setViewingProfile] = useState(false);
   const [compactView, setCompactView] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const { data: session, status } = useSession();
+  const [isDecisionMade, setIsDecisionMade] = useState(false);
 
   const toggleCompactView = () => {
     setCompactView((prevState) => !prevState);
   };
+
+  useEffect(() => {
+    if (isDecisionMade) {
+      setCurrentIndex(currentIndex+1)
+      setIsDecisionMade(false);
+    }
+  }, [isDecisionMade, profiles])
 
   // Fetch profiles when the component mounts
   useEffect(() => {
@@ -164,6 +173,9 @@ export default function Discovery() {
                   meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
                   methodPreference={profile.methodPreference || MethodPreference.NoPreference}
                   compact={compactView}
+                  loggedUserId={session?.user.id as string}
+                  cardUserId={profile.user_id}
+                  setIsDecisionMade={setIsDecisionMade}
                 />
               </Link>
             ))}

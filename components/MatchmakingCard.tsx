@@ -31,16 +31,59 @@ interface MatchmakingCardProps {
   loggedUserId: string;
   setIsDecisionMade: (decision: boolean) => void;
   compact?: boolean;
-  onClick?: () => void;
 }
 
-export default function MatchmakingCard({ name, university, biography, accountabilityAreas, growthAreas, meetingPreference, methodPreference, compact = false, }: MatchmakingCardProps) {
-  const onDislike = () => {
-    console.log("Disliked");
+export default function MatchmakingCard({ name, university, biography, accountabilityAreas, growthAreas, meetingPreference, methodPreference, compact = false, loggedUserId, cardUserId, setIsDecisionMade}: MatchmakingCardProps) {
+  
+  async function onLike() {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          liker: loggedUserId,
+          likee: cardUserId,
+          isLike: true,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+  
+      console.log('Like recorded successfully');
+    } catch (error) {
+      console.error("Error posting like: ", error);
+    }
+    setIsDecisionMade(true);
   }
-  const onLike = () => {
-    console.log("Liked");
+  async function onDislike() {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          liker: loggedUserId, // Replace with the actual logged user ID
+          likee: cardUserId,   // Replace with the user ID of the card
+          isLike: false,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+  
+      console.log('Like recorded successfully');
+    } catch (error) {
+      console.error("Error posting like: ", error);
+    }
+    setIsDecisionMade(true);
   }
+
   return (
     <Card className="bg-muted text-background-foreground hover:cursor-pointer">
       <div className={`grid gap-4 lg:gap-1 ${compact ? 'lg:grid-cols-[1fr,1fr]' : 'grid-cols-1'} p-${compact ? '2' : '6'}`}>
