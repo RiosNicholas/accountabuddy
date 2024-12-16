@@ -1,7 +1,7 @@
 "use client"
 
 import { useSession } from 'next-auth/react';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -67,12 +67,8 @@ export default function Dashboard() {
   }
 
   return (
-    <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 m-3">
-        <ChatList chats={exampleChats}/>
-        <Accountabuddies accountabuddies={matches} />
-        <NotificationCenter notifications={exampleNotifications}/>
-      </div>
-    </>
+    <div className="grid grid-cols-1 m-3">
+      <Accountabuddies />
+    </div>
   )
 }
