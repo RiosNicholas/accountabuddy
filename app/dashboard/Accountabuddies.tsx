@@ -21,9 +21,11 @@ export default function Accountabuddies() {
     <Card>
       <CardTitle className="text-xl font-extrabold p-3">Accountabuddies</CardTitle>
       <CardContent>
-        <Button className="w-full font-bold mb-2">
-          <Link href="/discover">Find Accountabuddies</Link>
-        </Button>
+        <Link href="/discover">
+          <Button className="w-full font-bold mb-2">
+            Find Accountabuddies
+          </Button>
+        </Link>
           <ul className="grid grid-cols-1 gap-4">
             {accountabuddies.length === 0 ? (
             <li className="flex justify-center font-light items-center p-3 text-sm text-muted-foreground">
