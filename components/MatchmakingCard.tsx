@@ -30,7 +30,7 @@ interface MatchmakingCardProps {
   onClick?: () => void;
 }
 
-export default function MatchmakingCard({ name, age, university, biography, accountabilityAreas, growthAreas, meetingPreference, methodPreference, compact = false, }: MatchmakingCardProps) {
+export default function MatchmakingCard({ name, university, biography, accountabilityAreas, growthAreas, meetingPreference, methodPreference, compact = false, }: MatchmakingCardProps) {
   return (
     <Card className="bg-muted text-background-foreground hover:cursor-pointer">
       <div className={`grid gap-4 lg:gap-1 ${compact ? 'lg:grid-cols-[1fr,1fr]' : 'grid-cols-1'} p-${compact ? '2' : '6'}`}>
@@ -44,7 +44,6 @@ export default function MatchmakingCard({ name, age, university, biography, acco
           <div className="flex flex-col justify-center text-left">
             <CardTitle className={`${compact ? 'lg:text-lg' : ''} font-bold`}>
               {name}
-              {!compact && `, ${age}`}
             </CardTitle>
             <CardHeader className={`${compact ? 'text-sm' : ''} p-0 font-semibold`}>
               {university}

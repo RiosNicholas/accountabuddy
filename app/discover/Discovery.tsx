@@ -6,15 +6,12 @@ import ProfileCard from "@/components/ProfileCard";
 import { Button } from "@/components/ui/button";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { HandIcon } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
 import DiscoverSkeleton from "./DiscoverSkeleton";
-
 
 interface UserProfile {
   user_id: string;
   username: string;
   name?: string;
-  age?: number;
   university?: string;
   biography?: string;
   accountabilityAreas: string[];
@@ -24,63 +21,59 @@ interface UserProfile {
 }
 
 export default function Discovery() {
-  /* TODO: 
-    - add compact view/detailed view from dashboard
-    - add animations from sank?
-    - redux store to track profile array. buttons in card component should pop the profile from the array and display the next one
-    - matchmaking card component buttons should make API calls to update the matches in db. might need to add some more tables to db
-  */
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
-  // TODO: Implement pagination for profiles using currentIndex
-  // const [currentIndex, setCurrentIndex] = useState(0); 
-  const [currentIndex] = useState(0); 
+  const [currentIndex] = useState(0); // Placeholder for pagination
   const [viewingProfile, setViewingProfile] = useState(false);
   const [compactView, setCompactView] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
 
   const toggleCompactView = () => {
-		setCompactView((prevState) => !prevState);
-	}
+    setCompactView((prevState) => !prevState);
+  };
 
-  // Fetch all profiles once when the component mounts
+  // Fetch profiles when the component mounts
   useEffect(() => {
     const fetchUsersToDisplay = async () => {
       console.log("Fetching users to display...");
       setLoading(true);
-  
+
       try {
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
-  
-        // Fetching user IDs
+
+        // Fetch user IDs
         const userResponse = await fetch(`${baseUrl}/api/users/ids`);
+        if (!userResponse.ok) throw new Error("Failed to fetch user IDs");
+
         const { data: userIds } = await userResponse.json();
-  
-        // Helper function to transform areas
-        const transformAreas = (rawData: { GrowthAreas?: { growth_area: string } }[]) =>
-          rawData?.map((item: { GrowthAreas?: { growth_area: string } }) => item.GrowthAreas?.growth_area).filter(Boolean) || ["N/A"];
-  
-        // Fetching individual profiles
+
+        // Fetch individual profiles
         const enhancedProfiles = await Promise.all(
           userIds.map(async ({ user_id }: { user_id: string }) => {
             try {
-              const [accountabilityResponse, growthResponse, profileResponse] = await Promise.all([
+              const [profileResponse, accountabilityResponse, growthResponse, universityResponse, bioResponse] = await Promise.all([
+                fetch(`${baseUrl}/api/users/${user_id}`),
                 fetch(`${baseUrl}/api/users/${user_id}/accountability-areas`),
                 fetch(`${baseUrl}/api/users/${user_id}/growth-areas`),
-                fetch(`${baseUrl}/api/users/${user_id}`),
+                fetch(`${baseUrl}/api/users/${user_id}/university`),
+                fetch(`${baseUrl}/api/users/${user_id}/bio`),
               ]);
 
-              const rawAccountability = await accountabilityResponse.json();
-              const rawGrowthAreas = await growthResponse.json();
-              const rawProfile = await profileResponse.json();
+              const profile = await profileResponse.json();
+              const accountabilityAreas = await accountabilityResponse.json();
+              const growthAreas = await growthResponse.json();
+              const university = await universityResponse.json();
+              const bio = await bioResponse.json();
 
-              console.log("Profile: ", rawProfile)
-              console.log("Accountability areas: ", rawAccountability)
-              console.log("Growth areas: ", rawGrowthAreas)
               return {
                 user_id,
-                ...rawProfile,
-                accountabilityAreas: transformAreas(rawAccountability.data),
-                growthAreas: transformAreas(rawGrowthAreas.data),
+                username: profile.username || `User_${user_id.slice(0, 8)}`,
+                name: profile.name || `User ${user_id.slice(0, 8)}`,
+                university: university.university || "Unknown University",
+                biography: bio.biography || "No intro provided.",
+                accountabilityAreas: accountabilityAreas.data || ["N/A"],
+                growthAreas: growthAreas.data || ["N/A"],
+                meetingPreference: profile.meetingPreference || MeetingPreference.Weekly,
+                methodPreference: profile.methodPreference || MethodPreference.Virtual,
               };
             } catch (error) {
               console.error(`Error fetching data for user ID ${user_id}:`, error);
@@ -88,8 +81,8 @@ export default function Discovery() {
             }
           })
         );
-  
-        // Set profiles and filter out null results
+
+        // Filter out null results
         setProfiles(enhancedProfiles.filter(Boolean));
         console.log("Successfully fetched profiles");
       } catch (error) {
@@ -98,15 +91,22 @@ export default function Discovery() {
         setLoading(false);
       }
     };
-  
+
     fetchUsersToDisplay();
   }, []);
 
   if (loading) {
     return <DiscoverSkeleton />;
   }
-  console.log(profiles)
-   
+
+  if (profiles.length === 0) {
+    return (
+      <div className="flex justify-center items-center font-medium text-center text-lg text-muted-foreground">
+        <p>No profiles found. Please try again later.</p>
+      </div>
+    );
+  }
+
   return (
     <main id="ProfileDiscovery">
       <div className="flex justify-start items-start">
@@ -119,34 +119,39 @@ export default function Discovery() {
           <div className="flex justify-between items-center w-full lg:w-3/4 xl:w-2/3">
             <Button variant="link" onClick={() => setViewingProfile(false)}>Back</Button>
             <div id="profile-actions" className={`flex justify-around`}>
-              <Button variant="destructive" id="reject-button" className={`bg-white border-none rounded-full w-10 h-10 text-2xl cursor-pointer shadow-md hover:shadow-lg text-red-500 hover:text-white`}>
-                <Cross1Icon /> 
+              <Button
+                variant="destructive"
+                id="reject-button"
+                className="bg-white border-none rounded-full w-10 h-10 text-2xl cursor-pointer shadow-md hover:shadow-lg text-red-500 hover:text-white"
+              >
+                <Cross1Icon />
               </Button>
-              <Button variant="default" id="connect-button" className={`bg-white border-none rounded-full w-10 h-10 text-2xl cursor-pointer shadow-md hover:shadow-lg text-green-500 hover:text-white`}>
-                <HandIcon /> 
+              <Button
+                variant="default"
+                id="connect-button"
+                className="bg-white border-none rounded-full w-10 h-10 text-2xl cursor-pointer shadow-md hover:shadow-lg text-green-500 hover:text-white"
+              >
+                <HandIcon />
               </Button>
             </div>
           </div>
-
-          <ProfileCard username="TestUsername" name={""} accountabilityAreas={[]} growthAreas={[]} />
+          <ProfileCard username="TestUsername" name={""} accountabilityAreas={[]} growthAreas={[]} isCurrentUser={false}/>
         </div>
       ) : (
         <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
           <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
-            {loading && <Skeleton className="h-12 w-full" />}
-            {profiles.slice(currentIndex, currentIndex+1).map((profile, index) => (
+            {profiles.slice(currentIndex, currentIndex + 2).map((profile, index) => (
               <MatchmakingCard
-              onClick={() => setViewingProfile(true)}
-              key={profile.user_id}
-              name={profile.name || `User ${index + 1}`}
-              age={profile.age} 
-              university={profile.university || "Unknown University"}
-              biography={profile.biography || "No intro provided."}
-              accountabilityAreas={profile.accountabilityAreas?.length > 0 ? profile.accountabilityAreas : ["N/A"]}
-              growthAreas={profile.growthAreas?.length > 0 ? profile.growthAreas : ["N/A"]}
-              meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
-              methodPreference={profile.methodPreference || MethodPreference.Virtual}
-              compact={compactView}
+                onClick={() => setViewingProfile(true)}
+                key={profile.user_id}
+                name={profile.name || `User ${index + 1}`}
+                university={profile.university || "Unknown University"}
+                biography={profile.biography || "No intro provided."}
+                accountabilityAreas={profile.accountabilityAreas}
+                growthAreas={profile.growthAreas}
+                meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
+                methodPreference={profile.methodPreference || MethodPreference.NoPreference}
+                compact={compactView}
               />
             ))}
           </div>
