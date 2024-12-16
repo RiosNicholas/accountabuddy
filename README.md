@@ -1,9 +1,52 @@
 # Accountabuddy 👥
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+Accountabuddy is a social platform designed to help students connect with accountability partners to achieve their goals. Whether you're focusing on habit building, goal setting, or skill development, AccountaBuddy pairs you with like-minded individuals to stay on track. The project is built using Next.js, with features such as user profiles, matchmaking, and customizable preferences.
+
+## Features
+
+- **User Profiles**: Create and customize your personal profile to showcase your goals and accountability preferences.
+- **Goal Buckets & Accountability Areas**: Select from predefined options to specify your focus areas and the type of support you need.
+- **Matchmaking**: Swipe to find accountability partners with similar goals and interests.
+- **Chat Integration (Coming Soon)**: Connect and communicate with matches directly on the platform.
+- **Customizable Preferences**: Choose how you'd like to meet and collaborate with your accountability partner.
+
+## Technologies Used
+
+- **Frontend**: Next.js (with App Router), React, Tailwind CSS
+- **Authentication**: NextAuth.js
+- **Database**: PostgreSQL (via Supabase and @vercel/postgres)
+- **Deployment**: Vercel
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+Ensure you have the following installed on your system:
+- Node.js (version 16 or higher)
+- npm, yarn, or pnpm
+
+### Installation
+
+Clone the repository and navigate to the project directory:
+
+```bash
+git clone https://github.com/RiosNicholas/accountabuddy.git
+cd accountabuddy
+```
+
+Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+```
+
+### Running the Development Server
+
+Start the development server:
 
 ```bash
 npm run dev
@@ -11,27 +54,19 @@ npm run dev
 yarn dev
 # or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to view the application.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env.local` file in the root directory and configure the following variables:
 
-## Learn More
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXTAUTH_SECRET=your_nextauth_secret
+NEXTAUTH_URL=http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+For production deployments, replace the `NEXTAUTH_URL` with your live application URL.

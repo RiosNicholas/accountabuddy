@@ -1,12 +1,10 @@
-export default function SettingsPage() {
+import UserSettings from "./UserSettings";
+
+/* eslint-disable react/no-unescaped-entities */
+export default function UserSettingsPage() {
   return (
-    <main className="flex flex-col items-center justify-center min-h-[50vh] p-4 text-center">
-      <h2 className="text-xl font-bold text-accent mb-2">
-        Settings
-      </h2>
-      <p>
-        This page is under construction.
-      </p>
-    </main>
+    <div className="flex flex-col justify-center items-center min-h-[50vh] p-4 sm:p-6 md:p-8 lg:p-12 xl:p-16 w-full">
+      <UserSettings />
+    </div>
   );
 }
