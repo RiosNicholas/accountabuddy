@@ -17,7 +17,7 @@ export async function GET(request: Request, { params }: { params: { user_id: str
       .from("UserBiographies")
       .select("biography")
       .eq("user_id", user_id)
-      .maybeSingle(); 
+      .maybeSingle();
 
     if (error) {
       console.error("Supabase query error:", error);
@@ -36,7 +36,6 @@ export async function GET(request: Request, { params }: { params: { user_id: str
   }
 }
 
-
 export async function PUT(request: Request, { params }: { params: { user_id: string } }) {
   const { user_id } = params;
 
@@ -50,16 +49,17 @@ export async function PUT(request: Request, { params }: { params: { user_id: str
 
     const supabase = createRouteHandlerClient({ cookies });
 
+    // Upsert: insert or update the biography
     const { error } = await supabase
       .from("UserBiographies")
-      .update({ biography })
-      .eq("user_id", user_id);
+      .upsert({ user_id, biography }, { onConflict: "user_id" }); 
 
     if (error) {
-      return NextResponse.json({ error: "Failed to update biography" }, { status: 500 });
+      console.error("Supabase upsert error:", error);
+      return NextResponse.json({ error: "Failed to upsert biography" }, { status: 500 });
     }
 
-    return NextResponse.json({ message: "Biography updated successfully" }, { status: 200 });
+    return NextResponse.json({ message: "Biography upserted successfully" }, { status: 200 });
   } catch (error) {
     console.error("Unexpected error:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });

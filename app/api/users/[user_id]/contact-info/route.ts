@@ -49,8 +49,6 @@ export async function POST(request: Request, { params }: { params: { user_id: st
     const body = await request.json();
     const { email, discord, instagram } = body;
 
-    console.log("Received payload:", { email, discord, instagram });
-
     const supabase = createRouteHandlerClient({ cookies });
 
     const { data, error } = await supabase
