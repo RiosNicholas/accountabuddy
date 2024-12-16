@@ -171,5 +171,5 @@ export default function Discovery() {
         </div>
       )}
     </main>
-  );
+  )
 }

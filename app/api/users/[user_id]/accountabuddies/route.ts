@@ -35,8 +35,6 @@ export async function GET(request: Request, { params }: { params: { user_id: str
       return NextResponse.json({ error: "Failed to fetch matches" }, { status: 500 });
     }
 
-    console.log("Query result:", data);
-
     if (!data || data.length === 0) {
       console.log("No matches found for user_id:", user_id);
       return NextResponse.json({ error: "No accountabuddies" }, { status: 404 });
