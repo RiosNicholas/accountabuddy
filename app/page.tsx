@@ -3,15 +3,39 @@
 
 import { Provider} from 'react-redux';
 import store from '../redux/store'
+import Link from 'next/link';
 
 
 export default function HomePage() {
 
   return (
     <Provider store={store}>
-      <main className="flex flex-col items-center justify-center bg-background h-4/5">
-        <h1 className="text-4xl font-bold mb-4 text-background-foreground">Coming Soon</h1>
-        <p className="text-lg text-secondary-foreground">We're working hard to bring you something amazing. Stay tuned!</p>
+      <main>
+        <div className="container mx-auto flex justify-between items-center py-4 px-6">
+          <h1 className="font-bold text-4xl pb-8">Welcome to Accountabuddy! 👋</h1>
+        </div>
+
+        <div className="bg-primary text-center py-20">
+          <h2 className="text-4xl font-extrabold mb-4">Achieve Your Goals with the Right Partner</h2>
+          <p className="text-lg mb-8">
+            Find an accountability buddy, stay productive, and accomplish your goals faster.
+          </p>
+          <Link href="/signup" className="bg-white text-secondary-foreground font-bold py-3 px-6 rounded-md shadow-lg hover:bg-gray-100"> 
+            Get Started
+          </Link>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-10 py-10 px-6">
+          <div className="px-10">
+            <p  className="text-4xl font-extrabold">About us</p>
+          </div>
+          <div>
+            <p className="text-lg text-gray-600 leading-relaxed">
+              Accountabuddy is designed for students who want to boost productivity by partnering with peers. Whether it’s achieving academic goals or personal milestones, our platform makes it easy to find, connect, and grow with others.  Connect with like-minded students who share your goals.  Use our built-in tools to stay on top of your commitments.
+            </p>
+          </div>
+
+        </div>
       </main>
     </Provider>
   );
