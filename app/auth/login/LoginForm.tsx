@@ -12,7 +12,7 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { toast } from '@/components/hooks/use-toast';
+import { toast } from '@/hooks/use-toast';
 
 const FormSchema = z.object({
   email: z.string().min(1, 'Username is required'),
