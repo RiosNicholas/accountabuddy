@@ -27,6 +27,7 @@ interface UserInfoProps {
 export default function UserInfo({ userId, userName, initialBio }: UserInfoProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [latestChanges, setLatestChanges] = useState({ name: userName, bio: initialBio });
+  const [isSaving, setIsSaving] = useState(false); // Loading state for saving
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
@@ -44,17 +45,45 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
   };
 
   const onSubmit = async (data: FormValues) => {
+    setIsSaving(true);
+    const updates = { ...latestChanges };
+
     try {
-      const response = await fetch(`/api/users/${userId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+      // Determine if the 'name' field has changed
+      if (data.name !== latestChanges.name) {
+        const nameResponse = await fetch(`/api/users/${userId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: data.name }),
+        });
 
-      if (!response.ok) throw new Error("Failed to update profile");
+        if (!nameResponse.ok) throw new Error("Failed to update name");
+        updates.name = data.name; // Update local state tracker
+      }
 
-      // Update latestChanges state
-      setLatestChanges(data);
+      // Determine if the 'bio' field has changed
+      if (data.bio !== latestChanges.bio) {
+        const bioResponse = await fetch(`/api/users/${userId}/bio`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ biography: data.bio }),
+        });
+
+        if (!bioResponse.ok) throw new Error("Failed to update biography");
+        updates.bio = data.bio; // Update local state tracker
+      }
+
+      // If no updates were needed
+      if (data.name === latestChanges.name && data.bio === latestChanges.bio) {
+        toast({
+          title: "No changes detected",
+          description: "No updates were made as the values are unchanged.",
+        });
+        return;
+      }
+
+      // Update latest changes
+      setLatestChanges(updates);
 
       toast({
         title: "Profile updated",
@@ -69,6 +98,8 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
         variant: "destructive",
       });
       console.error(error);
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -92,13 +123,8 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
                 <FormControl>
                   <Input
                     {...field}
-                    disabled={!isEditing}
+                    disabled={!isEditing || isSaving}
                     placeholder="Your name"
-                    value={field.value || latestChanges.name}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      setLatestChanges((prev) => ({ ...prev, name: e.target.value }));
-                    }}
                     className={fieldState.invalid ? "border-red-500" : ""}
                   />
                 </FormControl>
@@ -117,13 +143,8 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
                 <FormControl>
                   <Textarea
                     {...field}
-                    disabled={!isEditing}
+                    disabled={!isEditing || isSaving}
                     placeholder="Tell us a little bit about yourself"
-                    value={field.value || latestChanges.bio}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      setLatestChanges((prev) => ({ ...prev, bio: e.target.value }));
-                    }}
                     className={`resize-none ${fieldState.invalid ? "border-red-500" : ""}`}
                   />
                 </FormControl>
@@ -133,8 +154,8 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
           />
 
           {isEditing && (
-            <Button variant="outline" type="submit">
-              Save Changes
+            <Button variant="outline" type="submit" disabled={isSaving}>
+              {isSaving ? "Saving..." : "Save Changes"}
             </Button>
           )}
         </form>

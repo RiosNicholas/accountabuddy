@@ -20,18 +20,19 @@ export default function UserSettings() {
   const fetchUserBio = useCallback(async () => {
     if (session?.user.id) {
       try {
-        const bioResponse = await fetch(`/api/users/${session.user.id}/biography`);
+        const bioResponse = await fetch(`/api/users/${session.user.id}/bio`);
         if (bioResponse.ok) {
           const bioJson = await bioResponse.json();
-          setBio(bioJson.biography || null);
+          setBio(bioJson.biography || "");
         } else {
-          console.error("Failed to fetch user bio");
+          console.error("Failed to fetch user bio. Status:", bioResponse.status);
         }
       } catch (error) {
         console.error("Error fetching user bio:", error);
       }
     }
   }, [session?.user.id]);
+  
 
   const fetchUserContactInfo = useCallback(async () => {
     if (session?.user.id) {
