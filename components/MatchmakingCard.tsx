@@ -37,7 +37,7 @@ export default function MatchmakingCard({ name, university, biography, accountab
   
   async function onLike() {
     try {
-      const response = await fetch('/api/users', {
+      const response = await fetch(`/api/users/${loggedUserId}/like`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export default function MatchmakingCard({ name, university, biography, accountab
   }
   async function onDislike() {
     try {
-      const response = await fetch('/api/users', {
+      const response = await fetch(`/api/users/${loggedUserId}/dislike`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
