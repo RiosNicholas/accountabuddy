@@ -69,13 +69,13 @@ export default function Accountabuddies() {
       <CardTitle className="text-xl font-extrabold p-3">Accountabuddies</CardTitle>
       <CardContent>
         <Link href="/discover">
-          <Button className="w-full font-bold mb-2">Find Accountabuddies</Button>
+          <Button className="w-full font-bold mb-1">Find Accountabuddies</Button>
         </Link>
-
+        <hr className="my-4 border-secondary" />
         {error ? (
           <p className="text-center text-sm text-red-500">{error}</p>
         ) : (
-          <ul className="grid grid-cols-1 gap-4">
+          <ul className="grid grid-cols-1">
             {accountabuddies.length === 0 ? (
               <li className="flex justify-center font-light items-center p-3 text-sm text-muted-foreground">
                 No accountabuddies yet.
