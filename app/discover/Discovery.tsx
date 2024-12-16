@@ -7,6 +7,7 @@ import DiscoverSkeleton from "./DiscoverSkeleton";
 import MatchmakingCard, { MeetingPreference, MethodPreference } from "@/components/MatchmakingCard";
 import { Button } from "@/components/ui/button";
 import LoginReminder from "@/components/LoginReminder";
+import { motion } from "framer-motion";
 
 interface UserProfile {
   user_id: string;
@@ -96,9 +97,6 @@ export default function Discovery() {
 
         // Reset the currentIndex whenever profiles are fetched
         setCurrentIndex(0);
-
-        // Filter out null results
-        setProfiles(enhancedProfiles.filter(Boolean));
         setProfilesLoaded(true);
         console.log("Successfully fetched profiles");
       } catch (error) {
@@ -108,7 +106,7 @@ export default function Discovery() {
       }
     };
 
-    if (status == "authenticated" && !profilesLoaded) {
+    if (status === "authenticated" && !profilesLoaded) {
       fetchUsersToDisplay();
     }
   }, [status, profilesLoaded, session?.user.id]);
@@ -140,20 +138,26 @@ export default function Discovery() {
           <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
             <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
               {visibleProfiles.map((profile) => (
-                <MatchmakingCard
+                <motion.div
                   key={profile.user_id}
-                  name={profile.name || "Anonymous"}
-                  university={profile.university || "Unknown University"}
-                  biography={profile.biography || "No intro provided."}
-                  accountabilityAreas={profile.accountabilityAreas}
-                  growthAreas={profile.growthAreas}
-                  meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
-                  methodPreference={profile.methodPreference || MethodPreference.NoPreference}
-                  compact={compactView}
-                  loggedUserId={session?.user.id as string}
-                  cardUserId={profile.user_id}
-                  setIsDecisionMade={setIsDecisionMade}
-                />
+                  initial={{ x: -100, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+                >
+                  <MatchmakingCard
+                    name={profile.name || "Anonymous"}
+                    university={profile.university || "Unknown University"}
+                    biography={profile.biography || "No intro provided."}
+                    accountabilityAreas={profile.accountabilityAreas}
+                    growthAreas={profile.growthAreas}
+                    meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
+                    methodPreference={profile.methodPreference || MethodPreference.NoPreference}
+                    compact={compactView}
+                    loggedUserId={session?.user.id as string}
+                    cardUserId={profile.user_id}
+                    setIsDecisionMade={setIsDecisionMade}
+                  />
+                </motion.div>
               ))}
             </div>
           </div>
@@ -163,4 +167,4 @@ export default function Discovery() {
       )}
     </>
   );
-} 
+}
