@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Cross1Icon } from "@radix-ui/react-icons";
 import { HandIcon } from "lucide-react";
 import DiscoverSkeleton from "./DiscoverSkeleton";
+import { useSession } from "next-auth/react";
 
 interface UserProfile {
   user_id: string;
@@ -26,6 +27,7 @@ export default function Discovery() {
   const [viewingProfile, setViewingProfile] = useState(false);
   const [compactView, setCompactView] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
+  const { data: session, status } = useSession();
 
   const toggleCompactView = () => {
     setCompactView((prevState) => !prevState);

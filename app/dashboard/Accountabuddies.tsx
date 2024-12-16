@@ -12,10 +12,13 @@ type User = {
   profilePicture?: string;
 };
 
-export default function Accountabuddies() {
+interface AccountabuddiesProps {
+  accountabuddies: User[];
+}
+
+export default function Accountabuddies( { accountabuddies }: AccountabuddiesProps) {
   // TODO: Fetch accountabuddies from the API
   // const [accountabuddies, setAccountabuddies] = useState<User[]>([]);
-  const accountabuddies: User[] = [];
 
   return (
     <Card>
