@@ -35,6 +35,7 @@ export default function User() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Fetch user ID based on username
   useEffect(() => {
     if (!username) {
       setError("No username provided in the URL.");
@@ -59,6 +60,7 @@ export default function User() {
     fetchUserId();
   }, [username]);
 
+  // Fetch user data based on userId
   useEffect(() => {
     if (!userId) return;
 
@@ -78,42 +80,57 @@ export default function User() {
 
         const [userResult, bioResult, universityResult, contactResult, accountabilityResult, growthResult] = results;
 
-        const userData = userResult.status === "fulfilled" && userResult.value.ok 
-          ? await userResult.value.json() 
-          : {};
+        // Main user fetch (critical data)
+        const userData =
+          userResult.status === "fulfilled" && userResult.value.ok
+            ? await userResult.value.json()
+            : null;
 
-        const biographyData = bioResult.status === "fulfilled" && bioResult.value.ok 
-          ? await bioResult.value.json() 
-          : {};
+        if (!userData) {
+          setError("User does not exist.");
+          setLoading(false);
+          return;
+        }
 
-        const universityData = universityResult.status === "fulfilled" && universityResult.value.ok 
-          ? await universityResult.value.json() 
-          : {};
+        // Optional fields with fallback values
+        const biographyData =
+          bioResult.status === "fulfilled" && bioResult.value.status !== 404
+            ? await bioResult.value.json()
+            : { biography: null };
 
-        const contactData = contactResult.status === "fulfilled" && contactResult.value.ok 
-          ? await contactResult.value.json() 
-          : {};
+        const universityData =
+          universityResult.status === "fulfilled" && universityResult.value.status !== 404
+            ? await universityResult.value.json()
+            : { university_name: null };
 
-        const accountabilityData = accountabilityResult.status === "fulfilled" && accountabilityResult.value.ok 
-          ? await accountabilityResult.value.json() 
-          : { data: [] };
+        const contactData =
+          contactResult.status === "fulfilled" && contactResult.value.status !== 404
+            ? (await contactResult.value.json()) || { email: null, instagram: null, discord: null }
+            : { email: null, instagram: null, discord: null };
 
-        const growthData = growthResult.status === "fulfilled" && growthResult.value.ok 
-          ? await growthResult.value.json() 
-          : { data: [] };
+        const accountabilityData =
+          accountabilityResult.status === "fulfilled" && accountabilityResult.value.ok
+            ? (await accountabilityResult.value.json()) || { data: [] }
+            : { data: [] };
 
+        const growthData =
+          growthResult.status === "fulfilled" && growthResult.value.ok
+            ? (await growthResult.value.json()) || { data: [] }
+            : { data: [] };
+
+        // Set user info with defaults applied
         setUserInfo({
           username: userData.username || "Unknown",
-          name: userData.name || null,
-          university: universityData.university_name || null,
-          biography: biographyData.biography || null,
+          name: userData.name || "Anonymous User",
+          university: universityData.university_name || "University not specified",
+          biography: biographyData.biography || "No biography provided.",
           contactInfo: {
-            email: contactData.email || null,
-            instagram: contactData.instagram || null,
-            discord: contactData.discord || null,
+            email: contactData?.email || "Email not provided",
+            instagram: contactData?.instagram || "Instagram not provided",
+            discord: contactData?.discord || "Discord not provided",
           },
-          meetingFrequency: userData.meeting_frequency || null,
-          methodPreference: userData.meeting_preference || null,
+          meetingFrequency: userData.meeting_frequency || "Not specified",
+          methodPreference: userData.meeting_preference || "Not specified",
           accountabilityAreas: accountabilityData.data || [],
           growthAreas: growthData.data || [],
         });
@@ -128,6 +145,7 @@ export default function User() {
     fetchUserData();
   }, [userId]);
 
+  // Handle loading and error states
   if (loading || status === "loading") {
     return (
       <div className="flex justify-center w-full h-auto">
@@ -155,9 +173,9 @@ export default function User() {
             name={userInfo.name || "Unknown"}
             university={userInfo.university || "University not specified"}
             contactInfo={{
-              email: userInfo.contactInfo.email || "Email not specified",
-              instagram: userInfo.contactInfo.instagram || "Instagram not specified",
-              discord: userInfo.contactInfo.discord || "Discord not specified",
+              email: userInfo.contactInfo.email || "Email not provided",
+              instagram: userInfo.contactInfo.instagram || "Instagram not provided",
+              discord: userInfo.contactInfo.discord || "Discord not provided",
             }}
             biography={userInfo.biography || "No biography provided."}
             meetingFrequency={userInfo.meetingFrequency || "Not specified"}

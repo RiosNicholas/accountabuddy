@@ -112,7 +112,7 @@ export default function MethodPreferences({ preferencesData, setPreferencesData 
 					/>
 					<FormDescription>
 						You can manage preferences in your{" "}
-						<Link href="/profile/settings" className="underline">profile settings</Link>.
+						<Link href="/settings" className="underline">profile settings</Link>.
 					</FormDescription>
 				</div>
 			</Form> 

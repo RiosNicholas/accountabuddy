@@ -56,6 +56,21 @@ export default function UserInfo({ userId, userName, initialBio, userUniversity 
     const updates = { ...latestChanges };
 
     try {
+      // Check if any changes were made
+      if (
+        data.name === latestChanges.name &&
+        data.bio === latestChanges.bio &&
+        data.university === latestChanges.university
+      ) {
+        // No changes detected, flip editing mode off
+        toast({
+          title: "No changes detected",
+          description: "No updates were made as the values are unchanged.",
+        });
+        setIsEditing(false);
+        return;
+      }
+
       // Determine if the 'name' field has changed
       if (data.name !== latestChanges.name) {
         const nameResponse = await fetch(`/api/users/${userId}`, {
@@ -92,19 +107,6 @@ export default function UserInfo({ userId, userName, initialBio, userUniversity 
         updates.university = data.university; // Update local state tracker
       }
 
-      // If no updates were needed
-      if (
-        data.name === latestChanges.name &&
-        data.bio === latestChanges.bio &&
-        data.university === latestChanges.university
-      ) {
-        toast({
-          title: "No changes detected",
-          description: "No updates were made as the values are unchanged.",
-        });
-        return;
-      }
-
       // Update latest changes
       setLatestChanges(updates);
 
@@ -113,11 +115,11 @@ export default function UserInfo({ userId, userName, initialBio, userUniversity 
         description: "Your profile information has been updated successfully.",
       });
 
-      setIsEditing(false);
+      setIsEditing(false); // Flip editing mode off after successful updates
     } catch (error) {
       toast({
         title: "Error updating profile",
-        description: (error instanceof Error ? error.message : "Unable to update profile. Please try again."),
+        description: error instanceof Error ? error.message : "Unable to update profile. Please try again.",
         variant: "destructive",
       });
       console.error(error);

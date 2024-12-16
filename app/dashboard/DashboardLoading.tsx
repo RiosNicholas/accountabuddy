@@ -2,9 +2,9 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 
-export default function AccountabuddiesSkeleton() {
+export default function DashboardLoading() {
   return (
-    <Card>
+    <Card className="m-3">
       <CardTitle className="text-xl font-extrabold p-3">Accountabuddies</CardTitle>
       <CardContent>
         <Button className="w-full font-bold mb-2" disabled>
