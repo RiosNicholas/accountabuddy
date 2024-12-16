@@ -5,6 +5,10 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 
+import DashboardLoading from './DashboardLoading';
+import ChatList from './ChatList';
+import Accountabuddies from './Accountabuddies';
+import NotificationCenter from './NotificationCenter';
 interface Chat {
 	profileImageUrl: string;
 	name: string;
@@ -25,6 +29,11 @@ export default function Dashboard() {
   const exampleNotifications: Notification[] = [];
   const [matches, setMatches] = useState<User[]>([]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { data: session, status } = useSession();
+  const [needMatches, setNeedMatches] = useState(true);
+  const router = useRouter();
+
   useEffect(() => {
     async function getMatches() {
       try{
@@ -40,12 +49,11 @@ export default function Dashboard() {
       }
     }
 
-    getMatches();
+    if (needMatches && status =="authenticated") {
+      getMatches();
+      setNeedMatches(false);
+    }
   }, []);
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { data: session, status } = useSession();
-  const router = useRouter();
 
   // Refreshes page when session changes (i.e. user logs in)
   useEffect(() => {
