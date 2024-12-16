@@ -24,7 +24,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="grid grid-cols-1 m-3">
+    <div className="grid grid-cols-1 m-3 h-full">
       <Accountabuddies />
     </div>
   )
