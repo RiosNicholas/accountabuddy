@@ -82,26 +82,28 @@ export default function Accountabuddies() {
               </li>
             ) : (
               accountabuddies.map((user, index) => (
-                <li
-                  key={index}
-                  className="flex items-center space-x-4 my-2 py-1 px-2 bg-secondary rounded-md"
-                >
-                  <Avatar>
-                    <AvatarImage
-                      src="https://github.com/shadcn.png" // Placeholder for profile picture
-                      alt={user.username || "User"}
-                    />
-                    <AvatarFallback>
-                      {user.username.slice(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <div className="capitalize font-semibold">{user.name}</div>
-                    <div className="text-sm font-light lowercase text-muted-foreground">
-                      @{user.username}
+                <Link key={index} href={`/user/${user.username}`}>
+                  <li
+                    key={index}
+                    className="flex items-center space-x-4 my-2 py-1 px-2 bg-secondary rounded-md"
+                  >
+                    <Avatar>
+                      <AvatarImage
+                        src="https://github.com/shadcn.png" // Placeholder for profile picture
+                        alt={user.username || "User"}
+                      />
+                      <AvatarFallback>
+                        {user.username.slice(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <div className="capitalize font-semibold">{user.name}</div>
+                      <div className="text-sm font-light lowercase text-muted-foreground">
+                        @{user.username}
+                      </div>
                     </div>
-                  </div>
-                </li>
+                  </li>
+                </Link>
               ))
             )}
           </ul>
