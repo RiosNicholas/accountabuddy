@@ -50,17 +50,7 @@ export default function Discovery() {
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
         // Fetch user IDs
-        const response = await fetch(`/api/recommended-users?user_id=${session?.user.id}`, {
-          headers: {
-            'Authorization': `Bearer ${session?.user.id}`, // Ensure token is passed
-            'Content-Type': 'application/json',
-          },
-        });
-
-
-        if (!response.ok) {
-          throw new Error(`Error fetching recommended users: ${response.statusText}`);
-        }
+        const response = await fetch(`${baseUrl}/api/recommended-users?user_id=${session?.user.id}`);
 
         const userIds = await response.json();
         console.log(userIds);
