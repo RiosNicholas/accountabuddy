@@ -26,6 +26,7 @@ export default function Discovery() {
   const [loading, setLoading] = useState(true);
   const { data: session, status } = useSession();
   const [isDecisionMade, setIsDecisionMade] = useState(false);
+  const [profilesLoaded, setProfilesLoaded] = useState(false);
 
   const toggleCompactView = () => {
     setCompactView((prevState) => !prevState);
@@ -48,10 +49,14 @@ export default function Discovery() {
         const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
 
         // Fetch user IDs
-        const userResponse = await fetch(`${baseUrl}/api/users/ids`);
-        if (!userResponse.ok) throw new Error("Failed to fetch user IDs");
+        const response = await fetch(`/api/recommended-users?user_id=${session?.user.id}`);
 
-        const { data: userIds } = await userResponse.json();
+        if (!response.ok) {
+          throw new Error(`Error fetching recommended users: ${response.statusText}`);
+        }
+
+        const userIds = await response.json();
+        console.log(userIds);
 
         // Fetch individual profiles
         const enhancedProfiles = await Promise.all(
@@ -97,6 +102,9 @@ export default function Discovery() {
         // Reset the currentIndex whenever profiles are fetched
         setCurrentIndex(0);
 
+        // Filter out null results
+        setProfiles(enhancedProfiles.filter(Boolean));
+        setProfilesLoaded(true);
         console.log("Successfully fetched profiles");
       } catch (error) {
         console.error("Failed to fetch users:", error);
@@ -105,8 +113,10 @@ export default function Discovery() {
       }
     };
 
-    fetchUsersToDisplay();
-  }, []); // Dependency array left empty for initial load only
+    if (status == "authenticated" && !profilesLoaded) {
+      fetchUsersToDisplay();
+    }
+  }, [status, profilesLoaded]);
 
   // Show only one or two profiles at a time based on the currentIndex
   const visibleProfiles = profiles.slice(currentIndex, currentIndex + 2);
