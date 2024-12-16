@@ -110,7 +110,7 @@ export default function UserContact({ userId, email, discordUsername, instagramU
     } catch (error) {
       toast({
         title: "Error updating contact information",
-        description: error.message || "Unable to update contact information. Please try again.",
+        description: (error instanceof Error ? error.message : "Unable to update contact information. Please try again."),
         variant: "destructive",
       });
       console.error(error);
