@@ -11,16 +11,16 @@ import LoadingUser from "./LoadingUser";
 
 interface UserProfile {
   username: string;
-  name?: string;
-  university?: string;
-  biography?: string;
+  name?: string | null;
+  university?: string | null;
+  biography?: string | null;
   contactInfo: {
-    email: string;
-    instagram: string;
-    discord: string;
+    email?: string | null;
+    instagram?: string | null;
+    discord?: string | null;
   };
-  meetingFrequency?: string;
-  methodPreference?: string;
+  meetingFrequency?: string | null;
+  methodPreference?: string | null;
   accountabilityAreas: string[];
   growthAreas: string[];
 }
@@ -78,35 +78,39 @@ export default function User() {
 
         const [userResult, bioResult, universityResult, contactResult, accountabilityResult, growthResult] = results;
 
-        if (userResult.status === "rejected" || !userResult.value.ok)
-          throw new Error("Failed to fetch user data");
-        if (bioResult.status === "rejected" || !bioResult.value.ok)
-          throw new Error("Failed to fetch user biography");
-        if (universityResult.status === "rejected" || !universityResult.value.ok)
-          throw new Error("Failed to fetch user university");
-        if (contactResult.status === "rejected" || !contactResult.value.ok)
-          throw new Error("Failed to fetch user contact info");
-        if (accountabilityResult.status === "rejected" || !accountabilityResult.value.ok)
-          throw new Error("Failed to fetch accountability areas");
-        if (growthResult.status === "rejected" || !growthResult.value.ok)
-          throw new Error("Failed to fetch growth areas");
+        const userData = userResult.status === "fulfilled" && userResult.value.ok 
+          ? await userResult.value.json() 
+          : {};
 
-        const userData = await userResult.value.json();
-        const biographyData = await bioResult.value.json();
-        const universityData = await universityResult.value.json();
-        const contactData = await contactResult.value.json();
-        const accountabilityData = await accountabilityResult.value.json();
-        const growthData = await growthResult.value.json();
+        const biographyData = bioResult.status === "fulfilled" && bioResult.value.ok 
+          ? await bioResult.value.json() 
+          : {};
+
+        const universityData = universityResult.status === "fulfilled" && universityResult.value.ok 
+          ? await universityResult.value.json() 
+          : {};
+
+        const contactData = contactResult.status === "fulfilled" && contactResult.value.ok 
+          ? await contactResult.value.json() 
+          : {};
+
+        const accountabilityData = accountabilityResult.status === "fulfilled" && accountabilityResult.value.ok 
+          ? await accountabilityResult.value.json() 
+          : { data: [] };
+
+        const growthData = growthResult.status === "fulfilled" && growthResult.value.ok 
+          ? await growthResult.value.json() 
+          : { data: [] };
 
         setUserInfo({
-          username: userData.username,
+          username: userData.username || "Unknown",
           name: userData.name || null,
           university: universityData.university_name || null,
           biography: biographyData.biography || null,
           contactInfo: {
-            email: contactData.email || "",
-            instagram: contactData.instagram || "",
-            discord: contactData.discord || "",
+            email: contactData.email || null,
+            instagram: contactData.instagram || null,
+            discord: contactData.discord || null,
           },
           meetingFrequency: userData.meeting_frequency || null,
           methodPreference: userData.meeting_preference || null,
@@ -115,11 +119,7 @@ export default function User() {
         });
       } catch (err) {
         console.error("Error fetching user data:", err);
-        if (err instanceof Error) {
-          setError(err.message || "An unexpected error occurred.");
-        } else {
-          setError("An unexpected error occurred.");
-        }
+        setError("An error occurred while fetching user data.");
       } finally {
         setLoading(false);
       }
@@ -154,7 +154,11 @@ export default function User() {
             username={userInfo.username}
             name={userInfo.name || "Unknown"}
             university={userInfo.university || "University not specified"}
-            contactInfo={userInfo.contactInfo}
+            contactInfo={{
+              email: userInfo.contactInfo.email || "Email not specified",
+              instagram: userInfo.contactInfo.instagram || "Instagram not specified",
+              discord: userInfo.contactInfo.discord || "Discord not specified",
+            }}
             biography={userInfo.biography || "No biography provided."}
             meetingFrequency={userInfo.meetingFrequency || "Not specified"}
             methodPreference={userInfo.methodPreference || "Not specified"}
