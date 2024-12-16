@@ -66,20 +66,19 @@ export default function Discovery() {
               const [accountabilityResponse, growthResponse, profileResponse] = await Promise.all([
                 fetch(`${baseUrl}/api/users/${user_id}/accountability-areas`),
                 fetch(`${baseUrl}/api/users/${user_id}/growth-areas`),
-                fetch(`${baseUrl}/api/users/${user_id}`)
+                fetch(`${baseUrl}/api/users/${user_id}`),
               ]);
 
-  
-              const [rawAccountability, rawGrowthAreas, { data: profile }] = await Promise.all([
-                accountabilityResponse.json(),
-                growthResponse.json(),
-                profileResponse.json()
-              ]);
+              const rawAccountability = await accountabilityResponse.json();
+              const rawGrowthAreas = await growthResponse.json();
+              const rawProfile = await profileResponse.json();
 
-  
+              console.log("Profile: ", rawProfile)
+              console.log("Accountability areas: ", rawAccountability)
+              console.log("Growth areas: ", rawGrowthAreas)
               return {
                 user_id,
-                ...profile,
+                ...rawProfile,
                 accountabilityAreas: transformAreas(rawAccountability.data),
                 growthAreas: transformAreas(rawGrowthAreas.data),
               };
@@ -106,6 +105,7 @@ export default function Discovery() {
   if (loading) {
     return <DiscoverSkeleton />;
   }
+  console.log(profiles)
    
   return (
     <main id="ProfileDiscovery">
@@ -134,7 +134,7 @@ export default function Discovery() {
         <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
           <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
             {loading && <Skeleton className="h-12 w-full" />}
-            {profiles.slice(currentIndex, currentIndex + 2).map((profile, index) => (
+            {profiles.slice(currentIndex, currentIndex+1).map((profile, index) => (
               <MatchmakingCard
               onClick={() => setViewingProfile(true)}
               key={profile.user_id}
