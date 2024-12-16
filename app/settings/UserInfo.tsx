@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 const FormSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }).max(40),
   bio: z.string().min(2, { message: "Bio must be at least 2 characters." }).max(300),
+  university: z.string().min(2, { message: "University must be at least 2 characters." }).max(300),
 });
 
 type FormValues = z.infer<typeof FormSchema>;
@@ -22,18 +23,24 @@ interface UserInfoProps {
   userId: string;
   userName: string;
   initialBio: string;
+  userUniversity: string;
 }
 
-export default function UserInfo({ userId, userName, initialBio }: UserInfoProps) {
+export default function UserInfo({ userId, userName, initialBio, userUniversity }: UserInfoProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [latestChanges, setLatestChanges] = useState({ name: userName, bio: initialBio });
-  const [isSaving, setIsSaving] = useState(false); // Loading state for saving
+  const [isSaving, setIsSaving] = useState(false);
+  const [latestChanges, setLatestChanges] = useState({
+    name: userName,
+    bio: initialBio,
+    university: userUniversity,
+  });
 
   const form = useForm<FormValues>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       name: userName,
       bio: initialBio,
+      university: userUniversity,
     },
   });
 
@@ -73,8 +80,24 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
         updates.bio = data.bio; // Update local state tracker
       }
 
+      // Determine if the 'university' field has changed
+      if (data.university !== latestChanges.university) {
+        const universityResponse = await fetch(`/api/users/${userId}/university`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ university_name: data.university }),
+        });
+
+        if (!universityResponse.ok) throw new Error("Failed to update university");
+        updates.university = data.university; // Update local state tracker
+      }
+
       // If no updates were needed
-      if (data.name === latestChanges.name && data.bio === latestChanges.bio) {
+      if (
+        data.name === latestChanges.name &&
+        data.bio === latestChanges.bio &&
+        data.university === latestChanges.university
+      ) {
         toast({
           title: "No changes detected",
           description: "No updates were made as the values are unchanged.",
@@ -125,6 +148,26 @@ export default function UserInfo({ userId, userName, initialBio }: UserInfoProps
                     {...field}
                     disabled={!isEditing || isSaving}
                     placeholder="Your name"
+                    className={fieldState.invalid ? "border-red-500" : ""}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* University Field */}
+          <FormField
+            control={form.control}
+            name="university"
+            render={({ field, fieldState }) => (
+              <FormItem>
+                <FormLabel>University</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    disabled={!isEditing || isSaving}
+                    placeholder="University Name"
                     className={fieldState.invalid ? "border-red-500" : ""}
                   />
                 </FormControl>

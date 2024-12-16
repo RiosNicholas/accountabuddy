@@ -15,6 +15,7 @@ export default function UserSettings() {
   const [instagram, setInstagram] = useState("");
   const [discord, setDiscord] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [university, setUniversity] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchUserBio = useCallback(async () => {
@@ -32,7 +33,6 @@ export default function UserSettings() {
       }
     }
   }, [session?.user.id]);
-  
 
   const fetchUserContactInfo = useCallback(async () => {
     if (session?.user.id) {
@@ -40,9 +40,9 @@ export default function UserSettings() {
         const contactResponse = await fetch(`/api/users/${session.user.id}/contact-info`);
         if (contactResponse.ok) {
           const contactJson = await contactResponse.json();
-          setInstagram(contactJson.instagram || null);
-          setDiscord(contactJson.discord || null);
-          setUserEmail(contactJson.email || null);
+          setInstagram(contactJson.instagram || "");
+          setDiscord(contactJson.discord || "");
+          setUserEmail(contactJson.email || "");
         } else {
           console.error("Failed to fetch user contact info");
         }
@@ -52,11 +52,27 @@ export default function UserSettings() {
     }
   }, [session?.user.id]);
 
-  // Fetch both biography and contact info
+  const fetchUserUniversity = useCallback(async () => {
+    if (session?.user.id) {
+      try {
+        const universityResponse = await fetch(`/api/users/${session.user.id}/university`);
+        if (universityResponse.ok) {
+          const universityJson = await universityResponse.json();
+          setUniversity(universityJson.university_name || "");
+        } else {
+          console.error("Failed to fetch user university. Status:", universityResponse.status);
+        }
+      } catch (error) {
+        console.error("Error fetching user university:", error);
+      }
+    }
+  }, [session?.user.id]);
+
+  // Fetch all user data: bio, contact info, and university
   const fetchUserData = useCallback(async () => {
-    await Promise.all([fetchUserBio(), fetchUserContactInfo()]);
-    setIsLoading(false); 
-  }, [fetchUserBio, fetchUserContactInfo]);
+    await Promise.all([fetchUserBio(), fetchUserContactInfo(), fetchUserUniversity()]);
+    setIsLoading(false);
+  }, [fetchUserBio, fetchUserContactInfo, fetchUserUniversity]);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -76,11 +92,11 @@ export default function UserSettings() {
               <div className="w-20 h-20">
                 <Avatar className="w-full h-full">
                   <AvatarImage src="https://github.com/shadcn.png" alt={session.user.name || "User"} />
-                  <AvatarFallback>{session.user.username.slice(0, 2).toUpperCase()}</AvatarFallback> 
+                  <AvatarFallback>{session.user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
                 </Avatar>
               </div>
             </div>
-            <UserInfo userId={session.user.id} userName={session.user.name || ""} initialBio={bio} />
+            <UserInfo userId={session.user.id} userName={session.user.name || ""} initialBio={bio} userUniversity={university} />
             <UserContact userId={session.user.id} email={userEmail} discordUsername={discord} instagramUsername={instagram} />
           </main>
         </div>
