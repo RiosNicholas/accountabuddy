@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import DiscoverSkeleton from "./DiscoverSkeleton";
 import MatchmakingCard, { MeetingPreference, MethodPreference } from "@/components/MatchmakingCard";
 import { Button } from "@/components/ui/button";
+import LoginReminder from "@/components/LoginReminder";
 
 interface UserProfile {
   user_id: string;
@@ -115,16 +116,6 @@ export default function Discovery() {
     return <DiscoverSkeleton />;
   }
 
-  if (!session) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-lg text-muted-foreground font-medium">
-          Please log in to view profiles.
-        </p>
-      </div>
-    );
-  }
-
   if (profiles.length === 0 || visibleProfiles.length === 0) {
     return (
       <div className="flex justify-center items-center font-medium text-center text-lg text-muted-foreground">
@@ -134,32 +125,38 @@ export default function Discovery() {
   }
 
   return (
-    <main id="ProfileDiscovery">
-      <div className="flex justify-start items-start">
-        <Button variant="link" className="text-accent" onClick={toggleCompactView}>
-          {compactView ? "Compact View" : "Detailed View"}
-        </Button>
-      </div>
-      <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
-        <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
-          {visibleProfiles.map((profile) => (
-            <MatchmakingCard
-              key={profile.user_id}
-              name={profile.name || "Anonymous"}
-              university={profile.university || "Unknown University"}
-              biography={profile.biography || "No intro provided."}
-              accountabilityAreas={profile.accountabilityAreas}
-              growthAreas={profile.growthAreas}
-              meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
-              methodPreference={profile.methodPreference || MethodPreference.NoPreference}
-              compact={compactView}
-              loggedUserId={session?.user.id as string}
-              cardUserId={profile.user_id}
-              setIsDecisionMade={setIsDecisionMade}
-            />
-          ))}
-        </div>
-      </div>
-    </main>
+    <>
+      {session ? (
+        <main id="ProfileDiscovery">
+          <div className="flex justify-start items-start">
+            <Button variant="link" className="text-accent" onClick={toggleCompactView}>
+              {compactView ? "Compact View" : "Detailed View"}
+            </Button>
+          </div>
+          <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
+            <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
+              {visibleProfiles.map((profile) => (
+                <MatchmakingCard
+                  key={profile.user_id}
+                  name={profile.name || "Anonymous"}
+                  university={profile.university || "Unknown University"}
+                  biography={profile.biography || "No intro provided."}
+                  accountabilityAreas={profile.accountabilityAreas}
+                  growthAreas={profile.growthAreas}
+                  meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
+                  methodPreference={profile.methodPreference || MethodPreference.NoPreference}
+                  compact={compactView}
+                  loggedUserId={session?.user.id as string}
+                  cardUserId={profile.user_id}
+                  setIsDecisionMade={setIsDecisionMade}
+                />
+              ))}
+            </div>
+          </div>
+        </main>
+      ) : (
+        <LoginReminder />
+      )}
+    </>
   );
-}
+} 
