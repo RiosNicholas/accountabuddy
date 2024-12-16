@@ -1,10 +1,9 @@
 // import SupabaseClient from '@supabase/supabase-js';
-import MatchMaking from '@/app/discover/page';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     // Initializing Supabase client with request and response for SSR
     const supabase = createRouteHandlerClient({ cookies });
@@ -54,7 +53,7 @@ export async function POST(request: Request) {
       }
 
       if (data.length > 0) {
-        let matchParams = {user1:liker, user2:likee}
+        const matchParams = {user1:liker, user2:likee}
         const {error: matchMadeError} = await supabase
         .from("Matches")
         .insert(matchParams)

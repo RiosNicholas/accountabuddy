@@ -1,15 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useSession } from "next-auth/react";
 
 import DiscoverSkeleton from "./DiscoverSkeleton";
 import MatchmakingCard, { MeetingPreference, MethodPreference } from "@/components/MatchmakingCard";
-import ProfileCard from "@/components/ProfileCard";
 import { Button } from "@/components/ui/button";
 
-import { Cross1Icon } from "@radix-ui/react-icons";
-import { HandIcon } from "lucide-react";
-import { useSession } from "next-auth/react";
 
 interface UserProfile {
   user_id: string;
