@@ -7,7 +7,6 @@ import DiscoverSkeleton from "./DiscoverSkeleton";
 import MatchmakingCard, { MeetingPreference, MethodPreference } from "@/components/MatchmakingCard";
 import { Button } from "@/components/ui/button";
 
-
 interface UserProfile {
   user_id: string;
   username: string;
@@ -22,7 +21,7 @@ interface UserProfile {
 
 export default function Discovery() {
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0); 
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [compactView, setCompactView] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const { data: session, status } = useSession();
@@ -34,7 +33,7 @@ export default function Discovery() {
 
   useEffect(() => {
     if (isDecisionMade) {
-      setCurrentIndex((prev) => prev + 1); 
+      setCurrentIndex((prev) => prev + 1);
       setIsDecisionMade(false);
     }
   }, [isDecisionMade]);
@@ -91,8 +90,13 @@ export default function Discovery() {
           })
         );
 
-        // Filter out null results
-        setProfiles(enhancedProfiles.filter(Boolean));
+        // Filter out null results and set profiles
+        const validProfiles = enhancedProfiles.filter(Boolean) as UserProfile[];
+        setProfiles(validProfiles);
+
+        // Reset the currentIndex whenever profiles are fetched
+        setCurrentIndex(0);
+
         console.log("Successfully fetched profiles");
       } catch (error) {
         console.error("Failed to fetch users:", error);
@@ -102,7 +106,7 @@ export default function Discovery() {
     };
 
     fetchUsersToDisplay();
-  }, []);
+  }, []); // Dependency array left empty for initial load only
 
   // Show only one or two profiles at a time based on the currentIndex
   const visibleProfiles = profiles.slice(currentIndex, currentIndex + 2);
