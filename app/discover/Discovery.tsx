@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
 
 import DiscoverSkeleton from "./DiscoverSkeleton";
 import MatchmakingCard, { MeetingPreference, MethodPreference } from "@/components/MatchmakingCard";
@@ -26,8 +25,7 @@ interface UserProfile {
 
 export default function Discovery() {
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0); // Placeholder for pagination
-  const [viewingProfile, setViewingProfile] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0); 
   const [compactView, setCompactView] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
   const { data: session, status } = useSession();
@@ -39,10 +37,10 @@ export default function Discovery() {
 
   useEffect(() => {
     if (isDecisionMade) {
-      setCurrentIndex(currentIndex+1)
+      setCurrentIndex((prev) => prev + 1); 
       setIsDecisionMade(false);
     }
-  }, [isDecisionMade, profiles])
+  }, [isDecisionMade]);
 
   // Fetch profiles when the component mounts
   useEffect(() => {
@@ -63,13 +61,14 @@ export default function Discovery() {
         const enhancedProfiles = await Promise.all(
           userIds.map(async ({ user_id }: { user_id: string }) => {
             try {
-              const [profileResponse, accountabilityResponse, growthResponse, universityResponse, bioResponse] = await Promise.all([
-                fetch(`${baseUrl}/api/users/${user_id}`),
-                fetch(`${baseUrl}/api/users/${user_id}/accountability-areas`),
-                fetch(`${baseUrl}/api/users/${user_id}/growth-areas`),
-                fetch(`${baseUrl}/api/users/${user_id}/university`),
-                fetch(`${baseUrl}/api/users/${user_id}/bio`),
-              ]);
+              const [profileResponse, accountabilityResponse, growthResponse, universityResponse, bioResponse] =
+                await Promise.all([
+                  fetch(`${baseUrl}/api/users/${user_id}`),
+                  fetch(`${baseUrl}/api/users/${user_id}/accountability-areas`),
+                  fetch(`${baseUrl}/api/users/${user_id}/growth-areas`),
+                  fetch(`${baseUrl}/api/users/${user_id}/university`),
+                  fetch(`${baseUrl}/api/users/${user_id}/bio`),
+                ]);
 
               const profile = await profileResponse.json();
               const accountabilityAreas = await accountabilityResponse.json();
@@ -108,6 +107,9 @@ export default function Discovery() {
     fetchUsersToDisplay();
   }, []);
 
+  // Show only one or two profiles at a time based on the currentIndex
+  const visibleProfiles = profiles.slice(currentIndex, currentIndex + 2);
+
   if (loading || status === "loading") {
     return <DiscoverSkeleton />;
   }
@@ -122,7 +124,7 @@ export default function Discovery() {
     );
   }
 
-  if (profiles.length === 0) {
+  if (profiles.length === 0 || visibleProfiles.length === 0) {
     return (
       <div className="flex justify-center items-center font-medium text-center text-lg text-muted-foreground">
         <p>No profiles found. Please try again later.</p>
@@ -137,51 +139,26 @@ export default function Discovery() {
           {compactView ? "Compact View" : "Detailed View"}
         </Button>
       </div>
-      {viewingProfile ? (
-        <div className="flex flex-col justify-center items-center p-3">
-          <div className="flex justify-between items-center w-full lg:w-3/4 xl:w-2/3">
-            <Button variant="link" onClick={() => setViewingProfile(false)}>Back</Button>
-            <div id="profile-actions" className="flex justify-around">
-              <Button
-                variant="destructive"
-                className="bg-white border-none rounded-full w-10 h-10 text-2xl cursor-pointer shadow-md hover:shadow-lg text-red-500 hover:text-white"
-              >
-                <Cross1Icon />
-              </Button>
-              <Button
-                variant="default"
-                className="bg-white border-none rounded-full w-10 h-10 text-2xl cursor-pointer shadow-md hover:shadow-lg text-green-500 hover:text-white"
-              >
-                <HandIcon />
-              </Button>
-            </div>
-          </div>
-          <ProfileCard username="TestUsername" name="" accountabilityAreas={[]} growthAreas={[]} isCurrentUser={false} />
+      <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
+        <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
+          {visibleProfiles.map((profile) => (
+            <MatchmakingCard
+              key={profile.user_id}
+              name={profile.name || "Anonymous"}
+              university={profile.university || "Unknown University"}
+              biography={profile.biography || "No intro provided."}
+              accountabilityAreas={profile.accountabilityAreas}
+              growthAreas={profile.growthAreas}
+              meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
+              methodPreference={profile.methodPreference || MethodPreference.NoPreference}
+              compact={compactView}
+              loggedUserId={session?.user.id as string}
+              cardUserId={profile.user_id}
+              setIsDecisionMade={setIsDecisionMade}
+            />
+          ))}
         </div>
-      ) : (
-        <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
-          <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
-            {profiles.map((profile) => (
-              <Link key={profile.user_id} href={`/user/${profile.username}?ref=discover`} passHref>
-                <MatchmakingCard
-                  key={profile.user_id}
-                  name={profile.name || "Anonymous"}
-                  university={profile.university || "Unknown University"}
-                  biography={profile.biography || "No intro provided."}
-                  accountabilityAreas={profile.accountabilityAreas}
-                  growthAreas={profile.growthAreas}
-                  meetingPreference={profile.meetingPreference || MeetingPreference.Weekly}
-                  methodPreference={profile.methodPreference || MethodPreference.NoPreference}
-                  compact={compactView}
-                  loggedUserId={session?.user.id as string}
-                  cardUserId={profile.user_id}
-                  setIsDecisionMade={setIsDecisionMade}
-                />
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
+      </div>
     </main>
-  )
+  );
 }
