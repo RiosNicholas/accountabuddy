@@ -1,56 +1,52 @@
 
 export async function POST(request: Request) {
   try {
-
-    const { liker, likee, isLike } = await request.json();
+    const { liker, likee } = await request.json(); 
 
     const supabase = createRouteHandlerClient({ cookies });
 
-    let table = "";
-    let params = {};
+    // Insert like into the Likes table
+    const { error: likeInsertError } = await supabase
+      .from("Likes")
+      .insert({ liker, likee });
 
-    if (isLike) {
-      table = "Likes";
-      params = {liker: liker, likee: likee};
+    if (likeInsertError) {
+      console.error(likeInsertError);
+      return NextResponse.json({ message: "Failed to store like" }, { status: 500 });
+    }
 
-      // Check for a match
-      const {data, error:matchCheckError} = await supabase
-        .from(table)
-        .select("*")
-        .eq("liker", likee)
-        .eq("likee", liker)
+    // Check if the likee likes the liker (mutual like)
+    const { data: mutualLike, error: matchCheckError } = await supabase
+      .from("Likes")
+      .select("*")
+      .eq("liker", likee)
+      .eq("likee", liker)
+      .maybeSingle();
 
-      if (matchCheckError) {
-        console.error(matchCheckError);
-        return NextResponse.json({ message: "Failed to check for a match" }, { status: 500 });
-      }
+    if (matchCheckError) {
+      console.error(matchCheckError);
+      return NextResponse.json({ message: "Failed to check for mutual like" }, { status: 500 });
+    }
 
-      if (data.length > 0) {
-        const matchParams = {user1:liker, user2:likee}
-        const {error: matchMadeError} = await supabase
+    // If mutual like exists, add two rows to the Matches table
+    if (mutualLike) {
+      const { error: matchInsertError } = await supabase
         .from("Matches")
-        .insert(matchParams)
+        .insert([
+          { user1: liker, user2: likee },
+          { user1: likee, user2: liker },
+        ]);
 
-        if (matchMadeError) {
-          console.error(matchMadeError);
-          return NextResponse.json({ message: "Failed to store match" }, { status: 500 });
-        }
+      if (matchInsertError) {
+        console.error(matchInsertError);
+        return NextResponse.json({ message: "Failed to store match" }, { status: 500 });
       }
-    
-    } else {
-      table = "Dislikes";
-      params = {disliker: liker, dislikee: likee};
-    }
-    const { error } = await supabase
-      .from(table)
-      .insert(params);
-
-    if (error) {
-      console.error(error);
-      return NextResponse.json({ message: "Failed to store dis/like" }, { status: 500 });
     }
 
-    return NextResponse.json({ message: "dis/like saved successfully" }, { status: 201 })
+    return NextResponse.json(
+      { message: mutualLike ? "Like and mutual match saved successfully" : "Like saved successfully" },
+      { status: 201 }
+    );
   } catch (e: unknown) {
     console.error("Unexpected Error:", e);
     if (e instanceof Error) {

@@ -20,7 +20,7 @@ export default function HomePage() {
             Find an accountability buddy, stay productive, and accomplish your goals faster.
           </p>
           <Link
-            href="/signup"
+            href="/auth/signup"
             className="bg-secondary text-secondary-foreground font-bold py-3 px-8 rounded-md shadow-lg hover:bg-accent"
           >
             Get Started

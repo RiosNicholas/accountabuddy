@@ -37,7 +37,7 @@ export default function MatchmakingCard({ name, university, biography, accountab
   
   async function onLike() {
     try {
-      const response = await fetch('/api/users', {
+      const response = await fetch(`/api/users/${loggedUserId}/like`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +45,6 @@ export default function MatchmakingCard({ name, university, biography, accountab
         body: JSON.stringify({
           liker: loggedUserId,
           likee: cardUserId,
-          isLike: true,
         }),
       });
   
@@ -61,28 +60,28 @@ export default function MatchmakingCard({ name, university, biography, accountab
   }
   async function onDislike() {
     try {
-      const response = await fetch('/api/users', {
+      const response = await fetch(`/api/users/${loggedUserId}/dislike`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          liker: loggedUserId, // Replace with the actual logged user ID
-          likee: cardUserId,   // Replace with the user ID of the card
-          isLike: false,
+          disliker: loggedUserId, // Pass the logged-in user's ID
+          dislikee: cardUserId,   // Pass the ID of the disliked user
         }),
       });
-  
+
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-  
-      console.log('Like recorded successfully');
+
+      console.log('Dislike recorded successfully');
     } catch (error) {
-      console.error("Error posting like: ", error);
+      console.error("Error posting dislike: ", error);
     }
     setIsDecisionMade(true);
   }
+
 
   return (
     <Card className="bg-muted text-background-foreground hover:cursor-pointer">
