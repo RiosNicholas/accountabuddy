@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UUID } from 'crypto';
 
 interface User {
   meetingLocation: string | null;

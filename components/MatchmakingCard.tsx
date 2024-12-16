@@ -3,34 +3,76 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "./ui/button";
 import { Cross1Icon, HandIcon } from "@radix-ui/react-icons";
 import { Badge } from "./ui/badge";
-
-export enum MethodPreference {
-  InPerson = "In-Person",
-  Virtual = "Virtual",
-  NoPreference = "No Preference",
-}
-
-export enum MeetingPreference {
-  Daily = "Daily",
-  Weekly = "Weekly",
-  BiWeekly = "Bi-Weekly",
-  Monthly = "Monthly",
-}
+import store from "@/redux/store";
 
 interface MatchmakingCardProps {
   name: string;
-  age?: number;
-  university: string;
-  biography: string;
+  // age: number;
+  // university: string;
+  // intro: string;
   accountabilityAreas: string[]; 
-  growthAreas: string[]; 
-  meetingPreference: MeetingPreference;
-  methodPreference: MethodPreference;
+  goalBuckets: string[]; 
+  meetingPreference: string;
+  methodPreference: string;
+  cardUserId: string;
+  loggedUserId: string;
+  setIsDecisionMade: Function;
   compact?: boolean;
   onClick?: () => void;
 }
 
-export default function MatchmakingCard({ name, age, university, biography, accountabilityAreas, growthAreas, meetingPreference, methodPreference, compact = false, }: MatchmakingCardProps) {
+export default function MatchmakingCard({ name, /*age, university, intro,*/ accountabilityAreas, goalBuckets, meetingPreference, methodPreference, cardUserId, loggedUserId, setIsDecisionMade, compact = false, }: MatchmakingCardProps) {
+
+  async function onLike() {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          liker: loggedUserId,
+          likee: cardUserId,
+          isLike: true,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+  
+      console.log('Like recorded successfully');
+    } catch (error) {
+      console.error("Error posting like: ", error);
+    }
+    setIsDecisionMade(true);
+  }
+
+  async function onDislike() {
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          liker: loggedUserId, // Replace with the actual logged user ID
+          likee: cardUserId,   // Replace with the user ID of the card
+          isLike: false,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+  
+      console.log('Like recorded successfully');
+    } catch (error) {
+      console.error("Error posting like: ", error);
+    }
+    setIsDecisionMade(true);
+  }
+
   return (
     <Card className="bg-muted text-background-foreground hover:cursor-pointer">
       <div className={`grid gap-4 lg:gap-1 ${compact ? 'lg:grid-cols-[1fr,1fr]' : 'grid-cols-1'} p-${compact ? '2' : '6'}`}>
@@ -44,7 +86,7 @@ export default function MatchmakingCard({ name, age, university, biography, acco
           <div className="flex flex-col justify-center text-left">
             <CardTitle className={`${compact ? 'lg:text-lg' : ''} font-bold`}>
               {name}
-              {!compact && `, ${age}`}
+              {/*!compact && `, ${age}`*/}
             </CardTitle>
             <CardHeader className={`${compact ? 'text-sm' : ''} p-0 font-semibold`}>
               {university}
@@ -55,9 +97,9 @@ export default function MatchmakingCard({ name, age, university, biography, acco
 
         {/* PREFERENCES */}
         <CardContent className={`flex flex-col justify-center items-center p-2 lg:p-0 lg:text-sm text-center`}>
-          {!compact && (
-            <p className="text-center text-sm font-medium w-full text-secondary-foreground">{biography}</p>
-          )}
+          {/*!compact && (
+            <p className="text-center text-sm font-medium w-full text-secondary-foreground">{intro}</p>
+          )*/}
           <div className={`${compact ? " lg:flex-col" : "lg:flex w-full "}justify-center items-center gap-1`}>
             <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
               <h4 className={`text-muted-foreground font-semibold ${compact ? "text-right text-sm md:text-base" : "text-left"}`}>Meeting Preference</h4>
@@ -101,10 +143,10 @@ export default function MatchmakingCard({ name, age, university, biography, acco
 
       {/* PROFILE ACTIONS */}
       <div id="profile-actions" className={`flex justify-around ${compact ? 'px-1 pt-1 pb-2' : 'p-3'}`}>
-        <Button variant="destructive" id="reject-button" className={`bg-white border-none rounded-full ${compact ? 'w-10 h-10 text-xl' : 'w-12 h-12 text-2xl'} cursor-pointer shadow-md hover:shadow-lg text-red-500 hover:text-white`}>
+        <Button onClick={onDislike} variant="destructive" id="reject-button" className={`bg-white border-none rounded-full ${compact ? 'w-10 h-10 text-xl' : 'w-12 h-12 text-2xl'} cursor-pointer shadow-md hover:shadow-lg text-red-500 hover:text-white`}>
           <Cross1Icon/> 
         </Button>
-        <Button variant="default" id="connect-button" className={`bg-white border-none rounded-full ${compact ? 'w-10 h-10 text-xl' : 'w-12 h-12 text-2xl'} cursor-pointer shadow-md hover:shadow-lg text-green-500 hover:text-white`}>
+        <Button onClick={onLike} variant="default" id="connect-button" className={`bg-white border-none rounded-full ${compact ? 'w-10 h-10 text-xl' : 'w-12 h-12 text-2xl'} cursor-pointer shadow-md hover:shadow-lg text-green-500 hover:text-white`}>
           <HandIcon/> 
         </Button>
       </div>
