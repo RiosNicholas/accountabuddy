@@ -47,10 +47,8 @@ export default function Discovery() {
       setLoading(true);
 
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3000";
-
         // Fetch user IDs
-        const response = await fetch(`${baseUrl}/api/recommended-users?user_id=${session?.user.id}`);
+        const response = await fetch(`/api/recommended-users?user_id=${session?.user.id}`);
 
         const userIds = await response.json();
         console.log(userIds);
@@ -61,11 +59,11 @@ export default function Discovery() {
             try {
               const [profileResponse, accountabilityResponse, growthResponse, universityResponse, bioResponse] =
                 await Promise.all([
-                  fetch(`${baseUrl}/api/users/${user_id}`),
-                  fetch(`${baseUrl}/api/users/${user_id}/accountability-areas`),
-                  fetch(`${baseUrl}/api/users/${user_id}/growth-areas`),
-                  fetch(`${baseUrl}/api/users/${user_id}/university`),
-                  fetch(`${baseUrl}/api/users/${user_id}/bio`),
+                  fetch(`/api/users/${user_id}`),
+                  fetch(`/api/users/${user_id}/accountability-areas`),
+                  fetch(`/api/users/${user_id}/growth-areas`),
+                  fetch(`/api/users/${user_id}/university`),
+                  fetch(`/api/users/${user_id}/bio`),
                 ]);
 
               const profile = await profileResponse.json();
