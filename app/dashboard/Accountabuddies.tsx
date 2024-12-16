@@ -1,9 +1,9 @@
 // import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle, } from "@/components/ui/card"
+
 import Image from "next/image";
 import Link from "next/link";
+import { Card, CardContent, CardTitle, } from "@/components/ui/card"
 
 type User = {
   id: string;
@@ -12,13 +12,10 @@ type User = {
   profilePicture?: string;
 };
 
-interface AccountabuddiesProps {
-  accountabuddies: User[];
-}
-
-export default function Accountabuddies( { accountabuddies }: AccountabuddiesProps) {
+export default function Accountabuddies() {
   // TODO: Fetch accountabuddies from the API
   // const [accountabuddies, setAccountabuddies] = useState<User[]>([]);
+  const accountabuddies: User[] = [];
 
   return (
     <Card>

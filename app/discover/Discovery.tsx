@@ -26,7 +26,6 @@ interface UserProfile {
 
 export default function Discovery() {
   const [profiles, setProfiles] = useState<UserProfile[]>([]);
-  const [currentIndex] = useState(0); // Placeholder for pagination
   const [viewingProfile, setViewingProfile] = useState(false);
   const [compactView, setCompactView] = useState<boolean>(false);
   const [loading, setLoading] = useState(true);
@@ -100,8 +99,18 @@ export default function Discovery() {
     fetchUsersToDisplay();
   }, []);
 
-  if (loading) {
+  if (loading || status === "loading") {
     return <DiscoverSkeleton />;
+  }
+
+  if (!session) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-lg text-muted-foreground font-medium">
+          Please log in to view profiles.
+        </p>
+      </div>
+    );
   }
 
   if (profiles.length === 0) {
@@ -123,37 +132,31 @@ export default function Discovery() {
         <div className="flex flex-col justify-center items-center p-3">
           <div className="flex justify-between items-center w-full lg:w-3/4 xl:w-2/3">
             <Button variant="link" onClick={() => setViewingProfile(false)}>Back</Button>
-            <div id="profile-actions" className={`flex justify-around`}>
+            <div id="profile-actions" className="flex justify-around">
               <Button
                 variant="destructive"
-                id="reject-button"
                 className="bg-white border-none rounded-full w-10 h-10 text-2xl cursor-pointer shadow-md hover:shadow-lg text-red-500 hover:text-white"
               >
                 <Cross1Icon />
               </Button>
               <Button
                 variant="default"
-                id="connect-button"
                 className="bg-white border-none rounded-full w-10 h-10 text-2xl cursor-pointer shadow-md hover:shadow-lg text-green-500 hover:text-white"
               >
                 <HandIcon />
               </Button>
             </div>
           </div>
-          <ProfileCard username="TestUsername" name={""} accountabilityAreas={[]} growthAreas={[]} isCurrentUser={false}/>
+          <ProfileCard username="TestUsername" name="" accountabilityAreas={[]} growthAreas={[]} isCurrentUser={false} />
         </div>
       ) : (
         <div id="MatchMakingPage" className="flex flex-col justify-center items-center">
           <div id="MatchMakingBody" className="grid grid-cols-1 lg:grid-cols-2 gap-20 px-4">
-            {profiles.slice(currentIndex, currentIndex + 2).map((profile, index) => (
-              <Link 
-                key={profile.user_id} 
-                href={`/user/${profile.username}?ref=discover`} 
-                passHref
-              >
+            {profiles.map((profile) => (
+              <Link key={profile.user_id} href={`/user/${profile.username}?ref=discover`} passHref>
                 <MatchmakingCard
                   key={profile.user_id}
-                  name={profile.name || `User ${index + 1}`}
+                  name={profile.name || "Anonymous"}
                   university={profile.university || "Unknown University"}
                   biography={profile.biography || "No intro provided."}
                   accountabilityAreas={profile.accountabilityAreas}
