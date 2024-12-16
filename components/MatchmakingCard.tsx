@@ -3,25 +3,44 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "./ui/button";
 import { Cross1Icon, HandIcon } from "@radix-ui/react-icons";
 import { Badge } from "./ui/badge";
-import store from "@/redux/store";
+// import store from "@/redux/store";
+
+export enum MethodPreference {
+  InPerson = "In-Person",
+  Virtual = "Virtual",
+  NoPreference = "No Preference",
+}
+
+export enum MeetingPreference {
+  Daily = "Daily",
+  Weekly = "Weekly",
+  BiWeekly = "Bi-Weekly",
+  Monthly = "Monthly",
+}
+
 
 interface MatchmakingCardProps {
   name: string;
-  // age: number;
-  // university: string;
-  // intro: string;
+  university: string;
+  biography: string;
   accountabilityAreas: string[]; 
-  goalBuckets: string[]; 
-  meetingPreference: string;
-  methodPreference: string;
+  growthAreas: string[]; 
+  meetingPreference: MeetingPreference;
+  methodPreference: MethodPreference;
   cardUserId: string;
   loggedUserId: string;
-  setIsDecisionMade: Function;
+  setIsDecisionMade: (decision: boolean) => void;
   compact?: boolean;
   onClick?: () => void;
 }
 
 export default function MatchmakingCard({ name, university, biography, accountabilityAreas, growthAreas, meetingPreference, methodPreference, compact = false, }: MatchmakingCardProps) {
+  const onDislike = () => {
+    console.log("Disliked");
+  }
+  const onLike = () => {
+    console.log("Liked");
+  }
   return (
     <Card className="bg-muted text-background-foreground hover:cursor-pointer">
       <div className={`grid gap-4 lg:gap-1 ${compact ? 'lg:grid-cols-[1fr,1fr]' : 'grid-cols-1'} p-${compact ? '2' : '6'}`}>
@@ -45,9 +64,9 @@ export default function MatchmakingCard({ name, university, biography, accountab
 
         {/* PREFERENCES */}
         <CardContent className={`flex flex-col justify-center items-center p-2 lg:p-0 lg:text-sm text-center`}>
-          {/*!compact && (
-            <p className="text-center text-sm font-medium w-full text-secondary-foreground">{intro}</p>
-          )*/}
+          {!compact && (
+            <p className="text-center text-sm font-medium w-full text-secondary-foreground">{biography}</p>
+          )}
           <div className={`${compact ? " lg:flex-col" : "lg:flex w-full "}justify-center items-center gap-1`}>
             <div className={`flex flex-col w-full ${compact ? "mt-0" : "mt-2"} gap-1`}>
               <h4 className={`text-muted-foreground font-semibold ${compact ? "text-right text-sm md:text-base" : "text-left"}`}>Meeting Preference</h4>
