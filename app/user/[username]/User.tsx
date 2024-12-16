@@ -70,17 +70,20 @@ export default function User() {
         const results = await Promise.allSettled([
           fetch(`/api/users/${userId}`),
           fetch(`/api/users/${userId}/bio`),
+          fetch(`/api/users/${userId}/university`),
           fetch(`/api/users/${userId}/contact-info`),
           fetch(`/api/users/${userId}/accountability-areas`),
           fetch(`/api/users/${userId}/growth-areas`),
         ]);
 
-        const [userResult, bioResult, contactResult, accountabilityResult, growthResult] = results;
+        const [userResult, bioResult, universityResult, contactResult, accountabilityResult, growthResult] = results;
 
         if (userResult.status === "rejected" || !userResult.value.ok)
           throw new Error("Failed to fetch user data");
         if (bioResult.status === "rejected" || !bioResult.value.ok)
           throw new Error("Failed to fetch user biography");
+        if (universityResult.status === "rejected" || !universityResult.value.ok)
+          throw new Error("Failed to fetch user university");
         if (contactResult.status === "rejected" || !contactResult.value.ok)
           throw new Error("Failed to fetch user contact info");
         if (accountabilityResult.status === "rejected" || !accountabilityResult.value.ok)
@@ -90,6 +93,7 @@ export default function User() {
 
         const userData = await userResult.value.json();
         const biographyData = await bioResult.value.json();
+        const universityData = await universityResult.value.json();
         const contactData = await contactResult.value.json();
         const accountabilityData = await accountabilityResult.value.json();
         const growthData = await growthResult.value.json();
@@ -97,7 +101,7 @@ export default function User() {
         setUserInfo({
           username: userData.username,
           name: userData.name || null,
-          university: userData.university || null,
+          university: universityData.university_name || null,
           biography: biographyData.biography || null,
           contactInfo: {
             email: contactData.email || "",
