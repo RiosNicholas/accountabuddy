@@ -141,7 +141,7 @@ export default function User() {
   return (
     <>
       {session ? (
-        userInfo ? (
+        userInfo && (
           <ProfileCard
             username={userInfo.username}
             name={userInfo.name || "Unknown"}
@@ -154,8 +154,6 @@ export default function User() {
             growthAreas={userInfo.growthAreas}
             isCurrentUser={isCurrentUser}
           />
-        ) : (
-          <p className="flex justify-center items-center font-bold text-center text-lg">User not found.</p>
         )
       ) : (
         <LoginReminder />
