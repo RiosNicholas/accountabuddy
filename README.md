@@ -12,7 +12,7 @@ Accountabuddy is a social platform designed to help students connect with accoun
 
 ## Technologies Used
 
-- **Frontend**: Next.js (with App Router), React, Tailwind CSS
+- **Frontend**: Next.js (with App Router), React, Tailwind CSS, Redux, shadcn/ui
 - **Authentication**: NextAuth.js
 - **Database**: PostgreSQL (via Supabase and @vercel/postgres)
 - **Deployment**: Vercel
